@@ -6,8 +6,6 @@ Connect your Joomla site to the Fediverse. Publish articles to Mastodon, Pleroma
 ActivityPub platform. Build a following, receive reactions, and engage with the open social web —
 right from your Joomla admin.
 
-👉 **[joomlafedi.lemonsqueezy.com](https://joomlafedi.lemonsqueezy.com)** — website, docs & pricing
-
 ---
 
 ## Features
@@ -43,7 +41,6 @@ Issues and feature requests are welcome — please use the [issue tracker](../..
 
 Pull requests are accepted. Please open an issue first for larger changes.
 The extension source is in `src/`. A `composer.json` is provided; run `composer install` to set up autoloading.
-There are no build tools in this repository — the test suite and Docker environment are maintained separately.
 
 ## License
 
