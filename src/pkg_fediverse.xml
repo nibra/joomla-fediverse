@@ -24,7 +24,7 @@
     </files>
     <updateservers>
         <server type="extension" priority="1" name="Joomla Fediverse Updates">
-            https://raw.githubusercontent.com/nibra/pkg_fediverse/main/updates.xml
+            https://raw.githubusercontent.com/nibra/joomla-fediverse/main/updates.xml
         </server>
     </updateservers>
 </extension>
