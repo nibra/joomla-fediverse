@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset
+        name="general"
+        label="COM_FEDIVERSE_CONFIG_GENERAL_LABEL"
+        description="COM_FEDIVERSE_CONFIG_GENERAL_DESC"
+    >
+        <field
+            name="public_base_url"
+            type="url"
+            label="COM_FEDIVERSE_CONFIG_PUBLIC_BASE_URL_LABEL"
+            description="COM_FEDIVERSE_CONFIG_PUBLIC_BASE_URL_DESC"
+            size="60"
+            validate="url"
+        />
+
+        <field
+            name="actor_handle_format"
+            type="text"
+            label="COM_FEDIVERSE_CONFIG_ACTOR_HANDLE_FORMAT_LABEL"
+            description="COM_FEDIVERSE_CONFIG_ACTOR_HANDLE_FORMAT_DESC"
+            default="u{user_id}"
+            size="40"
+            validate="regex"
+            validate_regex="^[A-Za-z0-9_.{}-]+$"
+        />
+
+        <field
+            name="key_rotation_days"
+            type="number"
+            label="COM_FEDIVERSE_CONFIG_KEY_ROTATION_DAYS_LABEL"
+            description="COM_FEDIVERSE_CONFIG_KEY_ROTATION_DAYS_DESC"
+            default="90"
+            validate="number"
+            min="1"
+            step="1"
+        />
+
+        <field
+            name="enable_inbox_worker"
+            type="radio"
+            label="COM_FEDIVERSE_CONFIG_ENABLE_INBOX_WORKER_LABEL"
+            description="COM_FEDIVERSE_CONFIG_ENABLE_INBOX_WORKER_DESC"
+            layout="joomla.form.field.radio.switcher"
+            default="1"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field
+            name="enable_delivery_worker"
+            type="radio"
+            label="COM_FEDIVERSE_CONFIG_ENABLE_DELIVERY_WORKER_LABEL"
+            description="COM_FEDIVERSE_CONFIG_ENABLE_DELIVERY_WORKER_DESC"
+            layout="joomla.form.field.radio.switcher"
+            default="1"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field
+            name="follow_policy"
+            type="list"
+            label="COM_FEDIVERSE_CONFIG_FOLLOW_POLICY_LABEL"
+            description="COM_FEDIVERSE_CONFIG_FOLLOW_POLICY_DESC"
+            default="open"
+            validate="options"
+        >
+            <option value="open">COM_FEDIVERSE_CONFIG_FOLLOW_POLICY_OPEN</option>
+            <option value="approval">COM_FEDIVERSE_CONFIG_FOLLOW_POLICY_APPROVAL</option>
+            <option value="closed">COM_FEDIVERSE_CONFIG_FOLLOW_POLICY_CLOSED</option>
+        </field>
+    </fieldset>
+
+    <fieldset
+        name="retention"
+        label="COM_FEDIVERSE_CONFIG_RETENTION_LABEL"
+        description="COM_FEDIVERSE_CONFIG_RETENTION_DESC"
+    >
+        <field
+            name="inbox_retention_days"
+            type="number"
+            label="COM_FEDIVERSE_CONFIG_INBOX_RETENTION_DAYS_LABEL"
+            description="COM_FEDIVERSE_CONFIG_INBOX_RETENTION_DAYS_DESC"
+            default="90"
+            min="0"
+            step="1"
+        />
+        <field
+            name="outbox_retention_days"
+            type="number"
+            label="COM_FEDIVERSE_CONFIG_OUTBOX_RETENTION_DAYS_LABEL"
+            description="COM_FEDIVERSE_CONFIG_OUTBOX_RETENTION_DAYS_DESC"
+            default="180"
+            min="0"
+            step="1"
+        />
+        <field
+            name="delivery_queue_retention_days"
+            type="number"
+            label="COM_FEDIVERSE_CONFIG_DELIVERY_QUEUE_RETENTION_DAYS_LABEL"
+            description="COM_FEDIVERSE_CONFIG_DELIVERY_QUEUE_RETENTION_DAYS_DESC"
+            default="30"
+            min="0"
+            step="1"
+        />
+    </fieldset>
+
+    <fieldset
+        name="license"
+        label="COM_FEDIVERSE_CONFIG_LICENSE_FIELDSET_LABEL"
+        description="COM_FEDIVERSE_CONFIG_LICENSE_FIELDSET_DESC"
+    >
+        <field
+            name="license_key"
+            type="textarea"
+            label="COM_FEDIVERSE_CONFIG_LICENSE_KEY_LABEL"
+            description="COM_FEDIVERSE_CONFIG_LICENSE_KEY_DESC"
+            rows="4"
+            cols="80"
+            filter="raw"
+            default=""
+        />
+    </fieldset>
+</config>

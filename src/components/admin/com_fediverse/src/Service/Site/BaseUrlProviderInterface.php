@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+/**
+ * @package         pkg_fediverse
+ * @subpackage      com_fediverse
+ *
+ * @copyright   (C) 2026 BSDS / nibra Consulting <https://code.nibra.net>
+ * @license         GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+namespace NX\Component\Fediverse\Administrator\Service\Site;
+
+/**
+ * BaseUrlProviderInterface Interface
+ *
+ * Define the Base Url Provider contract.
+ *
+ * @since  __DEPLOY_VERSION__
+ */
+interface BaseUrlProviderInterface
+{
+    /**
+     * Get the canonical base URL.
+     *
+     * Return the base URL without a trailing slash.
+     *
+     * @return  string  Base URL.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function getBaseUrl(): string;
+}

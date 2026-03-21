@@ -1,0 +1,31 @@
+{
+  "name": "nibra/joomla-fediverse",
+  "description": "An ActivityPub implementation for Joomla 6+",
+  "type": "joomla-extension",
+  "license": "GPL2+",
+  "authors": [
+    {
+      "name": "Niels Braczek",
+      "email": "nbraczek@bsds.de"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "NX\\Component\\Fediverse\\Administrator\\": "src/components/admin/com_fediverse/src/",
+      "NX\\Component\\Fediverse\\Site\\": "src/components/site/com_fediverse/src/",
+      "NX\\Module\\Fediverse\\Site\\": [
+        "src/modules/site/mod_fediverse_profile/src/",
+        "src/modules/site/mod_fediverse_timeline/src/"
+      ],
+      "NX\\Module\\Fediverse\\Reactions\\Site\\": "src/modules/site/mod_fediverse_reactions/src/",
+      "NX\\Plugin\\Content\\Fediverse\\": "src/plugins/content/fediverse/src/",
+      "NX\\Plugin\\System\\Fediverse\\": "src/plugins/system/fediverse/src/",
+      "NX\\Plugin\\Task\\Fediverse\\": "src/plugins/task/fediverse/src/",
+      "NX\\Plugin\\User\\Fediverse\\": "src/plugins/user/fediverse/src/"
+    }
+  },
+  "require": {
+    "php": "^8.3",
+    "ext-openssl": "*"
+  }
+}

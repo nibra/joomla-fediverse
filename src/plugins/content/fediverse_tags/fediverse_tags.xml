@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="content" method="upgrade">
+    <name>PLG_CONTENT_FEDIVERSE_TAGS</name>
+    <author>Niels Braczek</author>
+    <creationDate>Feb 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>PLG_CONTENT_FEDIVERSE_TAGS_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Plugin\Content\FediverseTags</namespace>
+
+    <files>
+        <folder plugin="fediverse_tags">services</folder>
+        <folder>src</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/plg_content_fediverse_tags.ini</language>
+        <language tag="en-GB">language/en-GB/plg_content_fediverse_tags.sys.ini</language>
+    </languages>
+</extension>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Joomla update server manifest.
+    This file is updated automatically by the publish script on each release.
+    URL: https://raw.githubusercontent.com/nibra/pkg_fediverse/main/updates.xml
+-->
+<updates>
+    <update>
+        <name>Joomla Fediverse</name>
+        <description>ActivityPub &amp; Fediverse Integration for Joomla</description>
+        <element>pkg_fediverse</element>
+        <type>package</type>
+        <version>0.0.0</version>
+        <downloads>
+            <downloadurl type="full" format="zip">
+                https://github.com/nibra/pkg_fediverse/releases/download/v0.0.0/pkg_fediverse-0.0.0.zip
+            </downloadurl>
+        </downloads>
+        <tags>
+            <tag>beta</tag>
+        </tags>
+        <targetplatform name="joomla" version="6\.[0-9]+" />
+        <php_minimum>8.3.0</php_minimum>
+    </update>
+</updates>

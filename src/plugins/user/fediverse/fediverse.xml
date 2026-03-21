@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="user" method="upgrade">
+    <name>PLG_USER_FEDIVERSE</name>
+    <author>Niels Braczek</author>
+    <creationDate>Feb 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>PLG_USER_FEDIVERSE_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Plugin\User\Fediverse</namespace>
+
+    <files>
+        <folder plugin="fediverse">services</folder>
+        <folder>src</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/plg_user_fediverse.ini</language>
+        <language tag="en-GB">language/en-GB/plg_user_fediverse.sys.ini</language>
+    </languages>
+</extension>

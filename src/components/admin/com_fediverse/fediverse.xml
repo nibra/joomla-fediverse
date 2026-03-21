@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="component" method="upgrade">
+    <name>COM_FEDIVERSE</name>
+    <author>Niels Braczek</author>
+    <creationDate>Feb 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>COM_FEDIVERSE_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Component\Fediverse</namespace>
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <files folder="site">
+        <folder>services</folder>
+        <folder>src</folder>
+    </files>
+    <languages folder="site">
+        <language tag="en-GB">language/en-GB/com_fediverse.ini</language>
+    </languages>
+    <administration>
+        <menu img="class:comment">COM_FEDIVERSE</menu>
+        <files folder="admin">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>fediverse.xml</filename>
+            <folder>services</folder>
+            <folder>sql</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+        </files>
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/com_fediverse.ini</language>
+            <language tag="en-GB">language/en-GB/com_fediverse.sys.ini</language>
+        </languages>
+    </administration>
+</extension>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="6.0" method="upgrade">
+    <name>Fediverse Package</name>
+    <packagename>fediverse</packagename>
+    <author>Niels Braczek</author>
+    <creationDate>Feb 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>Fediverse (ActivityPub) Package</description>
+
+    <files folder="packages">
+        <file type="component" client="site" id="com_fediverse">com_fediverse.zip</file>
+        <file type="module" client="site" id="mod_fediverse_profile">mod_fediverse_profile.zip</file>
+        <file type="module" client="site" id="mod_fediverse_reactions">mod_fediverse_reactions.zip</file>
+        <file type="module" client="site" id="mod_fediverse_timeline">mod_fediverse_timeline.zip</file>
+        <file type="plugin" client="site" id="fediverse" group="content">plg_content_fediverse.zip</file>
+        <file type="plugin" client="site" id="fediverse_tags" group="content">plg_content_fediverse_tags.zip</file>
+        <file type="plugin" client="site" id="fediverse" group="system">plg_system_fediverse.zip</file>
+        <file type="plugin" client="site" id="fediverse" group="task">plg_task_fediverse.zip</file>
+        <file type="plugin" client="site" id="fediverse" group="user">plg_user_fediverse.zip</file>
+    </files>
+    <updateservers>
+        <server type="extension" priority="1" name="Joomla Fediverse Updates">
+            https://raw.githubusercontent.com/nibra/pkg_fediverse/main/updates.xml
+        </server>
+    </updateservers>
+</extension>

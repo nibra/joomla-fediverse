@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" client="site" method="upgrade">
+    <name>MOD_FEDIVERSE_PROFILE</name>
+    <author>Niels Braczek</author>
+    <creationDate>Feb 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>MOD_FEDIVERSE_PROFILE_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Module\Fediverse\Profile</namespace>
+
+    <files>
+        <folder module="mod_fediverse_profile">services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/mod_fediverse_profile.ini</language>
+        <language tag="en-GB">language/en-GB/mod_fediverse_profile.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="options" label="COM_MODULES_BASIC_FIELDSET_LABEL">
+                <field
+                    name="source"
+                    type="list"
+                    label="MOD_FEDIVERSE_PROFILE_FIELD_SOURCE_LABEL"
+                    default="current"
+                    validate="options"
+                >
+                    <option value="current">MOD_FEDIVERSE_PROFILE_FIELD_SOURCE_CURRENT</option>
+                    <option value="user_id">MOD_FEDIVERSE_PROFILE_FIELD_SOURCE_USER_ID</option>
+                    <option value="username">MOD_FEDIVERSE_PROFILE_FIELD_SOURCE_USERNAME</option>
+                    <option value="handle">MOD_FEDIVERSE_PROFILE_FIELD_SOURCE_HANDLE</option>
+                </field>
+                <field
+                    name="user_id"
+                    type="number"
+                    label="MOD_FEDIVERSE_PROFILE_FIELD_USER_ID_LABEL"
+                    description="MOD_FEDIVERSE_PROFILE_FIELD_USER_ID_DESC"
+                    min="1"
+                    filter="integer"
+                />
+                <field
+                    name="username"
+                    type="text"
+                    label="MOD_FEDIVERSE_PROFILE_FIELD_USERNAME_LABEL"
+                    description="MOD_FEDIVERSE_PROFILE_FIELD_USERNAME_DESC"
+                />
+                <field
+                    name="handle"
+                    type="text"
+                    label="MOD_FEDIVERSE_PROFILE_FIELD_HANDLE_LABEL"
+                    description="MOD_FEDIVERSE_PROFILE_FIELD_HANDLE_DESC"
+                />
+                <field
+                    name="show_actor_link"
+                    type="radio"
+                    layout="joomla.form.field.radio.switcher"
+                    label="MOD_FEDIVERSE_PROFILE_FIELD_SHOW_ACTOR_LINK_LABEL"
+                    default="1"
+                    filter="integer"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field
+                    name="show_follow_link"
+                    type="radio"
+                    layout="joomla.form.field.radio.switcher"
+                    label="MOD_FEDIVERSE_PROFILE_FIELD_SHOW_FOLLOW_LINK_LABEL"
+                    default="1"
+                    filter="integer"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                    name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    class="form-select"
+                    validate="moduleLayout"
+                />
+                <field
+                    name="moduleclass_sfx"
+                    type="textarea"
+                    label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                    rows="3"
+                    validate="CssIdentifier"
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

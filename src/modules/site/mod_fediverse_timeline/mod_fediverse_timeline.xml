@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" client="site" method="upgrade">
+    <name>MOD_FEDIVERSE_TIMELINE</name>
+    <author>Niels Braczek</author>
+    <creationDate>Feb 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>MOD_FEDIVERSE_TIMELINE_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Module\Fediverse\Site</namespace>
+
+    <files>
+        <folder module="mod_fediverse_timeline">services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/mod_fediverse_timeline.ini</language>
+        <language tag="en-GB">language/en-GB/mod_fediverse_timeline.sys.ini</language>
+    </languages>
+    <config>
+    </config>
+</extension>
