@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-page="05-follow">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Following & Followers — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="following-followers">Following &amp; Followers</h1>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><a href="index.html">🏠 Tutorial Home</a> | <a
+href="04-publishing.html">← Publishing Content</a> | <a
+href="06-reactions.html">Reactions Module →</a></td>
+</tr>
+<tr class="even">
+<td>## How Fediverse Following Works</td>
+</tr>
+<tr class="odd">
+<td>Following in ActivityPub is a three-step handshake. The remote
+user’s server sends a <code>Follow</code> activity to the local actor’s
+inbox. Joomla Fediverse receives it, checks the configured follow
+policy, and — if the policy permits — immediately responds with an
+<code>Accept</code> activity back to the remote actor’s inbox. From that
+point on, the local actor’s new posts are delivered to the remote
+follower’s home timeline. Unfollowing works in reverse: the remote
+server sends an <code>Undo(Follow)</code> activity, and Joomla Fediverse
+removes the relationship from its followers table.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Joomla Fediverse installed and both plugins enabled</li>
+<li>A local actor (see <a href="03-actors.html">Tutorial 03 — Creating
+Actors</a>)</li>
+<li>Follow policy set to <code>auto-accept</code> in Components →
+Fediverse → Options (default)</li>
+</ul>
+<hr />
+<h2 id="step-1-a-remote-user-follows-a-local-actor">Step 1: A Remote
+User Follows a Local Actor</h2>
+<p>When someone on another Fediverse server (say,
+<code>alice@peer.localhost</code>) searches for
+<code>grace@yoursite.example</code> and clicks <strong>Follow</strong>,
+their server sends a <code>Follow</code> activity to:</p>
+<pre><code>POST https://yoursite.example/activitypub/actors/grace/inbox
+Content-Type: application/activity+json
+
+{
+  &quot;@context&quot;: &quot;https://www.w3.org/ns/activitystreams&quot;,
+  &quot;type&quot;: &quot;Follow&quot;,
+  &quot;actor&quot;: &quot;https://peer.localhost/users/alice&quot;,
+  &quot;object&quot;: &quot;https://yoursite.example/activitypub/actors/grace&quot;
+}</code></pre>
+<p>Joomla Fediverse receives this in grace’s inbox, verifies the HTTP
+Signature on the request, and — because the policy is
+<code>auto-accept</code> — immediately responds with:</p>
+<pre><code>POST https://peer.localhost/users/alice/inbox
+{
+  &quot;type&quot;: &quot;Accept&quot;,
+  &quot;object&quot;: { &quot;type&quot;: &quot;Follow&quot;, ... }
+}</code></pre>
+<p>The follow relationship is now active. The next time grace publishes
+an article, it will be delivered to alice’s inbox automatically.</p>
+<hr />
+<h2 id="step-2-view-followers-in-the-admin">Step 2: View Followers in
+the Admin</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Actors</strong>. The
+<strong>Followers</strong> column shows the number of confirmed remote
+followers for each actor.</p>
+<p><img src="assets/follow-actors-with-follower.png"
+alt="Actors list showing follower count after alice follows grace" />
+<em>After alice follows grace, the Followers column increments to
+1.</em></p>
+<p>You can click the follower count (or the actor row) to drill into the
+Followers sub-view, which lists each remote follower with their actor
+URI and the timestamp of the follow.</p>
+<hr />
+<h2 id="step-3-triggering-a-follow-from-the-peer-testing">Step 3:
+Triggering a Follow from the Peer (Testing)</h2>
+<p>In a test environment where you control both sides, you can instruct
+the Peer mock server to send a follow request programmatically. The
+acceptance tests in
+<code>tests/Acceptance/04_tutorial_follow.feature</code> automate this
+scenario end-to-end.</p>
+<p>For manual testing, use the Peer’s admin panel or its API to look up
+<code>grace@yoursite.example</code> and initiate a follow. The
+relationship state on the Peer side should transition from
+<code>pending</code> to <code>accepted</code> within a few seconds of
+the inbox worker processing the request (see Step 1).</p>
+<hr />
+<h2 id="step-4-local-actor-following-a-remote-user-c2s">Step 4: Local
+Actor Following a Remote User (C2S)</h2>
+<p>Outbound follows — where a local actor follows someone on a remote
+server — require an OAuth 2.0 Client-to-Server (C2S) flow because they
+originate from a user action rather than a server-to-server push. This
+is covered in <strong>§5.4 of the manual</strong>. In short:</p>
+<ol type="1">
+<li><p>Obtain an OAuth access token scoped to <code>write:follows</code>
+for the local actor.</p></li>
+<li><p><code>POST</code> a <code>Follow</code> activity to grace’s
+outbox:</p>
+<pre class="json"><code>{
+  &quot;type&quot;: &quot;Follow&quot;,
+  &quot;object&quot;: &quot;https://peer.localhost/users/alice&quot;
+}</code></pre></li>
+<li><p>Joomla Fediverse signs the delivery and POSTs it to alice’s inbox
+on the Peer.</p></li>
+<li><p>If the Peer auto-accepts, grace’s <strong>Following</strong>
+count increments.</p></li>
+</ol>
+<hr />
+<h2 id="step-5-unfollow">Step 5: Unfollow</h2>
+<p>Unfollowing is symmetric to following. The remote server sends an
+<code>Undo(Follow)</code> activity to grace’s inbox:</p>
+<pre class="json"><code>{
+  &quot;type&quot;: &quot;Undo&quot;,
+  &quot;object&quot;: {
+    &quot;type&quot;: &quot;Follow&quot;,
+    &quot;actor&quot;: &quot;https://peer.localhost/users/alice&quot;,
+    &quot;object&quot;: &quot;https://yoursite.example/activitypub/actors/grace&quot;
+  }
+}</code></pre>
+<p>Joomla Fediverse removes alice from grace’s followers table. The
+<strong>Followers</strong> count on the Actors list drops back to zero.
+Future articles published by grace will no longer be delivered to
+alice.</p>
+<hr />
+<h2 id="screenshots">Screenshots</h2>
+<p><img src="assets/follow-peer-sends-follow.png"
+alt="Peer sends follow — actors list showing follower count" />
+<em>After the Peer sends a follow request, the Actors list updates to
+show the new follower count once the inbox worker processes the
+activity.</em></p>
+<hr />
+<h2 id="common-issues">Common Issues</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Follow request not accepted</td>
+<td>Follow policy set to <code>manual</code></td>
+<td>Change the default follow policy to <code>auto-accept</code>, or
+manually approve the request via the Followers sub-view</td>
+</tr>
+<tr class="even">
+<td>Follower count not updating</td>
+<td>Inbox worker task not running</td>
+<td>Run <strong>Fediverse — Inbox Worker</strong> via <strong>System →
+Scheduled Tasks → Run Now</strong></td>
+</tr>
+<tr class="odd">
+<td>HTTP 401 on incoming follow</td>
+<td>HTTP Signature verification failed</td>
+<td>Ensure the remote actor’s public key is reachable; check that server
+clocks are within 5 minutes of each other</td>
+</tr>
+<tr class="even">
+<td>Accept activity not delivered back to remote</td>
+<td>Delivery task not running</td>
+<td>Check the delivery queue and run the <strong>Deliver Outbound
+Activities</strong> task</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p class="nav-bar"><a href="index.html">🏠 Tutorial Home</a> | <a
+href="04-publishing.html">← Publishing Content</a> | <a
+href="06-reactions.html">Reactions Module →</a></p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-page="07-policies">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Domain Policies — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="domain-policies">Domain Policies</h1>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><a href="index.html">🏠 Tutorial Home</a> | <a
+href="06-reactions.html">← Reactions Module</a> | <a
+href="08-admin-ui.html">Admin UI Tour →</a></td>
+</tr>
+<tr class="even">
+<td>Domain policies let site administrators control which remote domains
+are permitted to federate with local actors. A policy can allow or block
+an entire domain, and individual actors or articles can opt out of
+federation entirely.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Joomla Fediverse installed and configured (see <a
+href="01-installation.html">Tutorial 01</a> and <a
+href="02-configuration.html">Tutorial 02</a>)</li>
+<li>At least one local actor enabled (see <a
+href="03-actors.html">Tutorial 03</a>)</li>
+<li>Administrator access to <strong>Components → Fediverse →
+Policies</strong></li>
+</ul>
+<hr />
+<h2 id="step-1-what-domain-policies-do">Step 1: What Domain Policies
+Do</h2>
+<p>Joomla Fediverse evaluates incoming and outgoing federation requests
+against an ordered list of rules:</p>
+<table>
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule type</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Block domain</strong></td>
+<td>Refuses all inbound and outbound activities for that domain. Follow
+requests from blocked domains are automatically rejected.</td>
+</tr>
+<tr class="even">
+<td><strong>Allow domain</strong></td>
+<td>Explicitly permits federation with a domain (useful when the global
+default is set to <em>deny all</em>).</td>
+</tr>
+<tr class="odd">
+<td><strong>Per-actor opt-out</strong></td>
+<td>Removes an actor’s content from federation entirely — no activities
+are queued and no follows are accepted.</td>
+</tr>
+<tr class="even">
+<td><strong>Per-content opt-out</strong></td>
+<td>Marks a single article as non-federated — the article is not wrapped
+in a <code>Create(Note)</code> and never queued for delivery.</td>
+</tr>
+</tbody>
+</table>
+<p>Policies are evaluated in order. The first matching rule wins.</p>
+<hr />
+<h2 id="step-2-opening-the-policies-view">Step 2: Opening the Policies
+View</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Policies</strong>. On a
+fresh installation the list is empty.</p>
+<p><img src="assets/policies-list-empty.png"
+alt="Policies view with no policies" /> <em>An empty Policies list. No
+domain restrictions are active yet.</em></p>
+<hr />
+<h2 id="step-3-adding-a-block-policy-for-bad-actor.example">Step 3:
+Adding a Block Policy for <code>bad-actor.example</code></h2>
+<ol type="1">
+<li>Click <strong>New</strong> in the toolbar.</li>
+<li>In the <strong>Domain</strong> field, enter
+<code>bad-actor.example</code>.</li>
+<li>Set <strong>Policy</strong> to <strong>Block</strong>.</li>
+<li>Leave <strong>Actor</strong> blank to apply the rule site-wide.</li>
+<li>Click <strong>Save &amp; Close</strong>.</li>
+</ol>
+<p><img src="assets/policies-add-form.png" alt="Add policy form" />
+<em>The Add Policy form. Enter the domain and set the policy type to
+Block.</em></p>
+<p>The domain is now blocked. Any follow request from
+<code>bad-actor.example</code> will be rejected with an
+<code>Reject</code> activity. Outbound activities destined for
+<code>bad-actor.example</code> are dropped from the delivery queue.</p>
+<p><img src="assets/policies-list-with-entry.png"
+alt="Policies list showing the blocked domain" /> <em>The Policies list
+after adding the block rule for bad-actor.example.</em></p>
+<hr />
+<h2 id="step-4-per-user-opt-out-for-bob">Step 4: Per-User Opt-Out for
+bob</h2>
+<p>To disable federation for a specific local actor (for example,
+<code>bob</code> does not want his articles to appear on the
+Fediverse):</p>
+<ol type="1">
+<li>In <strong>Components → Fediverse → Policies</strong>, click
+<strong>New</strong>.</li>
+<li>Leave <strong>Domain</strong> blank.</li>
+<li>Set <strong>Policy</strong> to <strong>Block</strong>.</li>
+<li>In the <strong>Actor</strong> field, select <code>bob</code>.</li>
+<li>Click <strong>Save &amp; Close</strong>.</li>
+</ol>
+<p>From this point, bob’s articles are never queued for delivery and his
+actor profile will not accept new follow requests.</p>
+<hr />
+<h2 id="step-5-per-content-opt-out">Step 5: Per-Content Opt-Out</h2>
+<p>To exclude a single article from federation:</p>
+<ol type="1">
+<li>Open the article in the Joomla content editor (<strong>Content →
+Articles</strong>).</li>
+<li>Navigate to the <strong>Options</strong> or
+<strong>Fediverse</strong> tab.</li>
+<li>Set <strong>Federate this article</strong> to
+<strong>No</strong>.</li>
+<li>Save the article.</li>
+</ol>
+<p>The Content - Fediverse plugin checks this flag before queuing the
+activity. Articles marked as non-federated are silently skipped.</p>
+<hr />
+<h2 id="step-6-follow-policy-setting">Step 6: Follow Policy Setting</h2>
+<p>The global follow policy determines whether remote follow requests
+are automatically accepted or require manual approval:</p>
+<ol type="1">
+<li>Navigate to <strong>Components → Fediverse → Options</strong> (or
+click <strong>Options</strong> in the toolbar from any Fediverse admin
+view).</li>
+<li>In the <strong>Follow Policy</strong> field, choose:
+<ul>
+<li><strong>Auto-accept</strong> — Follow requests are accepted
+immediately (default).</li>
+<li><strong>Manual approval</strong> — Follow requests are queued for
+administrator review.</li>
+</ul></li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p>Per-actor overrides can be set with the
+<code>Joomla policy allows/denies follows for actor</code> Behat steps
+in acceptance tests.</p>
+<hr />
+<h2 id="common-issues">Common Issues</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 48%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Block not working immediately</td>
+<td>Delivery cache or in-flight scheduler run</td>
+<td>Wait for the next scheduler cycle or run tasks manually</td>
+</tr>
+<tr class="even">
+<td>Per-user opt-out not respected</td>
+<td>Content - Fediverse plugin disabled</td>
+<td>Enable the plugin at <strong>Extensions → Plugins → Content -
+Fediverse</strong></td>
+</tr>
+<tr class="odd">
+<td>Manual approval queue not visible</td>
+<td>No pending follows</td>
+<td>Send a test follow from the Peer mock server</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p class="nav-bar"><a href="index.html">🏠 Tutorial Home</a> | <a href="06-reactions.html">←
+Reactions Module</a> | <a href="08-admin-ui.html">Admin UI Tour →</a></p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>

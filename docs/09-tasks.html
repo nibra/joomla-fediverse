@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-page="09-tasks">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Scheduled Tasks — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="scheduled-tasks">Scheduled Tasks</h1>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><a href="index.html">🏠 Tutorial Home</a> | <a href="08-admin-ui.html">←
+Admin UI Tour</a> | <a href="10-shortcodes.html">Fediverse Shortcodes
+→</a></td>
+</tr>
+<tr class="even">
+<td>Joomla Fediverse relies on Joomla’s Scheduled Tasks framework
+(introduced in Joomla 4.1) to run background work. Without scheduled
+tasks, activities pile up in the delivery queue and inbound inbox
+records are never cleaned up. This tutorial explains which tasks are
+registered, how to configure their run intervals, and how to monitor
+their execution.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Joomla Fediverse installed (see <a
+href="01-installation.html">Tutorial 01</a>)</li>
+<li>Joomla 4.1+ with the Scheduled Tasks component enabled</li>
+<li>Administrator access to <strong>System → Scheduled
+Tasks</strong></li>
+<li>A server-level cron job hitting
+<code>cli/joomla.php task:run --all</code> (or the equivalent Joomla
+task runner URL) on a regular interval</li>
+</ul>
+<hr />
+<h2 id="step-1-tasks-registered-by-joomla-fediverse">Step 1: Tasks
+Registered by Joomla Fediverse</h2>
+<p>Joomla Fediverse registers two task plugins:</p>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 25%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task name</th>
+<th>Plugin</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Fediverse — Deliver Outbound Activities</strong></td>
+<td><code>plg_task_fediverse_delivery</code></td>
+<td>Processes the delivery queue — takes <code>pending</code> rows from
+<code>#__fediverse_deliveries</code>, POSTs them to remote inboxes, and
+updates the status to <code>delivered</code> or schedules a retry on
+failure.</td>
+</tr>
+<tr class="even">
+<td><strong>Fediverse — Clean Up Old Records</strong></td>
+<td><code>plg_task_fediverse_cleanup</code></td>
+<td>Removes <code>processed</code> inbox records and successfully
+<code>delivered</code> outbox entries older than a configurable
+retention period, keeping the database lean.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-2-viewing-tasks-in-the-admin">Step 2: Viewing Tasks in the
+Admin</h2>
+<p class="nav-bar">Navigate to <strong>System → Scheduled Tasks</strong>. Use the search
+bar to filter for <strong>fediverse</strong>.</p>
+<p><img src="assets/tasks-scheduler-list.png"
+alt="Scheduler list filtered for fediverse" /> <em>Both Fediverse
+scheduled tasks are visible in the Scheduler list. The State column
+shows whether each task is enabled.</em></p>
+<p>Each row shows:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Title</strong></td>
+<td>Human-readable task name</td>
+</tr>
+<tr class="even">
+<td><strong>Type</strong></td>
+<td>Plugin type identifier</td>
+</tr>
+<tr class="odd">
+<td><strong>Last run</strong></td>
+<td>UTC timestamp of the most recent execution</td>
+</tr>
+<tr class="even">
+<td><strong>Next run</strong></td>
+<td>Calculated next execution time based on the configured interval</td>
+</tr>
+<tr class="odd">
+<td><strong>State</strong></td>
+<td>Enabled / Disabled</td>
+</tr>
+<tr class="even">
+<td><strong>Exit code</strong></td>
+<td>Result of the last run: <code>0</code> = success, non-zero =
+error</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-3-configuring-task-intervals">Step 3: Configuring Task
+Intervals</h2>
+<ol type="1">
+<li>Click the task title (e.g. <strong>Fediverse — Deliver Outbound
+Activities</strong>) to open the task form.</li>
+<li>In the <strong>Execution rules</strong> section, set the
+<strong>Test rule</strong> (interval):
+<ul>
+<li>For the delivery task, <code>Every 1 minute</code> is recommended
+for responsive federation.</li>
+<li>For the cleanup task, <code>Every 1 day</code> is sufficient.</li>
+</ul></li>
+<li>Click <strong>Save &amp; Close</strong>.</li>
+</ol>
+<p><img src="assets/tasks-task-detail.png"
+alt="Individual task configuration form" /> <em>The task detail form
+showing the execution interval configuration.</em></p>
+<hr />
+<h2 id="step-4-triggering-tasks-manually">Step 4: Triggering Tasks
+Manually</h2>
+<p>During development or when diagnosing issues, you can run a task on
+demand without waiting for the scheduler interval:</p>
+<ol type="1">
+<li>Navigate to <strong>System → Scheduled Tasks</strong>.</li>
+<li>Check the checkbox next to the task you want to run.</li>
+<li>Click <strong>Run</strong> in the toolbar (or use the <strong>Run
+Now</strong> inline action button if present).</li>
+</ol>
+<p>Alternatively, run the task from the command line:</p>
+<pre class="bash"><code>php cli/joomla.php scheduler:run --id=&lt;task_id&gt;</code></pre>
+<p>Replace <code>&lt;task_id&gt;</code> with the numeric ID shown in the
+task list URL.</p>
+<hr />
+<h2 id="step-5-monitoring-task-execution-in-the-action-log">Step 5:
+Monitoring Task Execution in the Action Log</h2>
+<p class="nav-bar">Joomla’s Action Log records each task execution. Navigate to
+<strong>System → Action Logs</strong> and filter by
+<strong>Extension</strong> = <code>com_scheduler</code> to see a
+timestamped history of every task run, including exit codes and any
+error messages written by the task plugin.</p>
+<p>If the delivery task fails repeatedly, the Action Log entry will
+contain the HTTP error code returned by the remote inbox endpoint —
+useful for diagnosing connectivity issues with specific Fediverse
+instances.</p>
+<hr />
+<h2 id="common-issues">Common Issues</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 48%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tasks never run</td>
+<td>No server cron job configured</td>
+<td>Add a cron entry:
+<code>* * * * * php /path/to/cli/joomla.php scheduler:run --all</code></td>
+</tr>
+<tr class="even">
+<td>Tasks show as enabled but exit code is non-zero</td>
+<td>Database permission error or plugin error</td>
+<td>Check the Action Log for the specific error message and verify
+<code>#__fediverse_deliveries</code> table permissions</td>
+</tr>
+<tr class="odd">
+<td>Delivery task runs but nothing is delivered</td>
+<td>Remote Peer unreachable from the Joomla server</td>
+<td>Test connectivity: <code>curl -I https://peer.localhost/</code> from
+the Joomla server and check firewall rules</td>
+</tr>
+<tr class="even">
+<td>Cleanup task removes too many records</td>
+<td>Retention period too short</td>
+<td>Increase the retention period in the cleanup task configuration
+form</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p class="nav-bar"><a href="index.html">🏠 Tutorial Home</a> | <a href="08-admin-ui.html">←
+Admin UI Tour</a> | <a href="10-shortcodes.html">Fediverse Shortcodes
+→</a></p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>

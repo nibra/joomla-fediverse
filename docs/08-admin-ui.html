@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" data-page="08-admin-ui">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Admin UI Tour — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="admin-ui-tour">Admin UI Tour</h1>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><a href="index.html">🏠 Tutorial Home</a> | <a href="07-policies.html">←
+Domain Policies</a> | <a href="09-tasks.html">Scheduled Tasks →</a></td>
+</tr>
+<tr class="even">
+<td>Joomla Fediverse adds five views under <strong>Components →
+Fediverse</strong> in the Joomla administrator. This tutorial is a
+guided tour of each view, explaining the data they present and the
+actions available.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Joomla Fediverse installed (see <a
+href="01-installation.html">Tutorial 01</a>)</li>
+<li>Logged in as a Joomla Administrator (Super User or Administrator
+group)</li>
+</ul>
+<hr />
+<h2 id="dashboard">1. Dashboard</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse</strong> (the default view
+is the Dashboard).</p>
+<p><img src="assets/admin-dashboard.png" alt="Dashboard view" /> <em>The
+Fediverse Dashboard shows at-a-glance counts for all key
+entities.</em></p>
+<p>The Dashboard displays summary cards:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Card</th>
+<th>What it counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Actors</strong></td>
+<td>Total local Fediverse actors registered on this site</td>
+</tr>
+<tr class="even">
+<td><strong>Followers</strong></td>
+<td>Total confirmed remote followers across all actors</td>
+</tr>
+<tr class="odd">
+<td><strong>Inbox</strong></td>
+<td>Total inbound activities received (all time)</td>
+</tr>
+<tr class="even">
+<td><strong>Pending deliveries</strong></td>
+<td>Outbound activities waiting to be delivered</td>
+</tr>
+<tr class="odd">
+<td><strong>Failed deliveries</strong></td>
+<td>Deliveries that exhausted all retry attempts</td>
+</tr>
+</tbody>
+</table>
+<p>Click any card to jump directly to the corresponding list view.</p>
+<hr />
+<h2 id="actors">2. Actors</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Actors</strong>.</p>
+<p><img src="assets/admin-actors.png" alt="Actors list view" /> <em>The
+Actors list shows all local actors and their federation status.</em></p>
+<p>Column reference:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Handle</strong></td>
+<td>The actor’s Fediverse handle,
+e.g. <code>grace@yoursite.example</code></td>
+</tr>
+<tr class="even">
+<td><strong>Joomla User</strong></td>
+<td>The linked Joomla user account</td>
+</tr>
+<tr class="odd">
+<td><strong>Status</strong></td>
+<td>Enabled (green tick) or Disabled (red cross)</td>
+</tr>
+<tr class="even">
+<td><strong>Followers</strong></td>
+<td>Number of confirmed remote followers</td>
+</tr>
+<tr class="odd">
+<td><strong>Published</strong></td>
+<td>Number of federated articles</td>
+</tr>
+</tbody>
+</table>
+<p>Click <strong>Enable</strong> or <strong>Disable</strong> in the
+Status column to toggle federation for an actor without deleting the
+actor record. Disabling an actor stops new deliveries and rejects new
+follow requests, but preserves the existing follower list.</p>
+<hr />
+<h2 id="inbox">3. Inbox</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Inbox</strong> (or
+<code>?option=com_fediverse&amp;view=inboxitems</code>).</p>
+<p><img src="assets/admin-inbox.png" alt="Inbox view" /> <em>The Inbox
+lists every inbound ActivityPub activity received by any local
+actor.</em></p>
+<p>Column reference:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Activity ID</strong></td>
+<td>The <code>id</code> URI from the incoming activity JSON</td>
+</tr>
+<tr class="even">
+<td><strong>Type</strong></td>
+<td>Activity type: <code>Follow</code>, <code>Undo</code>,
+<code>Create</code>, <code>Like</code>, <code>Announce</code>,
+<code>Delete</code>, etc.</td>
+</tr>
+<tr class="odd">
+<td><strong>Actor (remote)</strong></td>
+<td>The remote actor that sent the activity</td>
+</tr>
+<tr class="even">
+<td><strong>Target (local)</strong></td>
+<td>The local actor whose inbox received it</td>
+</tr>
+<tr class="odd">
+<td><strong>Received</strong></td>
+<td>UTC timestamp of receipt</td>
+</tr>
+<tr class="even">
+<td><strong>Status</strong></td>
+<td><code>processed</code>, <code>pending</code>,
+<code>error</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use the <strong>Status</strong> filter to isolate activities stuck in
+<code>error</code> state for investigation.</p>
+<hr />
+<h2 id="deliveries">4. Deliveries</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Deliveries</strong>.</p>
+<p><img src="assets/admin-deliveries.png" alt="Deliveries view" />
+<em>The Deliveries view shows the outbound activity queue.</em></p>
+<p>Column reference:</p>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Activity</strong></td>
+<td>Summary of the wrapped activity (<code>Create</code>,
+<code>Update</code>, <code>Delete</code>, <code>Follow</code>,
+<code>Accept</code>, etc.)</td>
+</tr>
+<tr class="even">
+<td><strong>From</strong></td>
+<td>Local actor sending the activity</td>
+</tr>
+<tr class="odd">
+<td><strong>To</strong></td>
+<td>Remote inbox URI</td>
+</tr>
+<tr class="even">
+<td><strong>Status</strong></td>
+<td><code>pending</code>, <code>delivered</code>, <code>failed</code>,
+<code>retrying</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Attempts</strong></td>
+<td>Number of delivery attempts made</td>
+</tr>
+<tr class="even">
+<td><strong>Next attempt</strong></td>
+<td>Scheduled time for the next retry (exponential back-off)</td>
+</tr>
+</tbody>
+</table>
+<p>Click a row to view the full activity JSON and the error message from
+the last failed attempt. Failed deliveries that have exhausted all
+retries remain in the list for audit purposes; delete them manually when
+they are no longer needed.</p>
+<hr />
+<h2 id="policies">5. Policies</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Policies</strong>.</p>
+<p><img src="assets/admin-policies.png" alt="Policies view" /> <em>The
+Policies list shows domain-level and actor-level federation
+rules.</em></p>
+<p>For a full explanation of how to create and manage policies, see <a
+href="07-policies.html">Tutorial 07 — Domain Policies</a>.</p>
+<hr />
+<h2 id="common-issues">Common Issues</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 48%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>All views show no data</td>
+<td>Extension was just installed with no activity yet</td>
+<td>Publish an article or send a test follow from the Peer</td>
+</tr>
+<tr class="even">
+<td>Permission error accessing Fediverse views</td>
+<td>Logged-in user is not in the Administrator group</td>
+<td>Add the user to the Administrator group in <strong>Users →
+Groups</strong></td>
+</tr>
+<tr class="odd">
+<td>Dashboard counts don’t match list view counts</td>
+<td>Browser cache</td>
+<td>Hard-refresh (Ctrl+Shift+R) or clear the Joomla cache at
+<strong>System → Clear Cache</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p class="nav-bar"><a href="index.html">🏠 Tutorial Home</a> | <a href="07-policies.html">←
+Domain Policies</a> | <a href="09-tasks.html">Scheduled Tasks →</a></p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-page="04-publishing">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Publishing Content to the Fediverse — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="publishing-content-to-the-fediverse">Publishing Content to the
+Fediverse</h1>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><a href="index.html">🏠 Tutorial Home</a> | <a href="03-actors.html">←
+Creating Actors</a> | <a href="05-follow.html">Following and Followers
+→</a></td>
+</tr>
+<tr class="even">
+<td>Once you have a local actor set up and at least one remote follower,
+every article you publish by that actor is automatically wrapped in an
+ActivityPub <code>Create(Note)</code> activity and delivered to every
+follower’s inbox. This tutorial walks through the full cycle: write an
+article, verify it appears in grace’s outbox, and confirm that delivery
+was queued for remote recipients.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Joomla Fediverse installed and both plugins enabled</li>
+<li>A local actor for the article’s author (see <a
+href="03-actors.html">Tutorial 03 — Creating Actors</a>)</li>
+<li>At least one remote follower for that actor (optional for outbox
+verification; required for delivery testing — see <a
+href="05-follow.html">Tutorial 05 — Following &amp; Followers</a>)</li>
+</ul>
+<blockquote>
+<p><strong>Important:</strong> The <strong>Content - Fediverse</strong>
+plugin must be enabled. It is the hook that fires when a Joomla article
+is saved or published. Without it, nothing is queued for delivery.</p>
+</blockquote>
+<hr />
+<h2 id="step-1-write-and-publish-the-article">Step 1: Write and Publish
+the Article</h2>
+<p class="nav-bar">In the Joomla administrator, navigate to <strong>Content → Articles →
+New</strong>. Fill in the article normally, then pay attention to one
+crucial field: <strong>Author</strong>.</p>
+<p>In the <strong>Publishing</strong> tab (or the
+<strong>Author</strong> field in the right-hand sidebar), set the author
+to the Joomla user associated with your actor — in this tutorial that is
+<strong>Grace</strong>.</p>
+<p><img src="assets/publishing-article-editor.png"
+alt="Joomla article editor" /> <em>Set the article author to the Joomla
+user linked to your Fediverse actor (grace). The Content plugin watches
+this field.</em></p>
+<p>Give the article a title and body, then set <strong>Status</strong>
+to <em>Published</em> and click <strong>Save &amp; Close</strong>.</p>
+<p>As soon as the article is saved in Published state, the Content -
+Fediverse plugin intercepts the save event, builds a
+<code>Create(Note)</code> activity, and inserts it into the delivery
+queue.</p>
+<hr />
+<h2 id="step-2-check-the-delivery-queue">Step 2: Check the Delivery
+Queue</h2>
+<p class="nav-bar">Navigate to <strong>Components → Fediverse → Deliveries</strong> (or
+open the Fediverse Dashboard and click the delivery queue count). You
+should see one or more rows — one per follower inbox that grace has.</p>
+<p><img src="assets/publishing-deliveries-view.png"
+alt="Deliveries view showing a queued item" /> <em>Each row in the
+Deliveries view represents a pending HTTP POST to a remote inbox. The
+status column shows whether delivery has been attempted.</em></p>
+<p class="nav-bar">The rows will remain in a <em>pending</em> state until the scheduler
+task runs. If you want to trigger delivery immediately, navigate to
+<strong>System → Scheduled Tasks</strong>, find <strong>Fediverse —
+Deliver Outbound Activities</strong>, and click <strong>Run
+Now</strong>.</p>
+<hr />
+<h2 id="step-3-verify-the-outbox">Step 3: Verify the Outbox</h2>
+<p>The outbox is a public, paginated ActivityPub collection of
+everything grace has published. Remote servers read it to catch up on
+missed activities. You can inspect it directly:</p>
+<pre><code>GET https://yoursite.example/activitypub/actors/grace/outbox
+Accept: application/activity+json</code></pre>
+<p>The collection index response:</p>
+<pre class="json"><code>{
+  &quot;@context&quot;: &quot;https://www.w3.org/ns/activitystreams&quot;,
+  &quot;id&quot;: &quot;https://yoursite.example/activitypub/actors/grace/outbox&quot;,
+  &quot;type&quot;: &quot;OrderedCollection&quot;,
+  &quot;totalItems&quot;: 1,
+  &quot;first&quot;: &quot;https://yoursite.example/activitypub/actors/grace/outbox?page=1&quot;
+}</code></pre>
+<p>Follow the <code>first</code> link to fetch the page of items:</p>
+<pre class="json"><code>{
+  &quot;type&quot;: &quot;OrderedCollectionPage&quot;,
+  &quot;orderedItems&quot;: [
+    {
+      &quot;type&quot;: &quot;Create&quot;,
+      &quot;object&quot;: {
+        &quot;type&quot;: &quot;Note&quot;,
+        &quot;content&quot;: &quot;&lt;p&gt;Hello, Fediverse!&lt;/p&gt;&quot;
+      }
+    }
+  ]
+}</code></pre>
+<p><img src="assets/publishing-outbox.png"
+alt="Outbox endpoint response" /> <em>The outbox endpoint confirms that
+the article was wrapped in a Create activity and stored.</em></p>
+<hr />
+<h2 id="editing-and-deleting-articles">Editing and Deleting
+Articles</h2>
+<ul>
+<li><strong>Editing</strong> an article body creates an
+<code>Update(Note)</code> activity and queues it for delivery to all
+followers.</li>
+<li><strong>Deleting</strong> (or unpublishing) an article creates a
+<code>Delete(Tombstone)</code> activity. Remote servers that cached the
+original post will remove it from their timelines when they process the
+Delete.</li>
+</ul>
+<p>Both operations are automatic — the Content - Fediverse plugin
+handles them with no additional steps on your part.</p>
+<hr />
+<h2 id="common-issues">Common Issues</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No delivery queue rows after publishing</td>
+<td>Content - Fediverse plugin disabled</td>
+<td>Enable <code>plg_content_fediverse</code> in <strong>System →
+Plugins</strong></td>
+</tr>
+<tr class="even">
+<td>Delivery rows stuck in <em>pending</em> forever</td>
+<td>Scheduler task not running</td>
+<td>Configure a server cron or use <strong>Run Now</strong> as described
+above</td>
+</tr>
+<tr class="odd">
+<td>Outbox returns an empty <code>orderedItems</code></td>
+<td>Article author is not a Fediverse actor</td>
+<td>Create an actor for the author (Tutorial 03)</td>
+</tr>
+<tr class="even">
+<td>Remote timeline shows HTML instead of plain text</td>
+<td>Note content is being double-encoded</td>
+<td>Check for a third-party content plugin that transforms article
+output</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p class="nav-bar"><a href="index.html">🏠 Tutorial Home</a> | <a href="03-actors.html">←
+Creating Actors</a> | <a href="05-follow.html">Following and Followers
+→</a></p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>

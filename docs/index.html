@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-page="index">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Joomla Fediverse Tutorial — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="joomla-fediverse-tutorial">Joomla Fediverse Tutorial</h1>
+<p>Welcome to the <strong>Joomla Fediverse</strong> tutorial. This guide
+walks you through installing, configuring, and using the Joomla
+ActivityPub extension to join the Fediverse.</p>
+<h2 id="tutorial-contents">Tutorial Contents</h2>
+<ol type="1">
+<li><a href="01-installation.html">Installing Joomla Fediverse</a></li>
+<li><a href="02-configuration.html">Configuration</a></li>
+<li><a href="03-actors.html">Creating Actors</a></li>
+<li><a href="04-publishing.html">Publishing Content</a></li>
+<li><a href="05-follow.html">Following and Followers</a></li>
+<li><a href="06-reactions.html">Reactions Module</a></li>
+<li><a href="07-policies.html">Domain Policies</a></li>
+<li><a href="08-admin-ui.html">Admin UI Tour</a></li>
+<li><a href="09-tasks.html">Scheduled Tasks</a></li>
+<li><a href="10-shortcodes.html">Fediverse Shortcodes</a></li>
+<li><a href="11-client-apps.html">Using a Fediverse Client App</a></li>
+</ol>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="../../docs/manual.html">Operator Manual</a> — full reference
+documentation</li>
+<li><a href="../../docs/manual.html#appendix-b-glossary">Glossary</a></li>
+<li><a
+href="../../docs/manual.html#appendix-a-activitypub-overview">ActivityPub
+Overview</a></li>
+</ul>
+<h2 id="system-test-status">System Test Status</h2>
+<p>Each tutorial page is backed by a Behat acceptance test
+(<code>tests/Acceptance/0*_tutorial_*.feature</code>) and a Playwright
+screenshot spec
+(<code>tests/System/tutorial/tutorial-*.spec.js</code>).</p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>

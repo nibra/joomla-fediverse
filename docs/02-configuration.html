@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-page="02-configuration">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Configuring Joomla Fediverse — Joomla Fediverse Docs</title>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+
+  <header class="docs-topbar">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.svg" alt="Joomla Fediverse logo">
+      Joomla Fediverse
+    </a>
+    <nav class="topbar-links">
+      <a href="index.html">Docs</a>
+      <a href="https://github.com/nibra/joomla-fediverse/releases/latest">Download</a>
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a>
+      <a href="../index.html#pricing">Pricing</a>
+    </nav>
+  </header>
+
+  <div class="docs-body">
+
+    <aside class="docs-sidebar">
+      <div class="sidebar-label">Tutorial</div>
+      <ul>
+        <li data-page="index"><a href="index.html">🏠 Overview</a></li>
+        <li data-page="01-installation"><a href="01-installation.html">1. Installation</a></li>
+        <li data-page="02-configuration"><a href="02-configuration.html">2. Configuration</a></li>
+        <li data-page="03-actors"><a href="03-actors.html">3. Creating Actors</a></li>
+        <li data-page="04-publishing"><a href="04-publishing.html">4. Publishing Content</a></li>
+        <li data-page="05-follow"><a href="05-follow.html">5. Following &amp; Followers</a></li>
+        <li data-page="06-reactions"><a href="06-reactions.html">6. Reactions Module</a></li>
+        <li data-page="07-policies"><a href="07-policies.html">7. Domain Policies</a></li>
+        <li data-page="08-admin-ui"><a href="08-admin-ui.html">8. Admin UI Tour</a></li>
+        <li data-page="09-tasks"><a href="09-tasks.html">9. Scheduled Tasks</a></li>
+        <li data-page="10-shortcodes"><a href="10-shortcodes.html">10. Shortcodes</a></li>
+        <li data-page="11-client-apps"><a href="11-client-apps.html">11. Client Apps</a></li>
+      </ul>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-label">Links</div>
+      <ul>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../index.html">Back to site</a></li>
+      </ul>
+    </aside>
+
+    <main class="docs-content">
+<h1 id="configuring-joomla-fediverse">Configuring Joomla Fediverse</h1>
+<table style="width:6%;">
+<colgroup>
+<col style="width: 5%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><a href="index.html">🏠 Tutorial Home</a> | <a
+href="01-installation.html">← Installing Joomla Fediverse</a> | <a
+href="03-actors.html">Creating Actors →</a></td>
+</tr>
+<tr class="even">
+<td>Before you can create actors or publish content to the Fediverse,
+you need to tell Joomla Fediverse a few things about your site: its
+public identity, how aggressively to allow incoming follows, and which
+background tasks should run. This tutorial walks through every setting
+you are likely to touch on a typical installation.</td>
+</tr>
+<tr class="odd">
+<td>## Prerequisites</td>
+</tr>
+<tr class="even">
+<td>- Joomla Fediverse installed and both required plugins enabled (see
+<a href="01-installation.html">Tutorial 01 — Installation</a>) -
+Administrator access to the Joomla back-end</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-1-global-settings">Step 1: Global Settings</h2>
+<p class="nav-bar">Open <strong>Components → Fediverse</strong> from the administrator
+menu, then click the <strong>Options</strong> button in the toolbar
+(top-right). You land on the Fediverse configuration form.</p>
+<p class="nav-bar"><img src="assets/config-global-settings.png"
+alt="Fediverse global settings form" /> <em>The Fediverse configuration
+form. Reach it via Components → Fediverse → Options.</em></p>
+<p>The fields you should review immediately:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What it does</th>
+<th>Recommended value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Site handle suffix</strong></td>
+<td>The domain appended to actor handles —
+<code>grace@yoursite.example</code>. Must match your site’s public
+domain.</td>
+<td><code>yoursite.example</code></td>
+</tr>
+<tr class="even">
+<td><strong>Base URL</strong></td>
+<td>The HTTPS root URL of your Joomla site. ActivityPub uses this to
+build all actor and object URIs.</td>
+<td><code>https://yoursite.example</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Maximum incoming follows</strong></td>
+<td>Hard cap on the total number of remote followers any single local
+actor can accumulate. Set to <code>0</code> to disable the cap.</td>
+<td><code>0</code> (unlimited) or a sane integer</td>
+</tr>
+<tr class="even">
+<td><strong>Default follow policy</strong></td>
+<td><code>auto-accept</code> approves all incoming follow requests
+immediately; <code>manual</code> queues them for review.</td>
+<td><code>auto-accept</code> for a public site</td>
+</tr>
+</tbody>
+</table>
+<p>After editing, click <strong>Save</strong> in the toolbar to apply
+the changes, or <strong>Save &amp; Close</strong> to return to the
+dashboard.</p>
+<blockquote>
+<p><strong>Tip:</strong> The Base URL must match the domain your Joomla
+installation is served on. Mismatches cause WebFinger lookups and
+HTTP-Signature verification to fail silently.</p>
+</blockquote>
+<hr />
+<h2 id="step-2-scheduler-tasks">Step 2: Scheduler Tasks</h2>
+<p>Joomla Fediverse relies on two scheduled tasks to move activities
+through the delivery pipeline and clean up stale data. These tasks must
+exist in Joomla’s Task Scheduler and must be triggered by a cron job (or
+by Joomla’s lazy-execution mode).</p>
+<p class="nav-bar">Navigate to <strong>System → Scheduled Tasks</strong> in the
+administrator menu. Use the search bar to filter by
+<code>fediverse</code>.</p>
+<p><img src="assets/config-scheduler-tasks.png"
+alt="Scheduled Tasks list filtered for Fediverse" /> <em>Two Fediverse
+tasks should appear: the delivery task and the cleanup task.</em></p>
+<p>You should see two entries:</p>
+<ul>
+<li><strong>Fediverse — Deliver Outbound Activities</strong> — dequeues
+items from the delivery queue and sends them to remote inboxes via HTTP
+POST. Should run every one to five minutes.</li>
+<li><strong>Fediverse — Inbox Cleanup</strong> — purges processed inbox
+entries older than a configurable retention window. Can run daily.</li>
+</ul>
+<p>If either task is missing, click <strong>New</strong> and add it from
+the Fediverse task type. If the tasks exist but show a red status icon,
+click the task name and ensure <strong>Published</strong> is set to
+<em>Yes</em>.</p>
+<h3 id="cron-configuration">Cron configuration</h3>
+<p>For reliable delivery, call Joomla’s scheduler endpoint from a
+server-side cron job:</p>
+<pre class="sh"><code>*/5 * * * * curl -s &quot;https://yoursite.example/index.php?option=com_ajax&amp;plugin=fediverse&amp;format=json&quot; &gt; /dev/null 2&gt;&amp;1</code></pre>
+<p class="nav-bar">Alternatively, enable Joomla’s built-in <strong>Web Cron</strong>
+under <strong>System → Global Configuration → Server</strong> so that
+normal page loads trigger pending tasks (convenient for development; not
+recommended for production).</p>
+<hr />
+<h2 id="step-3-verifying-the-webfinger-endpoint">Step 3: Verifying the
+WebFinger Endpoint</h2>
+<p>WebFinger is the discovery protocol other Fediverse servers use to
+find your actors. Before creating any actors, confirm the endpoint is
+reachable.</p>
+<p>Open a browser (or use <code>curl</code>) and visit:</p>
+<pre><code>/.well-known/webfinger?resource=acct:grace@yoursite.example</code></pre>
+<p>Replace <code>grace</code> with any local actor handle you have
+already created, and replace <code>yoursite.example</code> with your
+site’s domain.</p>
+<p>A healthy response looks like this:</p>
+<pre class="json"><code>{
+  &quot;subject&quot;: &quot;acct:grace@yoursite.example&quot;,
+  &quot;aliases&quot;: [&quot;https://yoursite.example/activitypub/actors/grace&quot;],
+  &quot;links&quot;: [
+    {
+      &quot;rel&quot;: &quot;self&quot;,
+      &quot;type&quot;: &quot;application/activity+json&quot;,
+      &quot;href&quot;: &quot;https://yoursite.example/activitypub/actors/grace&quot;
+    }
+  ]
+}</code></pre>
+<p><img src="assets/config-webfinger.png"
+alt="WebFinger response shown in browser" /> <em>A valid WebFinger
+response confirms the System plugin is active and routing
+correctly.</em></p>
+<p>If the endpoint returns a 404, the <strong>System -
+Fediverse</strong> plugin is either disabled or its routing rules are
+blocked by another plugin. If it returns HTML instead of JSON, the
+<code>Accept</code> header is not being respected — check that no
+caching layer is stripping request headers.</p>
+<hr />
+<h2 id="common-issues">Common Issues</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Configuration form shows “Save failed”</td>
+<td>File-system permissions on the <code>configuration.php</code>
+directory</td>
+<td>Give the web server write access to the Joomla root, or use a custom
+params table</td>
+</tr>
+<tr class="even">
+<td>Scheduler tasks never fire</td>
+<td>System cron not configured</td>
+<td>Add a cron entry as shown above, or enable Web Cron</td>
+</tr>
+<tr class="odd">
+<td>WebFinger returns 404</td>
+<td>System - Fediverse plugin disabled</td>
+<td>Enable <code>plg_system_fediverse</code> in <strong>System →
+Plugins</strong></td>
+</tr>
+<tr class="even">
+<td>WebFinger returns HTML</td>
+<td>Caching plugin serving a cached HTML response</td>
+<td>Exclude <code>/.well-known/*</code> from caching rules</td>
+</tr>
+<tr class="odd">
+<td>Remote server can’t resolve actors</td>
+<td>Base URL does not match actual domain</td>
+<td>Re-check the <strong>Base URL</strong> field in Options</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p class="nav-bar"><a href="index.html">🏠 Tutorial Home</a> | <a
+href="01-installation.html">← Installing Joomla Fediverse</a> | <a
+href="03-actors.html">Creating Actors →</a></p>
+    </main>
+
+  </div>
+
+  <footer class="docs-footer">
+    <p>Joomla Fediverse &mdash; GPL v2 &mdash;
+      <a href="https://github.com/nibra/joomla-fediverse">GitHub</a> &middot;
+      <a href="https://github.com/nibra/joomla-fediverse/issues">Issues</a> &middot;
+      <a href="../index.html">Back to site</a>
+    </p>
+  </footer>
+
+  <script>
+    // Highlight the active sidebar item based on data-page attribute
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      if (!page) return;
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (li.getAttribute('data-page') === page) li.classList.add('active');
+      });
+    })();
+  </script>
+
+</body>
+</html>
