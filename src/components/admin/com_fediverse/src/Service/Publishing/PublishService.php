@@ -17,7 +17,11 @@ use NX\Component\Fediverse\Administrator\Service\Publishing\ContentProviderRegis
 use NX\Component\Fediverse\Administrator\Model\FollowersModelInterface;
 use NX\Component\Fediverse\Administrator\Model\OutboxModelInterface;
 use NX\Component\Fediverse\Administrator\Service\Actor\ActorResolverServiceInterface;
+use NX\Component\Fediverse\Administrator\Event\ContentDeletedEvent;
+use NX\Component\Fediverse\Administrator\Event\ContentPublishedEvent;
+use NX\Component\Fediverse\Administrator\Event\ContentUpdatedEvent;
 use NX\Component\Fediverse\Administrator\Service\Federation\DeliveryServiceInterface;
+use NX\Component\Fediverse\Administrator\Service\Events\FediverseDomainEventDispatcherInterface;
 use NX\Component\Fediverse\Administrator\Service\Site\BaseUrlProviderInterface;
 use Joomla\Database\DatabaseInterface;
 use Throwable;
@@ -42,6 +46,7 @@ final class PublishService
      * @params BaseUrlProviderInterface $baseUrl Base URL provider.
      * @params FollowersModel $followersModel Followers model.
      * @params OutboxModel $outboxModel Outbox model.
+     * @params ?FediverseDomainEventDispatcherInterface $eventDispatcher Domain event dispatcher.
      *
      * @return  void  None.
      *
@@ -55,6 +60,7 @@ final class PublishService
         private FollowersModelInterface $followersModel,
         private OutboxModelInterface $outboxModel,
         private ?DatabaseInterface $db = null,
+        private ?FediverseDomainEventDispatcherInterface $eventDispatcher = null,
     ) {
     }
 
@@ -79,6 +85,8 @@ final class PublishService
             return;
         }
 
+        $item = $this->mergeWithPersistedItem($provider, $item);
+
         $userId = $provider->resolveUserId($item, $context);
         if ($userId <= 0) {
             return;
@@ -90,18 +98,8 @@ final class PublishService
             if ($db === null) {
                 throw new \RuntimeException('Database not available');
             }
-            $userSettings = new UserSettingsModel($db);
-            if (!$userSettings->isFederationEnabled($userId)) {
+            if (!$this->isFederationEnabledForContent($db, $context, $userId, $item)) {
                 return;
-            }
-
-            // Skip federation if this content item has opted out.
-            $itemId = (int) ($item->id ?? 0);
-            if ($itemId > 0) {
-                $contentSettings = new ContentSettingsModel($db);
-                if (!$contentSettings->isFederationEnabled($context, $itemId)) {
-                    return;
-                }
             }
         } catch (Throwable) {
             // DB unavailable: fall through and allow federation (opt-in by default).
@@ -133,6 +131,22 @@ final class PublishService
         if ($targets !== []) {
             $this->delivery->enqueue($outboxId, $targets);
         }
+
+        $payload = [
+            'context' => $context,
+            'item_id' => (int) ($item->id ?? 0),
+            'actor_id' => (int) $actor->id,
+            'user_id' => $userId,
+            'outbox_id' => $outboxId,
+            'activity_type' => (string) $activity->type,
+            'activity_id' => (string) ($activity->json['id'] ?? ''),
+            'object_id' => (string) (($activity->json['object']['id'] ?? '') ?: ''),
+            'target_count' => count($targets),
+        ];
+
+        $this->eventDispatcher?->dispatch(
+            $isNew ? new ContentPublishedEvent($payload) : new ContentUpdatedEvent($payload)
+        );
     }
 
     /**
@@ -166,18 +180,8 @@ final class PublishService
             if ($db === null) {
                 throw new \RuntimeException('Database not available');
             }
-            $userSettings = new UserSettingsModel($db);
-            if (!$userSettings->isFederationEnabled($userId)) {
+            if (!$this->isFederationEnabledForContent($db, $context, $userId, $item)) {
                 return;
-            }
-
-            // Skip federation if this content item has opted out.
-            $itemId = (int) ($item->id ?? 0);
-            if ($itemId > 0) {
-                $contentSettings = new ContentSettingsModel($db);
-                if (!$contentSettings->isFederationEnabled($context, $itemId)) {
-                    return;
-                }
             }
         } catch (Throwable) {
             // DB unavailable: fall through and allow federation (opt-in by default).
@@ -202,6 +206,98 @@ final class PublishService
         if ($targets !== []) {
             $this->delivery->enqueue($outboxId, $targets);
         }
+
+        $this->eventDispatcher?->dispatch(
+            new ContentDeletedEvent([
+                'context' => $context,
+                'item_id' => (int) ($item->id ?? 0),
+                'actor_id' => (int) $actor->id,
+                'user_id' => $userId,
+                'outbox_id' => $outboxId,
+                'activity_type' => (string) $activity->type,
+                'activity_id' => (string) ($activity->json['id'] ?? ''),
+                'object_id' => (string) (($activity->json['object'] ?? '') ?: ''),
+                'target_count' => count($targets),
+            ])
+        );
+    }
+
+    /**
+     * Merge a saved content item with its freshly persisted database row.
+     *
+     * This keeps save-event data while filling in fields such as attribs, images, and tags that may be missing
+     * from the event payload.
+     *
+     * @params ContentProviderInterface $provider Content provider.
+     * @params object $item Joomla content item.
+     *
+     * @return  object  Enriched content item.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function mergeWithPersistedItem(ContentProviderInterface $provider, object $item): object
+    {
+        $itemId = (int) ($item->id ?? 0);
+        if ($itemId <= 0) {
+            return $item;
+        }
+
+        try {
+            $persisted = $provider->fetchById($itemId);
+        } catch (Throwable) {
+            return $item;
+        }
+
+        if ($persisted === null) {
+            return $item;
+        }
+
+        $merged = clone $persisted;
+
+        foreach (get_object_vars($item) as $property => $value) {
+            $merged->$property = $value;
+        }
+
+        return $merged;
+    }
+
+    /**
+     * Check whether federation is enabled for a user and content item.
+     *
+     * Applies user-level, category-level, then item-level settings.
+     *
+     * @params DatabaseInterface $db Database connection.
+     * @params string $context Joomla content context.
+     * @params int $userId Joomla user id.
+     * @params object $item Joomla content item.
+     *
+     * @return  bool  True when federation is enabled.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function isFederationEnabledForContent(DatabaseInterface $db, string $context, int $userId, object $item): bool
+    {
+        $userSettings = new UserSettingsModel($db);
+        if (!$userSettings->isFederationEnabled($userId)) {
+            return false;
+        }
+
+        $contentSettings = new ContentSettingsModel($db);
+
+        // Category-level controls currently apply to Joomla core articles.
+        if ($context === 'com_content.article') {
+            $categoryId = isset($item->catid) ? (int) $item->catid : 0;
+            if ($categoryId > 0 && !$contentSettings->isFederationEnabled('com_content.category', $categoryId)) {
+                return false;
+            }
+        }
+
+        $itemId = (int) ($item->id ?? 0);
+        if ($itemId > 0 && !$contentSettings->isFederationEnabled($context, $itemId)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

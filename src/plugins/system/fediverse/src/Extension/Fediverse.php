@@ -22,6 +22,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Event\SubscriberInterface;
 use NX\Component\Fediverse\Administrator\Service\Announce\NodeInfoService;
 use NX\Component\Fediverse\Administrator\Service\Announce\WebfingerService;
+use NX\Component\Fediverse\Administrator\Service\Comments\CommentRendererRegistry;
 use NX\Component\Fediverse\Administrator\Service\Publishing\ContentProviderRegistry;
 use NX\Component\Fediverse\Administrator\Service\Publishing\PublishService;
 use NX\Component\Fediverse\Site\Controller\ActorController;
@@ -43,6 +44,7 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
 {
     protected $autoloadLanguage = true;
     private bool $contentProvidersRegistered = false;
+    private bool $commentRenderersRegistered = false;
 
     /**
      * Initialize the system plugin.
@@ -102,7 +104,8 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
         $app = $event->getApplication();
 
         $this->registerContentProviders();
-        $this->normalizeAdminLiveSite($app);
+        $this->registerCommentRenderers();
+        $this->normalizeLiveSite($app);
         $this->handleRoutes($app);
     }
 
@@ -178,6 +181,14 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
         if ($this->matchActorKey($path, $handle, $keyPart)) {
             $this->ensureComponentPaths();
             $this->handleActorKey($handle, $keyPart);
+            $this->closeApp($app);
+
+            return;
+        }
+
+        if ($this->matchActorFeatured($path, $handle)) {
+            $this->ensureComponentPaths();
+            $this->handleActorFeatured($handle);
             $this->closeApp($app);
 
             return;
@@ -264,7 +275,7 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
     }
 
     /**
-     * Normalize live_site for admin requests with host mismatches.
+     * Normalize live_site for site/admin requests with host mismatches.
      *
      * Use the current request host to avoid cross-host redirects in admin.
      *
@@ -274,9 +285,9 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
      *
      * @since  __DEPLOY_VERSION__
      */
-    private function normalizeAdminLiveSite(object $app): void
+    private function normalizeLiveSite(object $app): void
     {
-        if (!$app->isClient('administrator')) {
+        if (!$app->isClient('administrator') && !$app->isClient('site')) {
             return;
         }
 
@@ -451,6 +462,28 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
         $app        = $this->getApplication();
         $controller = new ActorController([], $this->mvcFactory, $app, $app->getInput());
         $controller->key($handle, $keyPart);
+    }
+
+    /**
+     * Handle an actor featured collection request.
+     *
+     * Dispatch to the actor controller for the given handle.
+     *
+     * @params string $handle Actor handle.
+     *
+     * @return  void  None.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function handleActorFeatured(string $handle): void
+    {
+        if (!$this->ensureMethod('GET')) {
+            return;
+        }
+
+        $app        = $this->getApplication();
+        $controller = new ActorController([], $this->mvcFactory, $app, $app->getInput());
+        $controller->featured($handle);
     }
 
     /**
@@ -731,6 +764,29 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
     }
 
     /**
+     * Match an actor featured collection route.
+     *
+     * Parse the actor handle from the featured path.
+     *
+     * @params string $path Request path.
+     * @params ?string $handle Output actor handle.
+     *
+     * @return  bool  True when the path matches.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function matchActorFeatured(string $path, ?string &$handle): bool
+    {
+        if (preg_match('#/ap/actors/([^/]+)/featured$#', $path, $m)) {
+            $handle = rawurldecode($m[1]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Match an object route.
      *
      * Parse the object identifier from the object path.
@@ -842,6 +898,38 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
 
         PluginHelper::importPlugin('fediverse');
         $app->triggerEvent('onFediverseRegisterContentProviders', [$registry]);
+    }
+
+    /**
+     * Register external Fediverse comment renderers.
+     *
+     * Load fediverse plugins and dispatch the comment renderer registration event.
+     *
+     * @return  void  None.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function registerCommentRenderers(): void
+    {
+        if ($this->commentRenderersRegistered) {
+            return;
+        }
+
+        $this->commentRenderersRegistered = true;
+
+        try {
+            $registry = Factory::getContainer()->get(CommentRendererRegistry::class);
+        } catch (\Throwable) {
+            return;
+        }
+
+        $app = $this->getApplication();
+        if (!is_object($app) || !method_exists($app, 'triggerEvent')) {
+            return;
+        }
+
+        PluginHelper::importPlugin('fediverse');
+        $app->triggerEvent('onFediverseRegisterCommentRenderers', [$registry]);
     }
 
     /**

@@ -199,6 +199,20 @@ final class FediverseConfig
     }
 
     /**
+     * Check whether strict action-level ACL enforcement is enabled.
+     *
+     * When enabled, only explicit Fediverse action permissions are accepted.
+     *
+     * @return  bool  True when strict ACL enforcement is enabled.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function isStrictAclActionsEnabled(): bool
+    {
+        return (int) $this->getParams()->get('strict_acl_actions', 0) === 1;
+    }
+
+    /**
      * Get the component parameters.
      *
      * Lazy-load the params registry from Joomla.

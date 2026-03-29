@@ -10,9 +10,12 @@
     <authorUrl>code.nibra.net</authorUrl>
     <version>__DEPLOY_VERSION__</version>
     <description>Fediverse (ActivityPub) Package</description>
+    <scriptfile>script.php</scriptfile>
 
     <files folder="packages">
         <file type="component" client="site" id="com_fediverse">com_fediverse.zip</file>
+        <file type="module" client="administrator" id="mod_fediverse_dashboard">mod_fediverse_dashboard.zip</file>
+        <file type="module" client="administrator" id="mod_fediverse_diagnostics">mod_fediverse_diagnostics.zip</file>
         <file type="module" client="site" id="mod_fediverse_profile">mod_fediverse_profile.zip</file>
         <file type="module" client="site" id="mod_fediverse_reactions">mod_fediverse_reactions.zip</file>
         <file type="module" client="site" id="mod_fediverse_timeline">mod_fediverse_timeline.zip</file>
@@ -21,6 +24,8 @@
         <file type="plugin" client="site" id="fediverse" group="system">plg_system_fediverse.zip</file>
         <file type="plugin" client="site" id="fediverse" group="task">plg_task_fediverse.zip</file>
         <file type="plugin" client="site" id="fediverse" group="user">plg_user_fediverse.zip</file>
+        <file type="plugin" client="site" id="fediverse_actionlog" group="fediverse">plg_fediverse_fediverse_actionlog.zip</file>
+        <file type="plugin" client="site" id="fediverse_webhooks" group="fediverse">plg_fediverse_fediverse_webhooks.zip</file>
     </files>
     <updateservers>
         <server type="extension" priority="1" name="Joomla Fediverse Updates">

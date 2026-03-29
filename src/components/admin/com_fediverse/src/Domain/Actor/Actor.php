@@ -377,6 +377,82 @@ final class Actor
     }
 
     /**
+     * Return the decoded profile data.
+     *
+     * Normalize the stored JSON payload into a flat string map.
+     *
+     * @return  array<string, string>  Decoded profile data.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function getProfileData(): array
+    {
+        $json = trim((string) ($this->profileJson ?? ''));
+
+        if ($json === '') {
+            return [];
+        }
+
+        $decoded = json_decode($json, true);
+
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $profileData = [];
+
+        foreach ($decoded as $key => $value) {
+            if (!is_string($key) || $key === '' || !is_scalar($value)) {
+                continue;
+            }
+
+            $normalized = trim((string) $value);
+
+            if ($normalized === '') {
+                continue;
+            }
+
+            $profileData[$key] = $normalized;
+        }
+
+        return $profileData;
+    }
+
+    /**
+     * Replace the stored profile data with a normalized map.
+     *
+     * @param   array<string, scalar|null>  $profileData  Profile data to persist.
+     *
+     * @return  self  Updated actor instance.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function setProfileData(array $profileData): self
+    {
+        $normalized = [];
+
+        foreach ($profileData as $key => $value) {
+            if (!is_string($key) || $key === '' || !is_scalar($value)) {
+                continue;
+            }
+
+            $stringValue = trim((string) $value);
+
+            if ($stringValue === '') {
+                continue;
+            }
+
+            $normalized[$key] = $stringValue;
+        }
+
+        $this->profileJson = $normalized === []
+            ? null
+            : (string) json_encode($normalized, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        return $this;
+    }
+
+    /**
      * Return an actor with a new id.
      *
      * Produce an actor instance associated with the provided id.

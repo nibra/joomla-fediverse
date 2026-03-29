@@ -23,7 +23,7 @@ use NX\Component\Fediverse\Administrator\Service\License\LicenseValidatorInterfa
  * LemonSqueezy variant names are mapped to LicenseTier values via the
  * $variantMap constructor argument, e.g.:
  *
- *   ['personal' => LicenseTier::Personal, 'developer' => LicenseTier::Developer, ...]
+ *   ['personal' => LicenseTier::Personal, 'pro' => LicenseTier::Pro, ...]
  *
  * The match is case-insensitive and checks whether the variant name *contains*
  * the map key (so "Joomla Fedi Personal" matches "personal").
@@ -34,19 +34,33 @@ use NX\Component\Fediverse\Administrator\Service\License\LicenseValidatorInterfa
  */
 final class LemonSqueezyLicenseValidator implements LicenseValidatorInterface
 {
-    private const VALIDATE_URL = 'https://api.lemonsqueezy.com/v1/licenses/validate';
+    private const DEFAULT_API_BASE_URL = 'https://api.lemonsqueezy.com/v1/licenses';
+
+    /** @var array<string, LicenseTier> */
+    private readonly array $variantMap;
+    private readonly string $apiBaseUrl;
+    private readonly int $timeoutSecs;
+    /** @var null|callable(string, array<string, scalar|null>): ?array<string, mixed> */
+    private $requestHandler;
 
     /**
      * @param  array<string, LicenseTier>  $variantMap   Variant-name-fragment → tier.
-     * @param  string                      $instanceId   Stable identifier for this site
-     *                                                   (e.g. SHA-1 of the site URL).
      * @param  int                         $timeoutSecs  HTTP timeout for the API call.
+     * @param  string                      $apiBaseUrl   LemonSqueezy License API base URL.
+     * @param  null|callable(string, array<string, scalar|null>): ?array<string, mixed> $requestHandler
+     *                                                  Optional transport override for tests.
      */
     public function __construct(
-        private readonly array  $variantMap   = [],
-        private readonly string $instanceId   = '',
-        private readonly int    $timeoutSecs  = 5,
-    ) {}
+        array $variantMap = [],
+        int $timeoutSecs = 5,
+        string $apiBaseUrl = self::DEFAULT_API_BASE_URL,
+        ?callable $requestHandler = null,
+    ) {
+        $this->variantMap = $variantMap !== [] ? $variantMap : self::defaultVariantMap();
+        $this->timeoutSecs = $timeoutSecs;
+        $this->apiBaseUrl = rtrim($apiBaseUrl, '/');
+        $this->requestHandler = $requestHandler;
+    }
 
     /**
      * Validate a LemonSqueezy license key.
@@ -57,25 +71,38 @@ final class LemonSqueezyLicenseValidator implements LicenseValidatorInterface
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function validate(string $key): LicenseValidationResult
+    public function validate(string $key, ?string $instanceId = null, ?string $instanceName = null): LicenseValidationResult
     {
         $key = trim($key);
         if ($key === '') {
             return LicenseValidationResult::free();
         }
 
-        $payload = ['license_key' => $key];
-        if ($this->instanceId !== '') {
-            $payload['instance_id'] = $this->instanceId;
+        if ($instanceId !== null && trim($instanceId) !== '') {
+            $response = $this->request('/validate', [
+                'license_key' => $key,
+                'instance_id' => trim($instanceId),
+            ]);
+            $isValid = !empty($response['valid']);
+        } else {
+            $resolvedInstanceName = trim((string) $instanceName);
+            if ($resolvedInstanceName === '') {
+                $resolvedInstanceName = 'joomla-fediverse';
+            }
+
+            $response = $this->request('/activate', [
+                'license_key'   => $key,
+                'instance_name' => $resolvedInstanceName,
+            ]);
+            $isValid = !empty($response['activated']);
         }
 
-        $response = $this->post(self::VALIDATE_URL, $payload);
+        $response = $response ?? null;
         if ($response === null) {
             return LicenseValidationResult::free();
         }
 
-        // LemonSqueezy returns { "valid": bool, "license_key": {...}, "meta": {...} }
-        if (empty($response['valid'])) {
+        if (!$isValid) {
             return LicenseValidationResult::free();
         }
 
@@ -91,13 +118,15 @@ final class LemonSqueezyLicenseValidator implements LicenseValidatorInterface
 
         $variantName = strtolower((string) ($meta['variant_name'] ?? ''));
         $tier        = $this->resolveTier($variantName);
+        $resolvedInstanceId = $this->resolveInstanceId($response, $instanceId);
 
         return new LicenseValidationResult(
-            tier:    $tier,
-            valid:   true,
-            expired: $expired,
-            expiry:  $expiry,
-            domain:  null, // LemonSqueezy keys are not domain-scoped by default
+            tier:       $tier,
+            valid:      true,
+            expired:    $expired,
+            expiry:     $expiry,
+            domain:     null,
+            instanceId: $resolvedInstanceId,
         );
     }
 
@@ -118,8 +147,46 @@ final class LemonSqueezyLicenseValidator implements LicenseValidatorInterface
             }
         }
 
-        // Fallback: try direct enum match on the full variant name
-        return LicenseTier::tryFrom($variantName) ?? LicenseTier::Personal;
+        return $this->resolveTierAlias($variantName);
+    }
+
+    /**
+     * Provide the default LemonSqueezy variant fragments for the supported paid tiers.
+     *
+     * @return  array<string, LicenseTier>  Variant-name-fragment → tier.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private static function defaultVariantMap(): array
+    {
+        return [
+            'personal' => LicenseTier::Personal,
+            'pro'      => LicenseTier::Pro,
+            // Legacy tier names from older variants.
+            'developer' => LicenseTier::Pro,
+            'agency'    => LicenseTier::Pro,
+        ];
+    }
+
+    /**
+     * Resolve direct variant aliases when no fragment matched.
+     *
+     * @param   string  $variantName  Lowercase variant name.
+     *
+     * @return  LicenseTier  Resolved tier.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function resolveTierAlias(string $variantName): LicenseTier
+    {
+        return match ($variantName) {
+            'free'      => LicenseTier::Free,
+            'personal'  => LicenseTier::Personal,
+            'pro'       => LicenseTier::Pro,
+            'developer' => LicenseTier::Pro,
+            'agency'    => LicenseTier::Pro,
+            default     => LicenseTier::Personal,
+        };
     }
 
     /**
@@ -132,13 +199,18 @@ final class LemonSqueezyLicenseValidator implements LicenseValidatorInterface
      *
      * @since  __DEPLOY_VERSION__
      */
-    private function post(string $url, array $payload): ?array
+    private function request(string $path, array $payload): ?array
     {
+        if (is_callable($this->requestHandler)) {
+            return ($this->requestHandler)($path, $payload);
+        }
+
+        $url = $this->apiBaseUrl . $path;
         $ctx = stream_context_create([
             'http' => [
                 'method'        => 'POST',
-                'header'        => "Content-Type: application/json\r\nAccept: application/json\r\n",
-                'content'       => json_encode($payload),
+                'header'        => "Content-Type: application/x-www-form-urlencoded\r\nAccept: application/json\r\n",
+                'content'       => http_build_query($payload, '', '&', PHP_QUERY_RFC3986),
                 'timeout'       => $this->timeoutSecs,
                 'ignore_errors' => true,
             ],
@@ -151,5 +223,32 @@ final class LemonSqueezyLicenseValidator implements LicenseValidatorInterface
 
         $data = json_decode($body, true);
         return \is_array($data) ? $data : null;
+    }
+
+    /**
+     * Resolve the current LemonSqueezy instance id from the response.
+     *
+     * @param   array<string, mixed>  $response           API response payload.
+     * @param   ?string               $existingInstanceId Stored instance id from local config.
+     *
+     * @return  ?string  Active instance id.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function resolveInstanceId(array $response, ?string $existingInstanceId): ?string
+    {
+        $instance = $response['instance'] ?? null;
+
+        if (is_array($instance)) {
+            $id = trim((string) ($instance['id'] ?? $instance['identifier'] ?? ''));
+
+            if ($id !== '') {
+                return $id;
+            }
+        }
+
+        $existingInstanceId = trim((string) $existingInstanceId);
+
+        return $existingInstanceId !== '' ? $existingInstanceId : null;
     }
 }

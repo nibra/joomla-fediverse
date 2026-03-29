@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+    <fields name="attribs">
+        <fieldset name="fediverse" label="PLG_CONTENT_FEDIVERSE_FIELDSET_LABEL">
+            <field
+                name="fediverse_editor_guidance"
+                type="note"
+                class="alert alert-info fediverse-editor-guidance"
+                label="PLG_CONTENT_FEDIVERSE_EDITOR_GUIDANCE_LABEL"
+                description="PLG_CONTENT_FEDIVERSE_EDITOR_GUIDANCE_DESC"
+                heading="h4"
+            />
+
+            <field
+                name="fediverse_include_link"
+                type="radio"
+                label="PLG_CONTENT_FEDIVERSE_INCLUDE_LINK_LABEL"
+                description="PLG_CONTENT_FEDIVERSE_INCLUDE_LINK_DESC"
+                layout="joomla.form.field.radio.switcher"
+                default="1"
+            >
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+            <field
+                name="fediverse_use_intro_text"
+                type="radio"
+                label="PLG_CONTENT_FEDIVERSE_USE_INTRO_TEXT_LABEL"
+                description="PLG_CONTENT_FEDIVERSE_USE_INTRO_TEXT_DESC"
+                layout="joomla.form.field.radio.switcher"
+                default="1"
+            >
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+            <field
+                name="fediverse_excerpt"
+                type="textarea"
+                label="PLG_CONTENT_FEDIVERSE_EXCERPT_LABEL"
+                description="PLG_CONTENT_FEDIVERSE_EXCERPT_DESC"
+                rows="3"
+                maxlength="500"
+                charcounter="true"
+                filter="string"
+                showon="fediverse_use_intro_text:0"
+            />
+
+            <field
+                name="fediverse_image_source"
+                type="list"
+                label="PLG_CONTENT_FEDIVERSE_IMAGE_SOURCE_LABEL"
+                description="PLG_CONTENT_FEDIVERSE_IMAGE_SOURCE_DESC"
+                default="intro"
+            >
+                <option value="none">PLG_CONTENT_FEDIVERSE_IMAGE_SOURCE_NONE</option>
+                <option value="intro">PLG_CONTENT_FEDIVERSE_IMAGE_SOURCE_INTRO</option>
+                <option value="full">PLG_CONTENT_FEDIVERSE_IMAGE_SOURCE_FULL</option>
+            </field>
+
+            <field
+                name="fediverse_hashtag_source"
+                type="list"
+                label="PLG_CONTENT_FEDIVERSE_HASHTAG_SOURCE_LABEL"
+                description="PLG_CONTENT_FEDIVERSE_HASHTAG_SOURCE_DESC"
+                default="text"
+            >
+                <option value="none">PLG_CONTENT_FEDIVERSE_HASHTAG_SOURCE_NONE</option>
+                <option value="text">PLG_CONTENT_FEDIVERSE_HASHTAG_SOURCE_TEXT</option>
+                <option value="tags">PLG_CONTENT_FEDIVERSE_HASHTAG_SOURCE_TAGS</option>
+                <option value="both">PLG_CONTENT_FEDIVERSE_HASHTAG_SOURCE_BOTH</option>
+            </field>
+        </fieldset>
+    </fields>
+</form>

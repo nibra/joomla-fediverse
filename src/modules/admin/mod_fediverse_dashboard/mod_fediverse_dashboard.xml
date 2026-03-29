@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" client="administrator" method="upgrade">
+    <name>MOD_FEDIVERSE_DASHBOARD</name>
+    <author>Niels Braczek</author>
+    <creationDate>Mar 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>MOD_FEDIVERSE_DASHBOARD_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Module\Fediverse\Dashboard</namespace>
+    <scriptfile>script.php</scriptfile>
+
+    <files>
+        <folder module="mod_fediverse_dashboard">services</folder>
+        <folder>assets</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/mod_fediverse_dashboard.ini</language>
+        <language tag="en-GB">language/en-GB/mod_fediverse_dashboard.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="metrics"
+                    type="checkboxes"
+                    label="MOD_FEDIVERSE_DASHBOARD_FIELD_METRICS_LABEL"
+                    default="actors-local,actors-remote,delivery-queued,delivery-delivering,delivery-delivered,delivery-failed"
+                >
+                    <option value="actors-local">MOD_FEDIVERSE_DASHBOARD_METRIC_ACTORS_LOCAL</option>
+                    <option value="actors-remote">MOD_FEDIVERSE_DASHBOARD_METRIC_ACTORS_REMOTE</option>
+                    <option value="delivery-queued">MOD_FEDIVERSE_DASHBOARD_METRIC_DELIVERY_QUEUED</option>
+                    <option value="delivery-delivering">MOD_FEDIVERSE_DASHBOARD_METRIC_DELIVERY_DELIVERING</option>
+                    <option value="delivery-delivered">MOD_FEDIVERSE_DASHBOARD_METRIC_DELIVERY_DELIVERED</option>
+                    <option value="delivery-failed">MOD_FEDIVERSE_DASHBOARD_METRIC_DELIVERY_FAILED</option>
+                </field>
+                <field
+                    name="show_links"
+                    type="radio"
+                    layout="joomla.form.field.radio.switcher"
+                    label="MOD_FEDIVERSE_DASHBOARD_FIELD_SHOW_LINKS_LABEL"
+                    default="1"
+                    filter="integer"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                    name="header_icon"
+                    type="hidden"
+                    default="icon-fediverse"
+                />
+                <field
+                    name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    class="form-select"
+                    validate="moduleLayout"
+                />
+                <field
+                    name="moduleclass_sfx"
+                    type="textarea"
+                    label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                    rows="3"
+                    validate="CssIdentifier"
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

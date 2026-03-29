@@ -111,8 +111,21 @@ final class ActorResolverService implements ActorResolverServiceInterface
             $actorId = $this->actorsModel->insertLocal($mapped);
             $actor   = $mapped->withId($actorId);
         } else {
-            // keep handle stable, but refresh mutable fields
-            $this->actorsModel->updateLocalCoreFields((int) $actor->id, $mapped);
+            // Keep custom handle stable and regenerate canonical URLs from that handle.
+            $stable = Actor::newLocal(
+                userId: $userId,
+                handle: $actor->handle,
+                preferredUsername: (string) $user->username,
+                uri: $this->actorMapper->actorUri($baseUrl, $actor->handle),
+                inboxUrl: $this->actorMapper->inboxUrl($baseUrl, $actor->handle),
+                outboxUrl: $this->actorMapper->outboxUrl($baseUrl, $actor->handle),
+                sharedInboxUrl: $this->actorMapper->sharedInboxUrl($baseUrl),
+                publicKeyPem: $mapped->publicKeyPem,
+                profileJson: $mapped->profileJson,
+                isEnabled: $actor->isEnabled,
+            );
+
+            $this->actorsModel->updateLocalCoreFields((int) $actor->id, $stable);
             $actor = $this->actorsModel->getById((int) $actor->id) ?? $actor;
         }
 

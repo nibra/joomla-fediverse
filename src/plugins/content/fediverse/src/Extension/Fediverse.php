@@ -61,7 +61,37 @@ final class Fediverse extends CMSPlugin implements SubscriberInterface
             'onContentAfterSave'   => 'onContentAfterSave',
             'onContentAfterDelete' => 'onContentAfterDelete',
             'onContentChangeState' => 'onContentChangeState',
+            'onContentPrepareForm' => 'onContentPrepareForm',
         ];
+    }
+
+    /**
+     * Extend the Joomla article editor with Fediverse-specific guidance and controls.
+     *
+     * @param   mixed  $eventOrForm  Joomla prepare-form event or direct form instance.
+     * @param   mixed  $data         Bound form data for legacy invocation.
+     *
+     * @return  void  None.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function onContentPrepareForm(mixed $eventOrForm, mixed $data = null): void
+    {
+        if (is_object($eventOrForm) && method_exists($eventOrForm, 'getForm')) {
+            $form = $eventOrForm->getForm();
+        } else {
+            $form = $eventOrForm;
+        }
+
+        if (!is_object($form) || !method_exists($form, 'getName') || !method_exists($form, 'loadFile')) {
+            return;
+        }
+
+        if ($form->getName() !== 'com_content.article') {
+            return;
+        }
+
+        $form->loadFile(dirname(__DIR__, 2) . '/forms/article.xml', false);
     }
 
     /**

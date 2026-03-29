@@ -13,6 +13,9 @@ namespace NX\Component\Fediverse\Administrator\Controller;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use NX\Component\Fediverse\Administrator\Service\Access\PermissionService;
+use NX\Component\Fediverse\Administrator\Service\License\LicenseTier;
 use NX\Component\Fediverse\Administrator\Service\License\LicenseService;
 
 /**
@@ -36,8 +39,19 @@ final class OAuthClientsController extends BaseController
      */
     public function display($cachable = false, $urlparams = []): static
     {
+        $user = $this->app->getIdentity();
+        $permissions = Factory::getContainer()->get(PermissionService::class);
+        if (!$permissions->canManageOAuthClients($user)) {
+            $this->setRedirect(
+                Route::_('index.php?option=com_fediverse&view=dashboard', false),
+                Text::_('JERROR_ALERTNOAUTHOR'),
+                'error'
+            );
+            $this->redirect();
+        }
+
         try {
-            Factory::getContainer()->get(LicenseService::class)->requirePro();
+            Factory::getContainer()->get(LicenseService::class)->requireTier(LicenseTier::Pro);
         } catch (\RuntimeException $e) {
             $this->setRedirect(
                 Route::_('index.php?option=com_fediverse&view=dashboard', false),

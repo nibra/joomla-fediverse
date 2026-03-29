@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="fediverse" method="upgrade">
+    <name>PLG_FEDIVERSE_FEDIVERSE_WEBHOOKS</name>
+    <author>Niels Braczek</author>
+    <creationDate>Mar 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>PLG_FEDIVERSE_FEDIVERSE_WEBHOOKS_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Plugin\Fediverse\FediverseWebhooks</namespace>
+
+    <files>
+        <folder plugin="fediverse_webhooks">services</folder>
+        <folder>src</folder>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/plg_fediverse_fediverse_webhooks.ini</language>
+        <language tag="en-GB">language/en-GB/plg_fediverse_fediverse_webhooks.sys.ini</language>
+    </languages>
+</extension>

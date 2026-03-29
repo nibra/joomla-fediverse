@@ -15,6 +15,11 @@
             <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
         </sql>
     </install>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
     <uninstall>
         <sql>
             <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
@@ -29,6 +34,56 @@
     </languages>
     <administration>
         <menu img="class:comment">COM_FEDIVERSE</menu>
+        <submenu>
+            <menu
+                link="option=com_fediverse&amp;view=dashboard"
+                view="dashboard"
+                img="class:comment"
+                alt="Fediverse/Dashboard"
+                >
+                COM_FEDIVERSE_NAV_DASHBOARD
+            </menu>
+            <menu
+                link="option=com_fediverse&amp;view=actors"
+                view="actors"
+                img="class:users"
+                alt="Fediverse/Actors"
+                >
+                COM_FEDIVERSE_NAV_ACTORS
+            </menu>
+            <menu
+                link="option=com_fediverse&amp;view=inboxitems"
+                view="inboxitems"
+                img="class:inbox"
+                alt="Fediverse/Inbox"
+                >
+                COM_FEDIVERSE_NAV_INBOX
+            </menu>
+            <menu
+                link="option=com_fediverse&amp;view=deliveries"
+                view="deliveries"
+                img="class:send"
+                alt="Fediverse/Deliveries"
+                >
+                COM_FEDIVERSE_NAV_DELIVERIES
+            </menu>
+            <menu
+                link="option=com_fediverse&amp;view=policies"
+                view="policies"
+                img="class:shield"
+                alt="Fediverse/Policies"
+                >
+                COM_FEDIVERSE_NAV_POLICIES
+            </menu>
+            <menu
+                link="option=com_fediverse&amp;view=webhooks"
+                view="webhooks"
+                img="class:bolt"
+                alt="Fediverse/Webhooks"
+                >
+                COM_FEDIVERSE_NAV_WEBHOOKS
+            </menu>
+        </submenu>
         <files folder="admin">
             <filename>access.xml</filename>
             <filename>config.xml</filename>
@@ -36,6 +91,7 @@
             <folder>services</folder>
             <folder>sql</folder>
             <folder>src</folder>
+            <folder>forms</folder>
             <folder>tmpl</folder>
         </files>
         <languages folder="admin">

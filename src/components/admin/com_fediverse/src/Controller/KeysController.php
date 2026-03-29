@@ -15,7 +15,11 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
+use NX\Component\Fediverse\Administrator\Event\KeyRotatedEvent;
+use NX\Component\Fediverse\Administrator\Service\License\LicenseTier;
 use NX\Component\Fediverse\Administrator\Service\License\LicenseService;
+use NX\Component\Fediverse\Administrator\Service\Access\PermissionService;
+use NX\Component\Fediverse\Administrator\Service\Events\FediverseDomainEventDispatcherInterface;
 use NX\Component\Fediverse\Administrator\Service\Security\KeyRotationService;
 
 
@@ -38,17 +42,17 @@ final class KeysController extends BaseController
     public function rotate(): void
     {
         try {
-            Factory::getContainer()->get(LicenseService::class)->requirePro();
+            Factory::getContainer()->get(LicenseService::class)->requireTier(LicenseTier::Pro);
         } catch (\RuntimeException $e) {
             $this->setRedirect(
-                Route::_('index.php?option=com_fediverse&view=dashboard', false),
+                Route::_('index.php?option=com_fediverse&view=actors', false),
                 $e->getMessage(),
                 'warning'
             );
             return;
         }
 
-        if (!Session::checkToken('post')) {
+        if (!Session::checkToken('request')) {
             $this->app->enqueueMessage(Text::_('JINVALID_TOKEN'), 'error');
             $this->setRedirect(Route::_('index.php?option=com_fediverse', false));
             return;
@@ -56,13 +60,11 @@ final class KeysController extends BaseController
 
         $app = $this->app;
         $user = $app->getIdentity();
-        $canManage = $user->authorise('core.manage', 'com_fediverse')
-            || $user->authorise('core.admin', 'com_fediverse')
-            || $user->authorise('core.options', 'com_fediverse');
+        $canManage = Factory::getContainer()->get(PermissionService::class)->canRotateKeys($user);
 
         if (!$canManage) {
             $this->setRedirect(
-                Route::_('index.php?option=com_fediverse&view=dashboard', false),
+                Route::_('index.php?option=com_fediverse&view=actors', false),
                 Text::_('JERROR_ALERTNOAUTHOR'),
                 'error'
             );
@@ -78,11 +80,20 @@ final class KeysController extends BaseController
 
         if ($handle !== '') {
             $rotated = $rotation->rotateForHandle($handle, null, true);
+            if ($rotated) {
+                Factory::getContainer()->get(FediverseDomainEventDispatcherInterface::class)->dispatch(
+                    new KeyRotatedEvent(
+                        $handle,
+                        null,
+                        (int) $user->id
+                    )
+                );
+            }
             $message = $rotated
                 ? Text::sprintf('COM_FEDIVERSE_KEY_ROTATION_SUCCESS_HANDLE', $handle)
                 : Text::sprintf('COM_FEDIVERSE_KEY_ROTATION_SKIPPED_HANDLE', $handle);
             $this->setRedirect(
-                Route::_('index.php?option=com_fediverse&view=dashboard', false),
+                Route::_('index.php?option=com_fediverse&view=actors', false),
                 $message,
                 $rotated ? 'message' : 'warning'
             );
@@ -92,11 +103,20 @@ final class KeysController extends BaseController
 
         if ($userId > 0) {
             $rotated = $rotation->rotateForUserId($userId, null, true);
+            if ($rotated) {
+                Factory::getContainer()->get(FediverseDomainEventDispatcherInterface::class)->dispatch(
+                    new KeyRotatedEvent(
+                        null,
+                        $userId,
+                        (int) $user->id
+                    )
+                );
+            }
             $message = $rotated
                 ? Text::sprintf('COM_FEDIVERSE_KEY_ROTATION_SUCCESS_USER', $userId)
                 : Text::sprintf('COM_FEDIVERSE_KEY_ROTATION_SKIPPED_USER', $userId);
             $this->setRedirect(
-                Route::_('index.php?option=com_fediverse&view=dashboard', false),
+                Route::_('index.php?option=com_fediverse&view=actors', false),
                 $message,
                 $rotated ? 'message' : 'warning'
             );
@@ -105,7 +125,7 @@ final class KeysController extends BaseController
         }
 
         $this->setRedirect(
-            Route::_('index.php?option=com_fediverse&view=dashboard', false),
+            Route::_('index.php?option=com_fediverse&view=actors', false),
             Text::_('COM_FEDIVERSE_KEY_ROTATION_MISSING_TARGET'),
             'warning'
         );

@@ -21,6 +21,7 @@ $moduleclass_sfx = htmlspecialchars((string) $params->get('moduleclass_sfx', '')
 $moduleId        = 'mod-fediverse-reactions-' . (int) $module->id;
 $counts          = (array) ($reactions['counts'] ?? []);
 $replies         = (array) ($reactions['replies'] ?? []);
+$renderedComments = trim((string) ($reactions['rendered_comments'] ?? ''));
 $showReactions   = (bool) ($reactions['show_reactions'] ?? true);
 $showReplies     = (bool) ($reactions['show_replies'] ?? true);
 $showLikeButton  = (int) $params->get('show_like_button', 1) === 1;
@@ -33,10 +34,11 @@ $boosts  = (int) ($counts['boosts'] ?? 0);
 $nReplies = (int) ($counts['replies'] ?? 0);
 
 $hasReactions = $showReactions && ($likes > 0 || $boosts > 0 || $nReplies > 0);
+$hasRenderedComments = $showReplies && $renderedComments !== '';
 $hasReplies   = $showReplies && count($replies) > 0;
 $hasButtons   = $showLikeButton || $showBoostButton;
 
-if (!$hasReactions && !$hasReplies && !$hasButtons) {
+if (!$hasReactions && !$hasRenderedComments && !$hasReplies && !$hasButtons) {
     return;
 }
 ?>
@@ -63,7 +65,11 @@ if (!$hasReactions && !$hasReplies && !$hasButtons) {
         </div>
     <?php endif; ?>
 
-    <?php if ($hasReplies) : ?>
+    <?php if ($hasRenderedComments) : ?>
+        <div class="mod-fediverse-reactions__comments-renderer" data-fediverse-comments-renderer="1">
+            <?php echo $renderedComments; ?>
+        </div>
+    <?php elseif ($hasReplies) : ?>
         <section class="mod-fediverse-reactions__replies" aria-label="<?php echo Text::_('MOD_FEDIVERSE_REACTIONS_REPLIES_HEADING'); ?>">
             <h4 class="mod-fediverse-reactions__replies-heading"><?php echo Text::_('MOD_FEDIVERSE_REACTIONS_REPLIES_HEADING'); ?></h4>
             <ul class="mod-fediverse-reactions__reply-list">

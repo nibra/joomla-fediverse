@@ -95,8 +95,16 @@ final class WebfingerService
             ];
         }
 
-        $handle   = $this->actorResolver->stableHandle($userId);
-        $actorUrl = $this->baseUrl->getBaseUrl() . '/ap/actors/' . $handle;
+        $actorsModel = $this->mvcFactory->createModel('Actors', 'Administrator');
+        $actor       = $actorsModel->getLocalByUserId($userId);
+        $actorUrl    = '';
+
+        if ($actor !== null && trim((string) $actor->uri) !== '') {
+            $actorUrl = trim((string) $actor->uri);
+        } else {
+            $handle   = $actor !== null ? $actor->handle : $this->actorResolver->stableHandle($userId);
+            $actorUrl = rtrim($this->baseUrl->getBaseUrl(), '/') . '/ap/actors/' . $handle;
+        }
 
         return [
             'subject' => $subject,

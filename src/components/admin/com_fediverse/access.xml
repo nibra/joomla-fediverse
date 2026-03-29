@@ -4,5 +4,30 @@
         <action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC"/>
         <action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC"/>
         <action name="core.options" title="JACTION_OPTIONS"/>
+        <action
+            name="fediverse.manage.inbox"
+            title="COM_FEDIVERSE_ACTION_MANAGE_INBOX"
+            description="COM_FEDIVERSE_ACTION_MANAGE_INBOX_DESC"
+        />
+        <action
+            name="fediverse.manage.policies"
+            title="COM_FEDIVERSE_ACTION_MANAGE_POLICIES"
+            description="COM_FEDIVERSE_ACTION_MANAGE_POLICIES_DESC"
+        />
+        <action
+            name="fediverse.manage.keys"
+            title="COM_FEDIVERSE_ACTION_MANAGE_KEYS"
+            description="COM_FEDIVERSE_ACTION_MANAGE_KEYS_DESC"
+        />
+        <action
+            name="fediverse.manage.oauthclients"
+            title="COM_FEDIVERSE_ACTION_MANAGE_OAUTH_CLIENTS"
+            description="COM_FEDIVERSE_ACTION_MANAGE_OAUTH_CLIENTS_DESC"
+        />
+        <action
+            name="fediverse.manage.webhooks"
+            title="COM_FEDIVERSE_ACTION_MANAGE_WEBHOOKS"
+            description="COM_FEDIVERSE_ACTION_MANAGE_WEBHOOKS_DESC"
+        />
     </section>
 </access>

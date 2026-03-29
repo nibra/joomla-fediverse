@@ -10,84 +10,97 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 ?>
 
 <div class="com-fediverse-dashboard">
-    <h1 class="h2"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_HEADING'); ?></h1>
-
-    <?php require __DIR__ . '/../_navbar.php'; ?>
+    <h1 class="h2">
+        <?php echo Text::_('COM_FEDIVERSE_DASHBOARD_HEADING'); ?>
+        <span class="badge bg-info" data-fediverse-plan-name="1">
+            <?php echo htmlspecialchars($this->planLabel, ENT_QUOTES, 'UTF-8'); ?>
+        </span>
+    </h1>
 
     <p><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_INTRO'); ?></p>
 
-    <?php
-    $actors = $this->summary['actors'] ?? ['local' => 0, 'remote' => 0];
-    $deliveries = $this->summary['deliveries'] ?? [
-        'queued' => 0,
-        'delivering' => 0,
-        'delivered' => 0,
-        'failed' => 0,
-    ];
-    ?>
-
-    <div class="fediverse-summary">
-        <div class="fediverse-metric" data-fediverse-metric="actors-local" data-fediverse-count="<?php echo (int) $actors['local']; ?>">
-            <span class="metric-label"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_ACTORS_LOCAL_LABEL'); ?></span>
-            <span class="metric-value"><?php echo (int) $actors['local']; ?></span>
-        </div>
-        <div class="fediverse-metric" data-fediverse-metric="actors-remote" data-fediverse-count="<?php echo (int) $actors['remote']; ?>">
-            <span class="metric-label"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_ACTORS_REMOTE_LABEL'); ?></span>
-            <span class="metric-value"><?php echo (int) $actors['remote']; ?></span>
-        </div>
-        <div class="fediverse-metric" data-fediverse-metric="delivery-queued" data-fediverse-count="<?php echo (int) $deliveries['queued']; ?>">
-            <span class="metric-label"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_DELIVERY_QUEUED_LABEL'); ?></span>
-            <span class="metric-value"><?php echo (int) $deliveries['queued']; ?></span>
-        </div>
-        <div class="fediverse-metric" data-fediverse-metric="delivery-delivering" data-fediverse-count="<?php echo (int) $deliveries['delivering']; ?>">
-            <span class="metric-label"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_DELIVERY_DELIVERING_LABEL'); ?></span>
-            <span class="metric-value"><?php echo (int) $deliveries['delivering']; ?></span>
-        </div>
-        <div class="fediverse-metric" data-fediverse-metric="delivery-delivered" data-fediverse-count="<?php echo (int) $deliveries['delivered']; ?>">
-            <span class="metric-label"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_DELIVERY_DELIVERED_LABEL'); ?></span>
-            <span class="metric-value"><?php echo (int) $deliveries['delivered']; ?></span>
-        </div>
-        <div class="fediverse-metric" data-fediverse-metric="delivery-failed" data-fediverse-count="<?php echo (int) $deliveries['failed']; ?>">
-            <span class="metric-label"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_DELIVERY_FAILED_LABEL'); ?></span>
-            <span class="metric-value"><?php echo (int) $deliveries['failed']; ?></span>
+    <div class="cpanel-modules fediverse-dashboard-modules mt-4">
+        <div class="card-columns">
+            <?php echo $this->statsModuleHtml; ?>
+            <?php echo $this->diagnosticsModuleHtml; ?>
         </div>
     </div>
 
-    <div class="fediverse-key-rotation">
-        <h2 class="h4"><?php echo Text::_('COM_FEDIVERSE_KEY_ROTATION_HEADING'); ?></h2>
-        <p><?php echo Text::_('COM_FEDIVERSE_KEY_ROTATION_DESC'); ?></p>
-        <form action="<?php echo Route::_('index.php?option=com_fediverse&task=keys.rotate'); ?>" method="post">
-            <div class="control-group">
-                <label class="control-label" for="fediverse-rotate-user-id">
-                    <?php echo Text::_('COM_FEDIVERSE_KEY_ROTATION_USER_ID_LABEL'); ?>
-                </label>
-                <div class="controls">
-                    <input id="fediverse-rotate-user-id" name="user_id" type="number" min="1" step="1">
+    <section class="alert alert-info mt-4" data-fediverse-compatibility-panel="1">
+        <h2 class="h6"><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_HEADING'); ?></h2>
+        <p class="mb-2"><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_INTRO'); ?></p>
+        <ul class="mb-2">
+            <li><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_POINT_PRESENTATION'); ?></li>
+            <li><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_POINT_MEDIA'); ?></li>
+            <li><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_POINT_INTERACTIONS'); ?></li>
+            <li><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_POINT_TESTING'); ?></li>
+        </ul>
+        <p class="mb-0 text-muted"><?php echo Text::_('COM_FEDIVERSE_COMPATIBILITY_GUIDE_HINT'); ?></p>
+    </section>
+
+    <?php if ($this->isPro) : ?>
+        <div class="modal fade" id="fediverse-transfer-import-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="<?php echo Route::_('index.php?option=com_fediverse&task=dashboard.importConfigPackage'); ?>" method="post" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h2 class="modal-title h5">
+                                <?php echo Text::_('COM_FEDIVERSE_DASHBOARD_TRANSFER_IMPORT_HEADING'); ?>
+                            </h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo Text::_('JCLOSE'); ?>"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-2"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_TRANSFER_IMPORT_DESC'); ?></p>
+                            <p class="mb-3 text-muted"><?php echo Text::_('COM_FEDIVERSE_DASHBOARD_TRANSFER_EXCLUDED'); ?></p>
+                            <div class="mb-3">
+                                <label class="form-label" for="fediverse-transfer-package">
+                                    <?php echo Text::_('COM_FEDIVERSE_DASHBOARD_TRANSFER_IMPORT_FILE_LABEL'); ?>
+                                </label>
+                                <input
+                                    class="form-control"
+                                    type="file"
+                                    id="fediverse-transfer-package"
+                                    name="transfer_package"
+                                    accept="application/json,.json"
+                                    required
+                                >
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="fediverse-transfer-confirm"
+                                    name="confirm_replace"
+                                    value="1"
+                                >
+                                <label class="form-check-label" for="fediverse-transfer-confirm">
+                                    <?php echo Text::_('COM_FEDIVERSE_DASHBOARD_TRANSFER_IMPORT_CONFIRM'); ?>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <?php echo Text::_('JCANCEL'); ?>
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                data-fediverse-transfer-action="import"
+                            >
+                                <?php echo Text::_('COM_FEDIVERSE_DASHBOARD_TRANSFER_IMPORT_ACTION'); ?>
+                            </button>
+                        </div>
+                        <?php echo HTMLHelper::_('form.token'); ?>
+                    </form>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="fediverse-rotate-handle">
-                    <?php echo Text::_('COM_FEDIVERSE_KEY_ROTATION_HANDLE_LABEL'); ?>
-                </label>
-                <div class="controls">
-                    <input id="fediverse-rotate-handle" name="handle" type="text">
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <button class="btn btn-primary" type="submit">
-                        <?php echo Text::_('COM_FEDIVERSE_KEY_ROTATION_SUBMIT'); ?>
-                    </button>
-                </div>
-            </div>
-            <?php echo HTMLHelper::_('form.token'); ?>
-        </form>
-    </div>
+        </div>
+    <?php endif; ?>
 </div>

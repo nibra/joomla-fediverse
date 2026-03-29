@@ -78,12 +78,18 @@ final class HttpSignaturService implements HttpSignaturServiceInterface
             return null;
         }
 
+        $requestedKeyId = $localActorKeyId;
+        $localActorKeyId = $this->maybeUpgradeLegacyKeyId($localActorKeyId);
+
         $keyMeta = $this->keysModel->getByKeyIdUri($localActorKeyId);
+        if (($keyMeta === null || !is_string($keyMeta->private_key_enc ?? null)) && $localActorKeyId !== $requestedKeyId) {
+            $localActorKeyId = $requestedKeyId;
+            $keyMeta = $this->keysModel->getByKeyIdUri($localActorKeyId);
+        }
+
         if ($keyMeta === null || !is_string($keyMeta->private_key_enc ?? null)) {
             return null;
         }
-
-        $localActorKeyId = $this->maybeUpgradeLegacyKeyId($localActorKeyId);
 
         $privateKeyPem = $this->keyVault->decryptPrivateKey((string) $keyMeta->private_key_enc);
 
@@ -357,7 +363,51 @@ final class HttpSignaturService implements HttpSignaturServiceInterface
      */
     private function maybeUpgradeLegacyKeyId(string $keyId): string
     {
-        return trim($keyId);
+        $keyId = trim($keyId);
+        if ($keyId === '') {
+            return '';
+        }
+
+        if (!preg_match('~^(.*)#main-key$~', $keyId, $matches)) {
+            return $keyId;
+        }
+
+        $actorUri = trim((string) ($matches[1] ?? ''));
+        if ($actorUri === '') {
+            return $keyId;
+        }
+
+        $upgradedKeyId = $this->buildUniqueKeyIdUri($actorUri);
+
+        try {
+            $this->keysModel->updateActiveKeyIdUriByKeyId($keyId, $upgradedKeyId);
+            return $upgradedKeyId;
+        } catch (\Throwable) {
+            return $keyId;
+        }
+    }
+
+    /**
+     * Build a unique key id URI for an actor.
+     *
+     * @params string $actorUri Actor URI.
+     *
+     * @return  string  Key id URI.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function buildUniqueKeyIdUri(string $actorUri): string
+    {
+        $actorUri = trim($actorUri);
+        $suffix   = 'fallback';
+
+        try {
+            $suffix = bin2hex(random_bytes(6));
+        } catch (\Throwable) {
+            $suffix = substr(str_replace('.', '', uniqid('', true)), 0, 12);
+        }
+
+        return $actorUri . '#main-key-' . gmdate('YmdHis') . '-' . $suffix;
     }
 
     /**

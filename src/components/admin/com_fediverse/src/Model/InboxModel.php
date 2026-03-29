@@ -402,27 +402,348 @@ final class InboxModel extends BaseModel implements InboxModelInterface
      * @params string $status  Optional status filter ('pending','processed','failed','ignored').
      * @params int    $limit   Maximum number of rows.
      * @params int    $offset  Row offset.
+     * @params string $search  Optional search term.
      *
      * @return  array<int, array<string, mixed>>  List of inbox rows.
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function getList(string $status = '', int $limit = 50, int $offset = 0): array
+    public function getList(
+        string $status = '',
+        int $limit = 50,
+        int $offset = 0,
+        string $search = '',
+        string $moderation = '',
+        string $fullOrdering = 'received_at DESC'
+    ): array
     {
+        [$orderColumn, $orderDirection] = $this->normaliseOrdering(
+            $fullOrdering,
+            'received_at',
+            'DESC',
+            ['received_at', 'id', 'status']
+        );
+
         $query = $this->db->createQuery()
-            ->select('*')
-            ->from($this->db->quoteName('#__fediverse_inbox'))
-            ->order($this->db->quoteName('received_at') . ' DESC');
+            ->select([
+                'i.*',
+                $this->db->quoteName('ia.moderation_state', 'reply_moderation_state'),
+                $this->db->quoteName('ia.object_id', 'reply_object_id'),
+            ])
+            ->from($this->db->quoteName('#__fediverse_inbox', 'i'))
+            ->leftJoin(
+                $this->db->quoteName('#__fediverse_inbound_activities', 'ia')
+                . ' ON ' . $this->db->quoteName('ia.inbox_id') . ' = ' . $this->db->quoteName('i.id')
+                . ' AND ' . $this->db->quoteName('ia.activity_type') . ' = ' . $this->db->quote('Create')
+            )
+            ->order($this->db->quoteName('i.' . $orderColumn) . ' ' . $orderDirection);
 
         if ($status !== '') {
-            $query->where($this->db->quoteName('status') . ' = :status')
+            $query->where($this->db->quoteName('i.status') . ' = :status')
                 ->bind(':status', $status, ParameterType::STRING);
         }
 
-        $query->setLimit($limit, $offset);
+        if (in_array($moderation, ['pending', 'approved', 'rejected'], true)) {
+            $query->where($this->db->quoteName('ia.moderation_state') . ' = :moderation')
+                ->bind(':moderation', $moderation, ParameterType::STRING);
+        }
+
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . 'CAST(' . $this->db->quoteName('i.id') . ' AS CHAR) LIKE :search1'
+                . ' OR ' . $this->db->quoteName('i.activity_id_uri') . ' LIKE :search2'
+                . ' OR ' . $this->db->quoteName('i.type') . ' LIKE :search3'
+                . ' OR ' . $this->db->quoteName('i.error') . ' LIKE :search4'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING)
+                ->bind(':search3', $searchLike, ParameterType::STRING)
+                ->bind(':search4', $searchLike, ParameterType::STRING);
+        }
+
+        if ($limit > 0) {
+            $query->setLimit($limit, $offset);
+        }
 
         $this->db->setQuery($query);
 
         return $this->db->loadAssocList() ?: [];
+    }
+
+    /**
+     * Count inbox rows for an optional status filter.
+     *
+     * @params string $status Optional status filter.
+     * @params string $search Optional search term.
+     * @params string $moderation Optional moderation filter.
+     *
+     * @return  int  Total matching rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function countList(string $status = '', string $search = '', string $moderation = ''): int
+    {
+        $query = $this->db->createQuery()
+            ->select('COUNT(DISTINCT ' . $this->db->quoteName('i.id') . ')')
+            ->from($this->db->quoteName('#__fediverse_inbox', 'i'))
+            ->leftJoin(
+                $this->db->quoteName('#__fediverse_inbound_activities', 'ia')
+                . ' ON ' . $this->db->quoteName('ia.inbox_id') . ' = ' . $this->db->quoteName('i.id')
+                . ' AND ' . $this->db->quoteName('ia.activity_type') . ' = ' . $this->db->quote('Create')
+            );
+
+        if ($status !== '') {
+            $query->where($this->db->quoteName('i.status') . ' = :status')
+                ->bind(':status', $status, ParameterType::STRING);
+        }
+
+        if (in_array($moderation, ['pending', 'approved', 'rejected'], true)) {
+            $query->where($this->db->quoteName('ia.moderation_state') . ' = :moderation')
+                ->bind(':moderation', $moderation, ParameterType::STRING);
+        }
+
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . 'CAST(' . $this->db->quoteName('i.id') . ' AS CHAR) LIKE :search1'
+                . ' OR ' . $this->db->quoteName('i.activity_id_uri') . ' LIKE :search2'
+                . ' OR ' . $this->db->quoteName('i.type') . ' LIKE :search3'
+                . ' OR ' . $this->db->quoteName('i.error') . ' LIKE :search4'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING)
+                ->bind(':search3', $searchLike, ParameterType::STRING)
+                ->bind(':search4', $searchLike, ParameterType::STRING);
+        }
+
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        return $total !== null ? (int) $total : 0;
+    }
+
+    /**
+     * Delete inbox rows by id.
+     *
+     * @params array<int, int> $ids Inbox ids to delete.
+     *
+     * @return  int  Number of deleted rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function deleteByIds(array $ids): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn(int $id): bool => $id > 0)));
+
+        if ($ids === []) {
+            return 0;
+        }
+
+        $query = $this->db->createQuery()
+            ->delete($this->db->quoteName('#__fediverse_inbox'))
+            ->where($this->db->quoteName('id') . ' IN (' . implode(',', $ids) . ')');
+
+        $this->db->setQuery($query);
+        $this->db->execute();
+
+        return (int) $this->db->getAffectedRows();
+    }
+
+    /**
+     * Update moderation state for reply activities selected by inbox ids.
+     *
+     * @params array<int,int> $ids Inbox ids.
+     * @params string $moderationState Target moderation state.
+     *
+     * @return  int  Number of updated rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function updateReplyModerationByInboxIds(array $ids, string $moderationState): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn(int $id): bool => $id > 0)));
+
+        if (
+            !in_array($moderationState, ['pending', 'approved', 'rejected'], true)
+            || $ids === []
+        ) {
+            return 0;
+        }
+
+        $query = $this->db->createQuery()
+            ->update($this->db->quoteName('#__fediverse_inbound_activities'))
+            ->set($this->db->quoteName('moderation_state') . ' = :state')
+            ->where($this->db->quoteName('activity_type') . ' = ' . $this->db->quote('Create'))
+            ->where($this->db->quoteName('inbox_id') . ' IN (' . implode(',', $ids) . ')')
+            ->bind(':state', $moderationState, ParameterType::STRING);
+
+        $this->db->setQuery($query);
+        $this->db->execute();
+
+        $affectedRows = (int) $this->db->getAffectedRows();
+        $this->syncReplyCommentsWorkflowByInboxIds($ids, $moderationState);
+
+        return $affectedRows;
+    }
+
+    /**
+     * Sync mapped reply comments workflow entries for selected inbox ids.
+     *
+     * @params array<int,int> $ids Inbox ids.
+     * @params string $moderationState Target moderation state.
+     *
+     * @return  void  None.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function syncReplyCommentsWorkflowByInboxIds(array $ids, string $moderationState): void
+    {
+        if ($moderationState === 'approved') {
+            $this->upsertApprovedReplyCommentsByInboxIds($ids);
+
+            return;
+        }
+
+        $this->propagateReplyCommentStateByInboxIds($ids, $moderationState);
+    }
+
+    /**
+     * Upsert mapped reply comments for approved Create activities.
+     *
+     * Insert newly approved replies and refresh existing mapped rows.
+     *
+     * @params array<int,int> $ids Inbox ids.
+     *
+     * @return  void  None.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function upsertApprovedReplyCommentsByInboxIds(array $ids): void
+    {
+        $inboundTable  = $this->db->quoteName('#__fediverse_inbound_activities');
+        $commentsTable = $this->db->quoteName('#__fediverse_comments');
+        $idList        = implode(',', $ids);
+
+        $insertSql = 'INSERT IGNORE INTO ' . $commentsTable
+            . ' ('
+            . implode(
+                ',',
+                [
+                    $this->db->quoteName('inbound_activity_id'),
+                    $this->db->quoteName('inbox_id'),
+                    $this->db->quoteName('local_actor_id'),
+                    $this->db->quoteName('remote_actor_id'),
+                    $this->db->quoteName('object_id'),
+                    $this->db->quoteName('activity_id_uri'),
+                    $this->db->quoteName('raw_json'),
+                    $this->db->quoteName('state'),
+                ]
+            )
+            . ') '
+            . 'SELECT '
+            . implode(
+                ',',
+                [
+                    $this->db->quoteName('ia.id'),
+                    $this->db->quoteName('ia.inbox_id'),
+                    $this->db->quoteName('ia.local_actor_id'),
+                    $this->db->quoteName('ia.remote_actor_id'),
+                    $this->db->quoteName('ia.object_id'),
+                    $this->db->quoteName('ia.activity_id_uri'),
+                    $this->db->quoteName('ia.raw_json'),
+                    $this->db->quote('approved'),
+                ]
+            )
+            . ' FROM ' . $inboundTable . ' AS ' . $this->db->quoteName('ia')
+            . ' WHERE ' . $this->db->quoteName('ia.activity_type') . ' = ' . $this->db->quote('Create')
+            . ' AND ' . $this->db->quoteName('ia.moderation_state') . ' = ' . $this->db->quote('approved')
+            . ' AND ' . $this->db->quoteName('ia.inbox_id') . ' IN (' . $idList . ')';
+
+        $this->db->setQuery($insertSql);
+        $this->db->execute();
+
+        $updateSql = 'UPDATE ' . $commentsTable . ' AS ' . $this->db->quoteName('c')
+            . ' INNER JOIN ' . $inboundTable . ' AS ' . $this->db->quoteName('ia')
+            . ' ON ' . $this->db->quoteName('ia.id') . ' = ' . $this->db->quoteName('c.inbound_activity_id')
+            . ' SET '
+            . $this->db->quoteName('c.object_id') . ' = ' . $this->db->quoteName('ia.object_id')
+            . ', ' . $this->db->quoteName('c.activity_id_uri') . ' = ' . $this->db->quoteName('ia.activity_id_uri')
+            . ', ' . $this->db->quoteName('c.raw_json') . ' = ' . $this->db->quoteName('ia.raw_json')
+            . ', ' . $this->db->quoteName('c.state') . ' = ' . $this->db->quote('approved')
+            . ' WHERE ' . $this->db->quoteName('ia.activity_type') . ' = ' . $this->db->quote('Create')
+            . ' AND ' . $this->db->quoteName('ia.moderation_state') . ' = ' . $this->db->quote('approved')
+            . ' AND ' . $this->db->quoteName('ia.inbox_id') . ' IN (' . $idList . ')';
+
+        $this->db->setQuery($updateSql);
+        $this->db->execute();
+    }
+
+    /**
+     * Propagate pending/rejected moderation state into mapped comments.
+     *
+     * Update existing comment-workflow rows for the selected inbox ids.
+     *
+     * @params array<int,int> $ids Inbox ids.
+     * @params string $moderationState Target moderation state.
+     *
+     * @return  void  None.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function propagateReplyCommentStateByInboxIds(array $ids, string $moderationState): void
+    {
+        $inboundTable  = $this->db->quoteName('#__fediverse_inbound_activities');
+        $commentsTable = $this->db->quoteName('#__fediverse_comments');
+        $idList        = implode(',', $ids);
+
+        $sql = 'UPDATE ' . $commentsTable . ' AS ' . $this->db->quoteName('c')
+            . ' INNER JOIN ' . $inboundTable . ' AS ' . $this->db->quoteName('ia')
+            . ' ON ' . $this->db->quoteName('ia.id') . ' = ' . $this->db->quoteName('c.inbound_activity_id')
+            . ' SET ' . $this->db->quoteName('c.state') . ' = ' . $this->db->quote($moderationState)
+            . ' WHERE ' . $this->db->quoteName('ia.activity_type') . ' = ' . $this->db->quote('Create')
+            . ' AND ' . $this->db->quoteName('ia.inbox_id') . ' IN (' . $idList . ')';
+
+        $this->db->setQuery($sql);
+        $this->db->execute();
+    }
+
+    /**
+     * Normalise full ordering input to a whitelisted column and direction.
+     *
+     * @param   string    $fullOrdering      User supplied ordering value.
+     * @param   string    $defaultColumn     Fallback ordering column.
+     * @param   string    $defaultDirection  Fallback ordering direction.
+     * @param   string[]  $allowedColumns    Allowed ordering columns.
+     *
+     * @return  array{0:string,1:string}  Safe ordering tuple.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function normaliseOrdering(
+        string $fullOrdering,
+        string $defaultColumn,
+        string $defaultDirection,
+        array $allowedColumns
+    ): array {
+        $parts     = preg_split('/\s+/', trim($fullOrdering)) ?: [];
+        $column    = (string) ($parts[0] ?? '');
+        $direction = strtoupper((string) ($parts[1] ?? ''));
+
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = $defaultColumn;
+        }
+
+        if ($direction !== 'ASC' && $direction !== 'DESC') {
+            $direction = strtoupper($defaultDirection);
+        }
+
+        return [$column, $direction];
     }
 }

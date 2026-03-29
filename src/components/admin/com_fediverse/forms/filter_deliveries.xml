@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			inputmode="search"
+			label="JSEARCH_FILTER"
+			hint="JSEARCH_FILTER"
+		/>
+		<field
+			name="state"
+			type="list"
+			label="COM_FEDIVERSE_FILTER_STATE_SELECT"
+			class="js-select-submit-on-change"
+			validate="options"
+		>
+			<option value="">COM_FEDIVERSE_FILTER_STATE_SELECT</option>
+			<option value="queued">COM_FEDIVERSE_STATE_QUEUED</option>
+			<option value="inflight">COM_FEDIVERSE_STATE_INFLIGHT</option>
+			<option value="delivered">COM_FEDIVERSE_STATE_DELIVERED</option>
+			<option value="failed">COM_FEDIVERSE_STATE_FAILED</option>
+			<option value="dead">COM_FEDIVERSE_STATE_DEAD</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			label="JGLOBAL_SORT_BY"
+			class="js-select-submit-on-change"
+			default="created_at DESC"
+			validate="options"
+		>
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="created_at DESC">COM_FEDIVERSE_SORT_CREATED_DESC</option>
+			<option value="created_at ASC">COM_FEDIVERSE_SORT_CREATED_ASC</option>
+			<option value="id DESC">JGRID_HEADING_ID_DESC</option>
+			<option value="id ASC">JGRID_HEADING_ID_ASC</option>
+		</field>
+		<field
+			name="limit"
+			type="limitbox"
+			label="JGLOBAL_LIST_LIMIT"
+			class="js-select-submit-on-change"
+			default="20"
+		/>
+	</fields>
+</form>

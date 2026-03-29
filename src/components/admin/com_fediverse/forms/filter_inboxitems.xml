@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			inputmode="search"
+			label="JSEARCH_FILTER"
+			hint="JSEARCH_FILTER"
+		/>
+		<field
+			name="status"
+			type="list"
+			label="COM_FEDIVERSE_FILTER_STATUS_SELECT"
+			class="js-select-submit-on-change"
+			validate="options"
+		>
+			<option value="">COM_FEDIVERSE_FILTER_STATUS_SELECT</option>
+			<option value="received">COM_FEDIVERSE_STATUS_RECEIVED</option>
+			<option value="processed">COM_FEDIVERSE_STATUS_PROCESSED</option>
+			<option value="failed">COM_FEDIVERSE_STATUS_FAILED</option>
+			<option value="ignored">COM_FEDIVERSE_STATUS_IGNORED</option>
+		</field>
+		<field
+			name="moderation"
+			type="list"
+			label="COM_FEDIVERSE_FILTER_MODERATION_SELECT"
+			class="js-select-submit-on-change"
+			validate="options"
+		>
+			<option value="">COM_FEDIVERSE_FILTER_MODERATION_SELECT</option>
+			<option value="pending">COM_FEDIVERSE_MODERATION_PENDING</option>
+			<option value="approved">COM_FEDIVERSE_MODERATION_APPROVED</option>
+			<option value="rejected">COM_FEDIVERSE_MODERATION_REJECTED</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			label="JGLOBAL_SORT_BY"
+			class="js-select-submit-on-change"
+			default="received_at DESC"
+			validate="options"
+		>
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="received_at DESC">COM_FEDIVERSE_SORT_RECEIVED_DESC</option>
+			<option value="received_at ASC">COM_FEDIVERSE_SORT_RECEIVED_ASC</option>
+			<option value="id DESC">JGRID_HEADING_ID_DESC</option>
+			<option value="id ASC">JGRID_HEADING_ID_ASC</option>
+		</field>
+		<field
+			name="limit"
+			type="limitbox"
+			label="JGLOBAL_LIST_LIMIT"
+			class="js-select-submit-on-change"
+			default="20"
+		/>
+	</fields>
+</form>

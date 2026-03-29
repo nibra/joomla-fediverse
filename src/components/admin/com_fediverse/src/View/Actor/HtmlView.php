@@ -14,8 +14,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use NX\Component\Fediverse\Administrator\Domain\Actor\Actor;
+use NX\Component\Fediverse\Administrator\Helper\ActorAccountPresets;
+use NX\Component\Fediverse\Administrator\Service\License\LicenseService;
 
 /**
  * HtmlView Class
@@ -34,6 +37,60 @@ final class HtmlView extends BaseHtmlView
      * @since  __DEPLOY_VERSION__
      */
     public Actor $actor;
+
+    /**
+     * Analytics summary for the actor.
+     *
+     * @var array<string,array<string,int>>
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public array $analytics = [];
+
+    /**
+     * Semantic account kind for the current actor.
+     *
+     * @var string
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public string $accountKind = 'person';
+
+    /**
+     * Canonical actor profile data for the current actor.
+     *
+     * @var array<string, string>
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public array $profileData = [];
+
+    /**
+     * Select options for featured introduction content.
+     *
+     * @var array<int, array{value:string,text:string}>
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public array $featuredContentOptions = [];
+
+    /**
+     * Whether the installation has an active Pro license.
+     *
+     * @var bool
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public bool $isPro = false;
+
+    /**
+     * Whether the configured Pro license has expired.
+     *
+     * @var bool
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public bool $licenseExpired = false;
 
     /**
      * Display the actor edit view.
@@ -61,8 +118,22 @@ final class HtmlView extends BaseHtmlView
         }
 
         $this->actor = $actor;
+        $this->analytics = $model->getActorAnalytics((int) ($actor->id ?? 0));
+        $this->accountKind = ActorAccountPresets::kindForActorType($actor->actorType);
+        $this->profileData = $actor->getProfileData();
+        $this->featuredContentOptions = $actor->userId !== null
+            ? $model->getFeaturedContentOptions((int) $actor->userId)
+            : [];
+
+        $license = Factory::getContainer()->get(LicenseService::class);
+        $this->isPro = $license->isPro() && !$license->isExpired();
+        $this->licenseExpired = $license->isExpired();
 
         $this->addToolbar();
+
+        if ($this->getLayout() === 'default') {
+            $this->setLayout('edit');
+        }
 
         parent::display($tpl);
     }
@@ -76,6 +147,20 @@ final class HtmlView extends BaseHtmlView
      */
     private function addToolbar(): void
     {
+        /** @var Toolbar $toolbar */
+        $toolbar = $this->getDocument()->getToolbar();
+
         ToolbarHelper::title(Text::_('COM_FEDIVERSE_ACTORS_EDIT_HEADING'), 'users');
+        $toolbar->apply('actors.apply');
+
+        $saveGroup = $toolbar->dropdownButton('save-group');
+        $saveGroup->configure(
+            static function (Toolbar $childBar): void {
+                $childBar->save('actors.save');
+                $childBar->save2new('actors.save2new');
+            }
+        );
+
+        $toolbar->cancel('actors.close', 'JTOOLBAR_CLOSE');
     }
 }

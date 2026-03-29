@@ -21,19 +21,60 @@ enum LicenseTier: string
 {
     case Free     = 'free';
     case Personal = 'personal';
-    case Developer = 'developer';
-    case Agency   = 'agency';
+    case Pro      = 'pro';
 
     /**
-     * Check whether this tier includes Pro features.
+     * Check whether this tier is a paid plan.
      *
-     * @return  bool  True if this is a paid tier.
+     * @return  bool  True for Personal and Pro.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function isPaid(): bool
+    {
+        return $this !== self::Free;
+    }
+
+    /**
+     * Check whether this tier is the Pro plan.
+     *
+     * @return  bool  True only for the Pro plan.
      *
      * @since  __DEPLOY_VERSION__
      */
     public function isPro(): bool
     {
-        return $this !== self::Free;
+        return $this === self::Pro;
+    }
+
+    /**
+     * Check whether this tier satisfies a minimum required tier.
+     *
+     * @param   self  $required  Minimum required tier.
+     *
+     * @return  bool  True when this tier is greater than or equal to required.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function isAtLeast(self $required): bool
+    {
+        return $this->rank() >= $required->rank();
+    }
+
+    /**
+     * Return sort rank for tier comparisons.
+     *
+     * @return  int  Rank value.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function rank(): int
+    {
+        return match ($this) {
+            self::Free     => 0,
+            self::Personal => 1,
+            self::Pro      => 2,
+        };
     }
 
     /**
@@ -46,10 +87,9 @@ enum LicenseTier: string
     public function actorLimit(): int
     {
         return match ($this) {
-            self::Free      => 1,
-            self::Personal  => 3,
-            self::Developer => 10,
-            self::Agency    => PHP_INT_MAX,
+            self::Free     => 2,
+            self::Personal => 6,
+            self::Pro      => PHP_INT_MAX,
         };
     }
 
@@ -63,10 +103,9 @@ enum LicenseTier: string
     public function label(): string
     {
         return match ($this) {
-            self::Free      => 'Free',
-            self::Personal  => 'Personal',
-            self::Developer => 'Developer',
-            self::Agency    => 'Agency',
+            self::Free     => 'Free',
+            self::Personal => 'Personal',
+            self::Pro      => 'Pro',
         };
     }
 }

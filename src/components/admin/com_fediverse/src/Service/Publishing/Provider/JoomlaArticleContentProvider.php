@@ -154,6 +154,9 @@ final class JoomlaArticleContentProvider implements ContentProviderInterface
                 $this->db->quoteName('title'),
                 $this->db->quoteName('introtext'),
                 $this->db->quoteName('fulltext'),
+                $this->db->quoteName('attribs'),
+                $this->db->quoteName('images'),
+                $this->db->quoteName('catid'),
                 $this->db->quoteName('created'),
                 $this->db->quoteName('modified'),
                 $this->db->quoteName('created_by'),
@@ -165,6 +168,28 @@ final class JoomlaArticleContentProvider implements ContentProviderInterface
 
         $this->db->setQuery($query);
         $row = $this->db->loadObject();
+
+        if ($row) {
+            $tagQuery = $this->db->createQuery()
+                ->select([
+                    $this->db->quoteName('tags.title'),
+                    $this->db->quoteName('tags.alias'),
+                ])
+                ->from($this->db->quoteName('#__contentitem_tag_map', 'map'))
+                ->join(
+                    'INNER',
+                    $this->db->quoteName('#__tags', 'tags')
+                    . ' ON ' . $this->db->quoteName('tags.id')
+                    . ' = ' . $this->db->quoteName('map.tag_id')
+                )
+                ->where($this->db->quoteName('map.content_item_id') . ' = :id')
+                ->where($this->db->quoteName('map.type_alias') . ' = :typeAlias')
+                ->bind(':id', $aid, ParameterType::INTEGER)
+                ->bind(':typeAlias', 'com_content.article', ParameterType::STRING);
+
+            $this->db->setQuery($tagQuery);
+            $row->tags = $this->db->loadObjectList();
+        }
 
         return $row ?: null;
     }

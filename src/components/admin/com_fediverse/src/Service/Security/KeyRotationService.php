@@ -13,6 +13,7 @@ namespace NX\Component\Fediverse\Administrator\Service\Security;
 use Joomla\Database\DatabaseInterface;
 use NX\Component\Fediverse\Administrator\Domain\Activity\ActivityEnvelope;
 use NX\Component\Fediverse\Administrator\Domain\Actor\Actor;
+use NX\Component\Fediverse\Administrator\Helper\ActorProfileDocumentDecorator;
 use NX\Component\Fediverse\Administrator\Mapper\JoomlaUserActorMapper;
 use NX\Component\Fediverse\Administrator\Model\ActorsModel;
 use NX\Component\Fediverse\Administrator\Model\FollowersModel;
@@ -209,7 +210,7 @@ final class KeyRotationService
 
         $keyVault = new KeyVaultService();
         $pair = $keyVault->generateRsaKeyPair(2048);
-        $newKeyId = $currentKeyId;
+        $newKeyId = $this->buildUniqueKeyIdUri((string) $actor->uri, $currentKeyId);
 
         if ($announce) {
             $activity = $this->buildActorUpdateActivity($actor, $actor->handle, $newKeyId, $pair['public_key_pem']);
@@ -329,7 +330,7 @@ final class KeyRotationService
                 'https://w3id.org/security/v1',
             ],
             'id'                => $actorUri,
-            'type'              => 'Person',
+            'type'              => $actor->actorType ?? 'Person',
             'preferredUsername' => $actor->preferredUsername,
             'inbox'             => $actor->inboxUrl,
             'outbox'            => $actor->outboxUrl,
@@ -340,6 +341,8 @@ final class KeyRotationService
                 'publicKeyPem' => $publicKeyPem,
             ],
         ];
+
+        $doc = ActorProfileDocumentDecorator::applyProfileData($doc, $actor->getProfileData());
 
         if ($actor->sharedInboxUrl !== null && trim($actor->sharedInboxUrl) !== '') {
             $doc['endpoints'] = ['sharedInbox' => $actor->sharedInboxUrl];
@@ -368,6 +371,63 @@ final class KeyRotationService
 
         if (preg_match('~^(.*)#(main-key.*)$~', $keyId, $matches)) {
             return $matches[1] . '/' . $matches[2];
+        }
+
+        return $keyId;
+    }
+
+    /**
+     * Build a unique key id URI for a rotation.
+     *
+     * @params string $actorUri Actor URI.
+     * @params string $fallbackKeyId Fallback key id.
+     *
+     * @return  string  Key id URI.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function buildUniqueKeyIdUri(string $actorUri, string $fallbackKeyId): string
+    {
+        $actorUri = trim($actorUri);
+        if ($actorUri === '') {
+            $actorUri = self::actorUriFromKeyId($fallbackKeyId);
+        }
+
+        if ($actorUri === '') {
+            return $fallbackKeyId;
+        }
+
+        try {
+            $suffix = bin2hex(random_bytes(6));
+        } catch (Throwable) {
+            $suffix = substr(str_replace('.', '', uniqid('', true)), 0, 12);
+        }
+
+        return $actorUri . '#main-key-' . gmdate('YmdHis') . '-' . $suffix;
+    }
+
+    /**
+     * Extract actor URI from a key id.
+     *
+     * @params string $keyId Key identifier URI.
+     *
+     * @return  string  Actor URI.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private static function actorUriFromKeyId(string $keyId): string
+    {
+        $keyId = trim($keyId);
+        if ($keyId === '') {
+            return '';
+        }
+
+        if (preg_match('~^(.*)#main-key.*$~', $keyId, $matches)) {
+            return trim((string) ($matches[1] ?? ''));
+        }
+
+        if (preg_match('~^(.*)/main-key.*$~', $keyId, $matches)) {
+            return trim((string) ($matches[1] ?? ''));
         }
 
         return $keyId;

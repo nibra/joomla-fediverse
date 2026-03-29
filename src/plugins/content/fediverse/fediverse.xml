@@ -12,6 +12,7 @@
     <namespace path="src">NX\Plugin\Content\Fediverse</namespace>
 
     <files>
+        <folder>forms</folder>
         <folder plugin="fediverse">services</folder>
         <folder>src</folder>
     </files>

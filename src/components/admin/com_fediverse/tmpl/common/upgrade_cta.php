@@ -19,6 +19,7 @@ use Joomla\CMS\Language\Text;
 
 $featureName = $featureName ?? 'This feature';
 $expired     = $expired     ?? false;
+$projectUrl  = Text::_('COM_FEDIVERSE_PROJECT_URL');
 
 $msgKey  = $expired ? 'COM_FEDIVERSE_LICENSE_EXPIRED' : 'COM_FEDIVERSE_LICENSE_PRO_REQUIRED';
 $iconCls = $expired ? 'icon-clock' : 'icon-lock';
@@ -28,6 +29,6 @@ $iconCls = $expired ? 'icon-clock' : 'icon-lock';
     <div>
         <strong><?php echo htmlspecialchars($featureName, ENT_QUOTES, 'UTF-8'); ?></strong>
         &mdash;
-        <?php echo Text::_($msgKey); ?>
+        <?php echo Text::sprintf($msgKey, $projectUrl); ?>
     </div>
 </div>

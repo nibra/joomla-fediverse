@@ -25,6 +25,7 @@ final class LicenseValidationResult
         public readonly bool                  $expired = false,
         public readonly ?\DateTimeImmutable   $expiry  = null,
         public readonly ?string               $domain  = null,
+        public readonly ?string               $instanceId = null,
     ) {}
 
     /**

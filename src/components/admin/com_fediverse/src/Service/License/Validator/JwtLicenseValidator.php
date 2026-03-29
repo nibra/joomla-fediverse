@@ -25,7 +25,8 @@ use NX\Component\Fediverse\Administrator\Service\License\LicenseValidatorInterfa
  *
  * JWT payload fields:
  *   - `dom`  — licensed domain (e.g. "example.com")
- *   - `tier` — "free" | "personal" | "developer" | "agency"
+ *   - `tier` — "free" | "personal" | "pro"
+ *              Legacy aliases "developer" and "agency" are treated as "pro".
  *   - `exp`  — Unix expiry timestamp
  *   - `iat`  — Unix issued-at timestamp
  *
@@ -58,7 +59,7 @@ PEM;
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function validate(string $key): LicenseValidationResult
+    public function validate(string $key, ?string $instanceId = null, ?string $instanceName = null): LicenseValidationResult
     {
         $key = trim($key);
         if ($key === '') {
@@ -94,10 +95,11 @@ PEM;
             return LicenseValidationResult::free();
         }
 
-        $expiry  = \DateTimeImmutable::createFromFormat('U', (string) $exp) ?: null;
-        $expired = $expiry !== null && $expiry < new \DateTimeImmutable();
-        $domain  = strtolower(trim((string) ($payload['dom'] ?? ''))) ?: null;
-        $tier    = LicenseTier::tryFrom(strtolower(trim((string) ($payload['tier'] ?? '')))) ?? LicenseTier::Free;
+        $expiry    = \DateTimeImmutable::createFromFormat('U', (string) $exp) ?: null;
+        $expired   = $expiry !== null && $expiry < new \DateTimeImmutable();
+        $domain    = strtolower(trim((string) ($payload['dom'] ?? ''))) ?: null;
+        $tierValue = strtolower(trim((string) ($payload['tier'] ?? '')));
+        $tier      = $this->resolveTier($tierValue);
 
         return new LicenseValidationResult(
             tier:    $tier,
@@ -106,6 +108,27 @@ PEM;
             expiry:  $expiry,
             domain:  $domain,
         );
+    }
+
+    /**
+     * Resolve a tier payload value, including legacy aliases.
+     *
+     * @param   string  $tierValue  Raw lowercased tier value.
+     *
+     * @return  LicenseTier  Resolved tier.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function resolveTier(string $tierValue): LicenseTier
+    {
+        return match ($tierValue) {
+            'free'      => LicenseTier::Free,
+            'personal'  => LicenseTier::Personal,
+            'pro'       => LicenseTier::Pro,
+            'developer' => LicenseTier::Pro,
+            'agency'    => LicenseTier::Pro,
+            default     => LicenseTier::Free,
+        };
     }
 
     private function base64UrlDecode(string $input): string

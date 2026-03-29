@@ -68,6 +68,8 @@ final class InboundActivitiesModel extends BaseModel implements InboundActivitie
         ?string $objectId,
         string $rawJson
     ): int {
+        $moderationState = strcasecmp($activityType, 'Create') === 0 ? 'pending' : 'approved';
+
         $query = $this->db->createQuery()
             ->insert($this->db->quoteName('#__fediverse_inbound_activities'))
             ->columns([
@@ -79,6 +81,7 @@ final class InboundActivitiesModel extends BaseModel implements InboundActivitie
                 $this->db->quoteName('object_uri'),
                 $this->db->quoteName('object_id'),
                 $this->db->quoteName('raw_json'),
+                $this->db->quoteName('moderation_state'),
             ])
             ->values(
                 implode(',', [
@@ -90,6 +93,7 @@ final class InboundActivitiesModel extends BaseModel implements InboundActivitie
                     $objectUri === null ? 'NULL' : $this->db->quote($objectUri),
                     $objectId === null ? 'NULL' : $this->db->quote($objectId),
                     $this->db->quote($rawJson),
+                    $this->db->quote($moderationState),
                 ])
             );
 

@@ -517,22 +517,154 @@ final class DeliveryQueueModel extends BaseModel implements DeliveryQueueModelIn
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function getList(string $state = '', int $limit = 50, int $offset = 0): array
+    public function getList(
+        string $state = '',
+        int $limit = 50,
+        int $offset = 0,
+        string $search = '',
+        string $fullOrdering = 'created_at DESC'
+    ): array
     {
+        [$orderColumn, $orderDirection] = $this->normaliseOrdering(
+            $fullOrdering,
+            'created_at',
+            'DESC',
+            ['created_at', 'id', 'state', 'attempts']
+        );
+
         $query = $this->db->createQuery()
             ->select('*')
             ->from($this->db->quoteName('#__fediverse_delivery_queue'))
-            ->order($this->db->quoteName('created_at') . ' DESC');
+            ->order($this->db->quoteName($orderColumn) . ' ' . $orderDirection);
 
         if ($state !== '') {
             $query->where($this->db->quoteName('state') . ' = :state')
                 ->bind(':state', $state, ParameterType::STRING);
         }
 
-        $query->setLimit($limit, $offset);
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . 'CAST(' . $this->db->quoteName('id') . ' AS CHAR) LIKE :search1'
+                . ' OR ' . $this->db->quoteName('target_inbox_url') . ' LIKE :search2'
+                . ' OR ' . $this->db->quoteName('last_error') . ' LIKE :search3'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING)
+                ->bind(':search3', $searchLike, ParameterType::STRING);
+        }
+
+        if ($limit > 0) {
+            $query->setLimit($limit, $offset);
+        }
 
         $this->db->setQuery($query);
 
         return $this->db->loadAssocList() ?: [];
+    }
+
+    /**
+     * Count delivery queue rows for an optional state filter.
+     *
+     * @params string $state  Optional state filter.
+     * @params string $search Optional search term.
+     *
+     * @return  int  Total matching rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function countList(string $state = '', string $search = ''): int
+    {
+        $query = $this->db->createQuery()
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__fediverse_delivery_queue'));
+
+        if ($state !== '') {
+            $query->where($this->db->quoteName('state') . ' = :state')
+                ->bind(':state', $state, ParameterType::STRING);
+        }
+
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . 'CAST(' . $this->db->quoteName('id') . ' AS CHAR) LIKE :search1'
+                . ' OR ' . $this->db->quoteName('target_inbox_url') . ' LIKE :search2'
+                . ' OR ' . $this->db->quoteName('last_error') . ' LIKE :search3'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING)
+                ->bind(':search3', $searchLike, ParameterType::STRING);
+        }
+
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        return $total !== null ? (int) $total : 0;
+    }
+
+    /**
+     * Delete queue rows by id.
+     *
+     * @params array<int, int> $ids Queue ids to delete.
+     *
+     * @return  int  Number of deleted rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function deleteByIds(array $ids): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn(int $id): bool => $id > 0)));
+
+        if ($ids === []) {
+            return 0;
+        }
+
+        $query = $this->db->createQuery()
+            ->delete($this->db->quoteName('#__fediverse_delivery_queue'))
+            ->where($this->db->quoteName('id') . ' IN (' . implode(',', $ids) . ')');
+
+        $this->db->setQuery($query);
+        $this->db->execute();
+
+        return (int) $this->db->getAffectedRows();
+    }
+
+    /**
+     * Normalise full ordering input to a whitelisted column and direction.
+     *
+     * @param   string    $fullOrdering      User supplied ordering value.
+     * @param   string    $defaultColumn     Fallback ordering column.
+     * @param   string    $defaultDirection  Fallback ordering direction.
+     * @param   string[]  $allowedColumns    Allowed ordering columns.
+     *
+     * @return  array{0:string,1:string}  Safe ordering tuple.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function normaliseOrdering(
+        string $fullOrdering,
+        string $defaultColumn,
+        string $defaultDirection,
+        array $allowedColumns
+    ): array {
+        $parts     = preg_split('/\s+/', trim($fullOrdering)) ?: [];
+        $column    = (string) ($parts[0] ?? '');
+        $direction = strtoupper((string) ($parts[1] ?? ''));
+
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = $defaultColumn;
+        }
+
+        if ($direction !== 'ASC' && $direction !== 'DESC') {
+            $direction = strtoupper($defaultDirection);
+        }
+
+        return [$column, $direction];
     }
 }

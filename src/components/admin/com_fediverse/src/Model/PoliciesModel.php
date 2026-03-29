@@ -87,20 +87,100 @@ final class PoliciesModel extends BaseModel
     /**
      * Fetch all domain policies ordered by domain.
      *
+     * @params int    $limit   Maximum number of rows (0 = no limit).
+     * @params int    $offset  Row offset.
+     * @params string $search  Optional search term.
+     * @params string $policy  Optional policy filter ('allow' or 'block').
+     *
      * @return  array<int, array<string, mixed>>  List of policy rows.
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function getList(): array
+    public function getList(
+        int $limit = 0,
+        int $offset = 0,
+        string $search = '',
+        string $policy = '',
+        string $fullOrdering = 'domain ASC'
+    ): array
     {
+        [$orderColumn, $orderDirection] = $this->normaliseOrdering(
+            $fullOrdering,
+            'domain',
+            'ASC',
+            ['domain', 'policy']
+        );
+
         $query = $this->db->createQuery()
             ->select('*')
             ->from($this->db->quoteName('#__fediverse_domain_policies'))
-            ->order($this->db->quoteName('domain') . ' ASC');
+            ->order($this->db->quoteName($orderColumn) . ' ' . $orderDirection);
+
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . $this->db->quoteName('domain') . ' LIKE :search1'
+                . ' OR ' . $this->db->quoteName('reason') . ' LIKE :search2'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING);
+        }
+
+        if ($policy === DomainPolicy::POLICY_ALLOW || $policy === DomainPolicy::POLICY_BLOCK) {
+            $query->where($this->db->quoteName('policy') . ' = :policy')
+                ->bind(':policy', $policy, ParameterType::STRING);
+        }
+
+        if ($limit > 0) {
+            $query->setLimit($limit, $offset);
+        }
 
         $this->db->setQuery($query);
 
         return $this->db->loadAssocList() ?: [];
+    }
+
+    /**
+     * Count all domain policy rows for optional filters.
+     *
+     * @params string $search Optional search term.
+     * @params string $policy Optional policy filter ('allow' or 'block').
+     *
+     * @return  int  Total policy rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function countList(string $search = '', string $policy = ''): int
+    {
+        $query = $this->db->createQuery()
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__fediverse_domain_policies'));
+
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . $this->db->quoteName('domain') . ' LIKE :search1'
+                . ' OR ' . $this->db->quoteName('reason') . ' LIKE :search2'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING);
+        }
+
+        if ($policy === DomainPolicy::POLICY_ALLOW || $policy === DomainPolicy::POLICY_BLOCK) {
+            $query->where($this->db->quoteName('policy') . ' = :policy')
+                ->bind(':policy', $policy, ParameterType::STRING);
+        }
+
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        return $total !== null ? (int) $total : 0;
     }
 
     /**
@@ -185,5 +265,38 @@ final class PoliciesModel extends BaseModel
 
         $this->db->setQuery($query);
         $this->db->execute();
+    }
+
+    /**
+     * Normalise full ordering input to a whitelisted column and direction.
+     *
+     * @param   string    $fullOrdering      User supplied ordering value.
+     * @param   string    $defaultColumn     Fallback ordering column.
+     * @param   string    $defaultDirection  Fallback ordering direction.
+     * @param   string[]  $allowedColumns    Allowed ordering columns.
+     *
+     * @return  array{0:string,1:string}  Safe ordering tuple.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function normaliseOrdering(
+        string $fullOrdering,
+        string $defaultColumn,
+        string $defaultDirection,
+        array $allowedColumns
+    ): array {
+        $parts     = preg_split('/\s+/', trim($fullOrdering)) ?: [];
+        $column    = (string) ($parts[0] ?? '');
+        $direction = strtoupper((string) ($parts[1] ?? ''));
+
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = $defaultColumn;
+        }
+
+        if ($direction !== 'ASC' && $direction !== 'DESC') {
+            $direction = strtoupper($defaultDirection);
+        }
+
+        return [$column, $direction];
     }
 }

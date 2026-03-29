@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="module" client="administrator" method="upgrade">
+    <name>MOD_FEDIVERSE_DIAGNOSTICS</name>
+    <author>Niels Braczek</author>
+    <creationDate>Mar 2026</creationDate>
+    <copyright>(C) 2026 BSDS / nibra Consulting</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>nbraczek@bsds.de</authorEmail>
+    <authorUrl>code.nibra.net</authorUrl>
+    <version>__DEPLOY_VERSION__</version>
+    <description>MOD_FEDIVERSE_DIAGNOSTICS_XML_DESCRIPTION</description>
+    <namespace path="src">NX\Module\Fediverse\Diagnostics</namespace>
+    <scriptfile>script.php</scriptfile>
+
+    <files>
+        <folder module="mod_fediverse_diagnostics">services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+        <filename>script.php</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/mod_fediverse_diagnostics.ini</language>
+        <language tag="en-GB">language/en-GB/mod_fediverse_diagnostics.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="tiles"
+                    type="checkboxes"
+                    label="MOD_FEDIVERSE_DIAGNOSTICS_FIELD_TILES_LABEL"
+                    default="public_base_url,plugins,scheduler,actors,permissions"
+                >
+                    <option value="public_base_url">MOD_FEDIVERSE_DIAGNOSTICS_TILE_PUBLIC_BASE_URL</option>
+                    <option value="plugins">MOD_FEDIVERSE_DIAGNOSTICS_TILE_PLUGINS</option>
+                    <option value="scheduler">MOD_FEDIVERSE_DIAGNOSTICS_TILE_SCHEDULER</option>
+                    <option value="actors">MOD_FEDIVERSE_DIAGNOSTICS_TILE_ACTORS</option>
+                    <option value="permissions">MOD_FEDIVERSE_DIAGNOSTICS_TILE_PERMISSIONS</option>
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                    name="header_icon"
+                    type="hidden"
+                    default="icon-fediverse"
+                />
+                <field
+                    name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    class="form-select"
+                    validate="moduleLayout"
+                />
+                <field
+                    name="moduleclass_sfx"
+                    type="textarea"
+                    label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                    rows="3"
+                    validate="CssIdentifier"
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

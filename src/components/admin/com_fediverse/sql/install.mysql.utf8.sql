@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `#__fediverse_actors` (
   `public_key_pem` TEXT NULL,
   `profile_json` MEDIUMTEXT NULL,
   `is_enabled` TINYINT(1) NOT NULL DEFAULT 1,
-  `actor_type` ENUM('Person','Service') NOT NULL DEFAULT 'Person',
+  `actor_type` ENUM('Person','Service','Organization','Group') NOT NULL DEFAULT 'Person',
   `object_type` ENUM('Note','Article','Image','Video') NOT NULL DEFAULT 'Note',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -169,6 +169,7 @@ CREATE TABLE IF NOT EXISTS `#__fediverse_inbound_activities` (
   `object_uri` VARCHAR(512) NULL,
   `object_id` VARCHAR(190) NULL,
   `raw_json` MEDIUMTEXT NOT NULL,
+  `moderation_state` ENUM('pending','approved','rejected') NOT NULL DEFAULT 'approved',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
@@ -179,6 +180,7 @@ CREATE TABLE IF NOT EXISTS `#__fediverse_inbound_activities` (
   KEY `idx_fed_inbound_remote_actor` (`remote_actor_id`),
   KEY `idx_fed_inbound_object` (`object_id`),
   KEY `idx_fed_inbound_type` (`activity_type`),
+  KEY `idx_fed_inbound_moderation` (`activity_type`, `moderation_state`),
 
   CONSTRAINT `fk_fed_inbound_inbox`
     FOREIGN KEY (`inbox_id`)
@@ -193,6 +195,53 @@ CREATE TABLE IF NOT EXISTS `#__fediverse_inbound_activities` (
     ON UPDATE CASCADE,
 
   CONSTRAINT `fk_fed_inbound_remote_actor`
+    FOREIGN KEY (`remote_actor_id`)
+    REFERENCES `#__fediverse_actors` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =========================
+-- Reply comments workflow bridge
+-- =========================
+CREATE TABLE IF NOT EXISTS `#__fediverse_comments` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `inbound_activity_id` BIGINT UNSIGNED NOT NULL,
+  `inbox_id` BIGINT UNSIGNED NOT NULL,
+  `local_actor_id` BIGINT UNSIGNED NULL,
+  `remote_actor_id` BIGINT UNSIGNED NULL,
+  `object_id` VARCHAR(190) NULL,
+  `activity_id_uri` VARCHAR(512) NULL,
+  `raw_json` MEDIUMTEXT NOT NULL,
+  `state` ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_fed_comments_inbound` (`inbound_activity_id`),
+  KEY `idx_fed_comments_inbox` (`inbox_id`),
+  KEY `idx_fed_comments_object_state` (`object_id`, `state`),
+  KEY `idx_fed_comments_remote_actor` (`remote_actor_id`),
+
+  CONSTRAINT `fk_fed_comments_inbound`
+    FOREIGN KEY (`inbound_activity_id`)
+    REFERENCES `#__fediverse_inbound_activities` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_fed_comments_inbox`
+    FOREIGN KEY (`inbox_id`)
+    REFERENCES `#__fediverse_inbox` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_fed_comments_local_actor`
+    FOREIGN KEY (`local_actor_id`)
+    REFERENCES `#__fediverse_actors` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_fed_comments_remote_actor`
     FOREIGN KEY (`remote_actor_id`)
     REFERENCES `#__fediverse_actors` (`id`)
     ON DELETE SET NULL
@@ -306,6 +355,30 @@ CREATE TABLE IF NOT EXISTS `#__fediverse_domain_policies` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_fed_domain_policy` (`domain`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =========================
+-- Webhooks
+-- =========================
+CREATE TABLE IF NOT EXISTS `#__fediverse_webhooks` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(190) NOT NULL,
+  `target_url` VARCHAR(768) NOT NULL,
+  `secret` VARCHAR(255) NOT NULL,
+  `events` TEXT NOT NULL,
+  `is_enabled` TINYINT(1) NOT NULL DEFAULT 1,
+  `last_delivery_at` DATETIME NULL,
+  `last_delivery_status` SMALLINT NULL,
+  `last_error` TEXT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  KEY `idx_fed_webhooks_enabled` (`is_enabled`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =========================
+-- OAuth clients
+-- =========================
 CREATE TABLE IF NOT EXISTS `#__fediverse_oauth_clients` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `client_id` VARCHAR(191) NOT NULL,

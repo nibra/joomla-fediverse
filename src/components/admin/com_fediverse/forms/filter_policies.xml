@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			inputmode="search"
+			label="JSEARCH_FILTER"
+			hint="JSEARCH_FILTER"
+		/>
+		<field
+			name="policy"
+			type="list"
+			label="COM_FEDIVERSE_FILTER_POLICY_SELECT"
+			class="js-select-submit-on-change"
+			validate="options"
+		>
+			<option value="">COM_FEDIVERSE_FILTER_POLICY_SELECT</option>
+			<option value="allow">COM_FEDIVERSE_POLICY_ALLOW</option>
+			<option value="block">COM_FEDIVERSE_POLICY_BLOCK</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			label="JGLOBAL_SORT_BY"
+			class="js-select-submit-on-change"
+			default="domain ASC"
+			validate="options"
+		>
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="domain ASC">COM_FEDIVERSE_SORT_DOMAIN_ASC</option>
+			<option value="domain DESC">COM_FEDIVERSE_SORT_DOMAIN_DESC</option>
+		</field>
+		<field
+			name="limit"
+			type="limitbox"
+			label="JGLOBAL_LIST_LIMIT"
+			class="js-select-submit-on-change"
+			default="20"
+		/>
+	</fields>
+</form>

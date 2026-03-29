@@ -4,6 +4,7 @@
 -- ---------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `#__fediverse_domain_policies`;
+DROP TABLE IF EXISTS `#__fediverse_webhooks`;
 DROP TABLE IF EXISTS `#__fediverse_content_settings`;
 DROP TABLE IF EXISTS `#__fediverse_user_settings`;
 DROP TABLE IF EXISTS `#__fediverse_delivery_queue`;

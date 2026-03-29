@@ -11,7 +11,7 @@
 namespace NX\Module\Fediverse\Reactions\Site\Dispatcher;
 
 use Joomla\CMS\Dispatcher\AbstractModuleDispatcher;
-use NX\Module\Fediverse\Reactions\Site\Helper\ReactionsHelper;
+use NX\Module\Fediverse\Reactions\Site\Helper\ReactionsDataProvider;
 
 defined('_JEXEC') or die;
 
@@ -33,7 +33,7 @@ final class Dispatcher extends AbstractModuleDispatcher
     {
         $data = parent::getLayoutData();
 
-        $data['reactions'] = ReactionsHelper::getReactionsData($data['params']);
+        $data['reactions'] = ReactionsDataProvider::getReactionsData($data['params']);
 
         return $data;
     }

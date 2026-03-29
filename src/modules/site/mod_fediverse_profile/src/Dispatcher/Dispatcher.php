@@ -11,7 +11,7 @@
 namespace NX\Module\Fediverse\Profile\Site\Dispatcher;
 
 use Joomla\CMS\Dispatcher\AbstractModuleDispatcher;
-use NX\Module\Fediverse\Profile\Site\Helper\ProfileHelper;
+use NX\Module\Fediverse\Profile\Site\Helper\ProfileDataProvider;
 
 defined('_JEXEC') or die;
 
@@ -33,7 +33,7 @@ final class Dispatcher extends AbstractModuleDispatcher
     {
         $data = parent::getLayoutData();
 
-        $data['profile'] = ProfileHelper::getProfileData($data['params']);
+        $data['profile'] = ProfileDataProvider::getProfileData($data['params']);
 
         return $data;
     }

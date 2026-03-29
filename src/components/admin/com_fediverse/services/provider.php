@@ -19,6 +19,7 @@ use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use NX\Component\Fediverse\Administrator\Adapter\ActivityPubAdapterInterface;
 use NX\Component\Fediverse\Administrator\Adapter\RikudouAdapter;
+use NX\Component\Fediverse\Administrator\Service\Administration\ConfigurationTransferService;
 use NX\Component\Fediverse\Administrator\Extension\FediverseComponent;
 use NX\Component\Fediverse\Administrator\Http\JoomlaHttpClient;
 use NX\Component\Fediverse\Administrator\Http\RequestContext;
@@ -26,7 +27,10 @@ use NX\Component\Fediverse\Administrator\Mapper\JoomlaContentMapper;
 use NX\Component\Fediverse\Administrator\Mapper\JoomlaContentMapperInterface;
 use NX\Component\Fediverse\Administrator\Mapper\JoomlaUserActorMapper;
 use NX\Component\Fediverse\Administrator\MVC\FediverseMVCFactory;
+use NX\Component\Fediverse\Administrator\Service\Automation\WebhookAutomationService;
 use NX\Component\Fediverse\Administrator\Service\C2S\OAuthService;
+use NX\Component\Fediverse\Administrator\Service\Access\PermissionService;
+use NX\Component\Fediverse\Administrator\Service\Comments\CommentRendererRegistry;
 use NX\Component\Fediverse\Administrator\Service\Config\FediverseConfig;
 use NX\Component\Fediverse\Administrator\Service\Actor\ActorResolverService;
 use NX\Component\Fediverse\Administrator\Service\Actor\ActorResolverServiceInterface;
@@ -35,16 +39,20 @@ use NX\Component\Fediverse\Administrator\Service\Federation\DeliveryService;
 use NX\Component\Fediverse\Administrator\Service\Federation\DeliveryServiceInterface;
 use NX\Component\Fediverse\Administrator\Service\Federation\InboxProcessService;
 use NX\Component\Fediverse\Administrator\Service\Media\MediaStorageService;
+use NX\Component\Fediverse\Administrator\Service\Observability\AuditLogService;
 use NX\Component\Fediverse\Administrator\Service\Publishing\ContentProviderRegistry;
 use NX\Component\Fediverse\Administrator\Service\Publishing\Provider\JoomlaArticleContentProvider;
 use NX\Component\Fediverse\Administrator\Service\Publishing\Provider\JoomlaNewsfeedContentProvider;
 use NX\Component\Fediverse\Administrator\Service\Publishing\PublishService;
+use NX\Component\Fediverse\Administrator\Service\Profile\ExternalProfileLinkVerifier;
 use NX\Component\Fediverse\Administrator\Service\Security\HttpSignaturService;
 use NX\Component\Fediverse\Administrator\Service\Security\HttpSignaturServiceInterface;
 use NX\Component\Fediverse\Administrator\Service\Security\KeyRotationService;
 use NX\Component\Fediverse\Administrator\Service\Security\KeyVaultService;
 use NX\Component\Fediverse\Administrator\Service\License\LicenseService;
-use NX\Component\Fediverse\Administrator\Service\License\Validator\JwtLicenseValidator;
+use NX\Component\Fediverse\Administrator\Service\License\Validator\LemonSqueezyLicenseValidator;
+use NX\Component\Fediverse\Administrator\Service\Events\FediverseDomainEventDispatcher;
+use NX\Component\Fediverse\Administrator\Service\Events\FediverseDomainEventDispatcherInterface;
 use NX\Component\Fediverse\Administrator\Service\Site\JoomlaBaseUrlProvider;
 
 return new
@@ -111,8 +119,40 @@ class () implements ServiceProviderInterface {
         }
         $container->set(ActivityPubAdapterInterface::class, fn() => new RikudouAdapter());
         $container->set(RequestContext::class, fn() => RequestContext::fromGlobals());
-        $container->set(LicenseService::class, fn() => new LicenseService(new JwtLicenseValidator()));
         $container->set(FediverseConfig::class, fn() => new FediverseConfig());
+        $container->set(
+            PermissionService::class,
+            function(Container $container) {
+                $config = $container->get(FediverseConfig::class);
+
+                return new PermissionService($config->isStrictAclActionsEnabled());
+            }
+        );
+        $container->set(
+            LicenseService::class,
+            function(Container $container) {
+                $config = $container->get(FediverseConfig::class);
+                $baseUrlProvider = new JoomlaBaseUrlProvider($config);
+                $apiBaseUrl = trim((string) getenv('FEDIVERSE_LEMON_SQUEEZY_API_BASE'));
+
+                if ($apiBaseUrl === '' && defined('JPATH_ROOT')) {
+                    $testApiPath = JPATH_ROOT . '/tests/joomla-test-api/index.php';
+
+                    if (is_file($testApiPath)) {
+                        $apiBaseUrl = 'http://localhost/tests/joomla-test-api/index.php/lemon-squeezy/licenses';
+                    }
+                }
+
+                return new LicenseService(
+                    new LemonSqueezyLicenseValidator(
+                        timeoutSecs: 5,
+                        apiBaseUrl: $apiBaseUrl !== '' ? $apiBaseUrl : 'https://api.lemonsqueezy.com/v1/licenses',
+                    ),
+                    $container->get(DatabaseDriver::class),
+                    $baseUrlProvider
+                );
+            }
+        );
         $container->set(
             OAuthService::class,
             function(Container $container) {
@@ -135,6 +175,51 @@ class () implements ServiceProviderInterface {
                 return new NodeInfoService(
                     $baseUrlProvider,
                     $container->get(DatabaseDriver::class)
+                );
+            }
+        );
+        $container->set(
+            AuditLogService::class,
+            function(Container $container) {
+                return new AuditLogService();
+            }
+        );
+        $container->set(
+            ExternalProfileLinkVerifier::class,
+            function(Container $container) {
+                return new ExternalProfileLinkVerifier();
+            }
+        );
+        $container->set(
+            ConfigurationTransferService::class,
+            function(Container $container) {
+                return new ConfigurationTransferService($container->get(DatabaseDriver::class));
+            }
+        );
+        $container->set(
+            WebhookAutomationService::class,
+            function(Container $container) {
+                $mvcFactory = $container->get(FediverseMVCFactory::class);
+                $config     = $container->get(FediverseConfig::class);
+
+                return new WebhookAutomationService(
+                    $mvcFactory->createModel('Webhooks', 'Administrator', ['ignore_request' => true]),
+                    new JoomlaHttpClient(),
+                    new JoomlaBaseUrlProvider($config),
+                    $container->get(LicenseService::class)
+                );
+            }
+        );
+        $container->set(
+            FediverseDomainEventDispatcherInterface::class,
+            function(Container $container) {
+                $dispatcher = Factory::getApplication()->getDispatcher();
+
+                return new FediverseDomainEventDispatcher(
+                    $dispatcher,
+                    static function (): void {
+                        \Joomla\CMS\Plugin\PluginHelper::importPlugin('fediverse');
+                    }
                 );
             }
         );
@@ -329,6 +414,19 @@ class () implements ServiceProviderInterface {
             }
         );
         $container->set(
+            CommentRendererRegistry::class,
+            /**
+             * Define closure.
+             *
+             * Provide inline closure behavior.
+             *
+             * @return  CommentRendererRegistry  Empty registry.
+             *
+             * @since  __DEPLOY_VERSION__
+             */
+            fn() => new CommentRendererRegistry()
+        );
+        $container->set(
             PublishService::class,
             /**
              * Define closure.
@@ -349,6 +447,7 @@ class () implements ServiceProviderInterface {
                 $actorResolver   = $container->get(ActorResolverServiceInterface::class);
                 $deliveryService = $container->get(DeliveryServiceInterface::class);
                 $baseUrlProvider = new JoomlaBaseUrlProvider();
+                $eventDispatcher = $container->get(FediverseDomainEventDispatcherInterface::class);
 
                 return new PublishService(
                     $contentProviders,
@@ -358,27 +457,24 @@ class () implements ServiceProviderInterface {
                     $followersModel,
                     $outboxModel,
                     $container->get(DatabaseDriver::class),
+                    $eventDispatcher,
                 );
             }
         );
 
-        $app    = Factory::getApplication();
-        $option = $app !== null ? $app->input->getCmd('option') : '';
-        if ($option === 'com_fediverse') {
-            $container->set(
-                ComponentInterface::class,
-                function(Container $container) {
-                    $dispatcherFactory = new ComponentDispatcherFactory(
-                        '\\NX\\Component\\Fediverse',
-                        $container->get(FediverseMVCFactory::class)
-                    );
-                    $component         = new FediverseComponent($dispatcherFactory);
+        $container->set(
+            ComponentInterface::class,
+            function(Container $container) {
+                $dispatcherFactory = new ComponentDispatcherFactory(
+                    '\\NX\\Component\\Fediverse',
+                    $container->get(FediverseMVCFactory::class)
+                );
+                $component         = new FediverseComponent($dispatcherFactory);
 
-                    $component->setMVCFactory($container->get(FediverseMVCFactory::class));
+                $component->setMVCFactory($container->get(FediverseMVCFactory::class));
 
-                    return $component;
-                }
-            );
-        }
+                return $component;
+            }
+        );
     }
 };

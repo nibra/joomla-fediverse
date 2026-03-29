@@ -15,6 +15,7 @@ use Joomla\CMS\MVC\Model\BaseModel;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\ParameterType;
 use NX\Component\Fediverse\Administrator\Domain\Actor\Actor;
+use NX\Component\Fediverse\Administrator\Helper\ActorAccountPresets;
 
 /**
  * ActorsModel Class
@@ -505,7 +506,7 @@ final class ActorsModel extends BaseModel
      */
     public function updateTypes(int $actorId, string $actorType, string $objectType): void
     {
-        $allowedActorTypes  = ['Person', 'Service'];
+        $allowedActorTypes  = ActorAccountPresets::allowedActorTypes();
         $allowedObjectTypes = ['Note', 'Article', 'Image', 'Video'];
 
         if (!\in_array($actorType, $allowedActorTypes, true)) {
@@ -539,32 +540,491 @@ final class ActorsModel extends BaseModel
     }
 
     /**
+     * Update actor profile settings for a local actor.
+     *
+     * Validate type values and persist actor type, object type, and profile metadata.
+     *
+     * @params int      $actorId      Actor identifier.
+     * @params string   $actorType    ActivityPub actor type.
+     * @params string   $objectType   ActivityPub object type.
+     * @params ?string  $profileJson  Serialized actor profile metadata.
+     *
+     * @return  void  None.
+     * @throws  \InvalidArgumentException  When actorType or objectType is not a recognised value.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function updateProfileSettings(int $actorId, string $actorType, string $objectType, ?string $profileJson): void
+    {
+        $allowedActorTypes  = ActorAccountPresets::allowedActorTypes();
+        $allowedObjectTypes = ['Note', 'Article', 'Image', 'Video'];
+
+        if (!\in_array($actorType, $allowedActorTypes, true)) {
+            throw new InvalidArgumentException(
+                \sprintf('Invalid actor_type "%s". Allowed: %s', $actorType, \implode(', ', $allowedActorTypes))
+            );
+        }
+
+        if (!\in_array($objectType, $allowedObjectTypes, true)) {
+            throw new InvalidArgumentException(
+                \sprintf('Invalid object_type "%s". Allowed: %s', $objectType, \implode(', ', $allowedObjectTypes))
+            );
+        }
+
+        $id = $actorId;
+        $at = $actorType;
+        $ot = $objectType;
+        $pj = $profileJson;
+
+        $query = $this->db->createQuery()
+            ->update($this->db->quoteName('#__fediverse_actors'))
+            ->set($this->db->quoteName('actor_type') . ' = :at')
+            ->set($this->db->quoteName('object_type') . ' = :ot')
+            ->set($this->db->quoteName('profile_json') . ' = :pj')
+            ->set($this->db->quoteName('updated_at') . ' = NOW()')
+            ->where($this->db->quoteName('id') . ' = :id')
+            ->bind(':at', $at, ParameterType::STRING)
+            ->bind(':ot', $ot, ParameterType::STRING)
+            ->bind(':pj', $pj, ParameterType::STRING)
+            ->bind(':id', $id, ParameterType::INTEGER);
+
+        $this->db->setQuery($query);
+        $this->db->execute();
+    }
+
+    /**
+     * Fetch selectable featured content candidates for a local actor owner.
+     *
+     * Return published Joomla articles authored by the actor owner for the profile picker.
+     *
+     * @params int $userId Joomla user identifier.
+     *
+     * @return  array<int, array{value:string,text:string}>  Select options for featured intro content.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function getFeaturedContentOptions(int $userId): array
+    {
+        if ($userId <= 0) {
+            return [];
+        }
+
+        $uid = $userId;
+        $query = $this->db->createQuery()
+            ->select([
+                $this->db->quoteName('id'),
+                $this->db->quoteName('title'),
+            ])
+            ->from($this->db->quoteName('#__content'))
+            ->where($this->db->quoteName('created_by') . ' = :uid')
+            ->where($this->db->quoteName('state') . ' = 1')
+            ->order($this->db->quoteName('created') . ' DESC')
+            ->bind(':uid', $uid, ParameterType::INTEGER);
+
+        $this->db->setQuery($query);
+        $rows = $this->db->loadAssocList();
+
+        if (!is_array($rows)) {
+            return [];
+        }
+
+        $options = [];
+
+        foreach ($rows as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            $title = trim((string) ($row['title'] ?? ''));
+
+            if ($id <= 0 || $title === '') {
+                continue;
+            }
+
+            $options[] = [
+                'value' => (string) $id,
+                'text' => $title . ' (#' . $id . ')',
+            ];
+        }
+
+        return $options;
+    }
+
+    /**
+     * Check whether a local actor owner can feature a specific article.
+     *
+     * Validate that the article exists, is published, and belongs to the provided user.
+     *
+     * @params int $userId Joomla user identifier.
+     * @params int $contentId Joomla article identifier.
+     *
+     * @return  bool  True when the article is selectable as featured profile content.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function canFeatureContent(int $userId, int $contentId): bool
+    {
+        if ($userId <= 0 || $contentId <= 0) {
+            return false;
+        }
+
+        $uid = $userId;
+        $cid = $contentId;
+
+        $query = $this->db->createQuery()
+            ->select('1')
+            ->from($this->db->quoteName('#__content'))
+            ->where($this->db->quoteName('id') . ' = :cid')
+            ->where($this->db->quoteName('created_by') . ' = :uid')
+            ->where($this->db->quoteName('state') . ' = 1')
+            ->bind(':cid', $cid, ParameterType::INTEGER)
+            ->bind(':uid', $uid, ParameterType::INTEGER)
+            ->setLimit(1);
+
+        $this->db->setQuery($query);
+
+        return (int) ($this->db->loadResult() ?? 0) === 1;
+    }
+
+    /**
+     * Fetch the title of a published Joomla article for public actor presentation.
+     *
+     * @params int $contentId Joomla article identifier.
+     *
+     * @return  ?string  Published article title or null.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function getPublishedContentTitle(int $contentId): ?string
+    {
+        if ($contentId <= 0) {
+            return null;
+        }
+
+        $cid = $contentId;
+
+        $query = $this->db->createQuery()
+            ->select($this->db->quoteName('title'))
+            ->from($this->db->quoteName('#__content'))
+            ->where($this->db->quoteName('id') . ' = :cid')
+            ->where($this->db->quoteName('state') . ' = 1')
+            ->bind(':cid', $cid, ParameterType::INTEGER)
+            ->setLimit(1);
+
+        $this->db->setQuery($query);
+        $title = trim((string) ($this->db->loadResult() ?? ''));
+
+        return $title !== '' ? $title : null;
+    }
+
+    /**
      * Fetch a paginated list of actors.
      *
      * @params string $type   Optional type filter ('local' or 'remote'). Empty for all.
-     * @params int    $limit  Maximum number of rows.
-     * @params int    $offset Row offset.
+     * @params int    $limit   Maximum number of rows.
+     * @params int    $offset  Row offset.
+     * @params string $search  Optional search term.
+     * @params string $enabled Optional enabled filter ('1' or '0').
      *
      * @return  array<int, array<string, mixed>>  List of actor rows.
      *
      * @since  __DEPLOY_VERSION__
      */
-    public function getList(string $type = '', int $limit = 50, int $offset = 0): array
+    public function getList(
+        string $type = '',
+        int $limit = 50,
+        int $offset = 0,
+        string $search = '',
+        string $enabled = '',
+        string $fullOrdering = 'preferred_username ASC'
+    ): array
     {
+        [$orderColumn, $orderDirection] = $this->normaliseOrdering(
+            $fullOrdering,
+            'preferred_username',
+            'ASC',
+            ['preferred_username', 'type', 'user_id', 'actor_type', 'object_type', 'is_enabled', 'id']
+        );
+
+        $followerStatsSubquery = '(SELECT '
+            . $this->db->quoteName('local_actor_id')
+            . ', SUM(CASE WHEN ' . $this->db->quoteName('state') . ' = ' . $this->db->quote('accepted')
+            . ' THEN 1 ELSE 0 END) AS ' . $this->db->quoteName('followers_accepted_count')
+            . ', SUM(CASE WHEN ' . $this->db->quoteName('state') . ' = ' . $this->db->quote('pending')
+            . ' THEN 1 ELSE 0 END) AS ' . $this->db->quoteName('followers_pending_count')
+            . ', SUM(CASE WHEN ' . $this->db->quoteName('state') . ' = ' . $this->db->quote('blocked')
+            . ' THEN 1 ELSE 0 END) AS ' . $this->db->quoteName('followers_blocked_count')
+            . ' FROM ' . $this->db->quoteName('#__fediverse_followers')
+            . ' GROUP BY ' . $this->db->quoteName('local_actor_id')
+            . ') AS ' . $this->db->quoteName('fstats');
+
+        $interactionStatsSubquery = '(SELECT '
+            . $this->db->quoteName('local_actor_id')
+            . ', SUM(CASE WHEN ' . $this->db->quoteName('activity_type') . ' = ' . $this->db->quote('Create')
+            . ' THEN 1 ELSE 0 END) AS ' . $this->db->quoteName('interactions_create_count')
+            . ', SUM(CASE WHEN ' . $this->db->quoteName('activity_type') . ' = ' . $this->db->quote('Like')
+            . ' THEN 1 ELSE 0 END) AS ' . $this->db->quoteName('interactions_like_count')
+            . ', SUM(CASE WHEN ' . $this->db->quoteName('activity_type') . ' = ' . $this->db->quote('Announce')
+            . ' THEN 1 ELSE 0 END) AS ' . $this->db->quoteName('interactions_announce_count')
+            . ' FROM ' . $this->db->quoteName('#__fediverse_inbound_activities')
+            . ' GROUP BY ' . $this->db->quoteName('local_actor_id')
+            . ') AS ' . $this->db->quoteName('istats');
+
         $query = $this->db->createQuery()
-            ->select('*')
-            ->from($this->db->quoteName('#__fediverse_actors'))
-            ->order($this->db->quoteName('preferred_username') . ' ASC');
+            ->select([
+                'a.*',
+                $this->db->quoteName('u.name', 'user_name'),
+                'COALESCE(' . $this->db->quoteName('fstats.followers_accepted_count') . ', 0) AS '
+                    . $this->db->quoteName('followers_accepted_count'),
+                'COALESCE(' . $this->db->quoteName('fstats.followers_pending_count') . ', 0) AS '
+                    . $this->db->quoteName('followers_pending_count'),
+                'COALESCE(' . $this->db->quoteName('fstats.followers_blocked_count') . ', 0) AS '
+                    . $this->db->quoteName('followers_blocked_count'),
+                'COALESCE(' . $this->db->quoteName('istats.interactions_create_count') . ', 0) AS '
+                    . $this->db->quoteName('interactions_create_count'),
+                'COALESCE(' . $this->db->quoteName('istats.interactions_like_count') . ', 0) AS '
+                    . $this->db->quoteName('interactions_like_count'),
+                'COALESCE(' . $this->db->quoteName('istats.interactions_announce_count') . ', 0) AS '
+                    . $this->db->quoteName('interactions_announce_count'),
+            ])
+            ->from($this->db->quoteName('#__fediverse_actors', 'a'))
+            ->leftJoin(
+                $this->db->quoteName('#__users', 'u')
+                . ' ON ' . $this->db->quoteName('u.id') . ' = ' . $this->db->quoteName('a.user_id')
+            )
+            ->leftJoin(
+                $followerStatsSubquery
+                . ' ON ' . $this->db->quoteName('fstats.local_actor_id') . ' = ' . $this->db->quoteName('a.id')
+            )
+            ->leftJoin(
+                $interactionStatsSubquery
+                . ' ON ' . $this->db->quoteName('istats.local_actor_id') . ' = ' . $this->db->quoteName('a.id')
+            )
+            ->order($this->db->quoteName('a.' . $orderColumn) . ' ' . $orderDirection);
 
         if ($type !== '') {
             $query->where($this->db->quoteName('type') . ' = :type')
                 ->bind(':type', $type, ParameterType::STRING);
         }
 
-        $query->setLimit($limit, $offset);
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . $this->db->quoteName('preferred_username') . ' LIKE :search1'
+                . ' OR ' . $this->db->quoteName('handle') . ' LIKE :search2'
+                . ' OR CAST(' . $this->db->quoteName('user_id') . ' AS CHAR) LIKE :search3'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING)
+                ->bind(':search3', $searchLike, ParameterType::STRING);
+        }
+
+        if ($enabled === '1' || $enabled === '0') {
+            $enabledInt = (int) $enabled;
+            $query->where($this->db->quoteName('is_enabled') . ' = :enabled')
+                ->bind(':enabled', $enabledInt, ParameterType::INTEGER);
+        }
+
+        if ($limit > 0) {
+            $query->setLimit($limit, $offset);
+        }
 
         $this->db->setQuery($query);
 
         return $this->db->loadAssocList() ?: [];
+    }
+
+    /**
+     * Count actors for an optional type filter.
+     *
+     * @params string $type    Optional type filter ('local' or 'remote'). Empty for all.
+     * @params string $search  Optional search term.
+     * @params string $enabled Optional enabled filter ('1' or '0').
+     *
+     * @return  int  Total matching rows.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function countList(string $type = '', string $search = '', string $enabled = ''): int
+    {
+        $query = $this->db->createQuery()
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__fediverse_actors'));
+
+        if ($type !== '') {
+            $query->where($this->db->quoteName('type') . ' = :type')
+                ->bind(':type', $type, ParameterType::STRING);
+        }
+
+        $search = trim($search);
+        if ($search !== '') {
+            $searchLike = '%' . str_replace(' ', '%', $search) . '%';
+            $query->where(
+                '('
+                . $this->db->quoteName('preferred_username') . ' LIKE :search1'
+                . ' OR ' . $this->db->quoteName('handle') . ' LIKE :search2'
+                . ' OR CAST(' . $this->db->quoteName('user_id') . ' AS CHAR) LIKE :search3'
+                . ')'
+            )
+                ->bind(':search1', $searchLike, ParameterType::STRING)
+                ->bind(':search2', $searchLike, ParameterType::STRING)
+                ->bind(':search3', $searchLike, ParameterType::STRING);
+        }
+
+        if ($enabled === '1' || $enabled === '0') {
+            $enabledInt = (int) $enabled;
+            $query->where($this->db->quoteName('is_enabled') . ' = :enabled')
+                ->bind(':enabled', $enabledInt, ParameterType::INTEGER);
+        }
+
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        return $total !== null ? (int) $total : 0;
+    }
+
+    /**
+     * Fetch per-actor analytics summary.
+     *
+     * Aggregate follower and interaction counts for a local actor.
+     *
+     * @params int $actorId Actor identifier.
+     *
+     * @return  array<string,array<string,int>>  Analytics summary.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    public function getActorAnalytics(int $actorId): array
+    {
+        if ($actorId <= 0) {
+            return [
+                'followers'    => [
+                    'accepted' => 0,
+                    'pending'  => 0,
+                    'blocked'  => 0,
+                    'total'    => 0,
+                ],
+                'interactions' => [
+                    'create'   => 0,
+                    'like'     => 0,
+                    'announce' => 0,
+                    'total'    => 0,
+                ],
+            ];
+        }
+
+        $followersAccepted = $this->countFollowersByState($actorId, 'accepted');
+        $followersPending  = $this->countFollowersByState($actorId, 'pending');
+        $followersBlocked  = $this->countFollowersByState($actorId, 'blocked');
+
+        $interactionsCreate   = $this->countInboundInteractionsByType($actorId, 'Create');
+        $interactionsLike     = $this->countInboundInteractionsByType($actorId, 'Like');
+        $interactionsAnnounce = $this->countInboundInteractionsByType($actorId, 'Announce');
+
+        return [
+            'followers'    => [
+                'accepted' => $followersAccepted,
+                'pending'  => $followersPending,
+                'blocked'  => $followersBlocked,
+                'total'    => $followersAccepted + $followersPending + $followersBlocked,
+            ],
+            'interactions' => [
+                'create'   => $interactionsCreate,
+                'like'     => $interactionsLike,
+                'announce' => $interactionsAnnounce,
+                'total'    => $interactionsCreate + $interactionsLike + $interactionsAnnounce,
+            ],
+        ];
+    }
+
+    /**
+     * Count followers for a local actor by state.
+     *
+     * @params int $actorId Actor identifier.
+     * @params string $state Follower state.
+     *
+     * @return  int  Count for the state.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function countFollowersByState(int $actorId, string $state): int
+    {
+        $id   = $actorId;
+        $stat = $state;
+
+        $query = $this->db->createQuery()
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__fediverse_followers'))
+            ->where($this->db->quoteName('local_actor_id') . ' = :actorId')
+            ->where($this->db->quoteName('state') . ' = :state')
+            ->bind(':actorId', $id, ParameterType::INTEGER)
+            ->bind(':state', $stat, ParameterType::STRING);
+
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        return $total !== null ? (int) $total : 0;
+    }
+
+    /**
+     * Count inbound interactions for a local actor by activity type.
+     *
+     * @params int $actorId Actor identifier.
+     * @params string $activityType Activity type.
+     *
+     * @return  int  Count for the activity type.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function countInboundInteractionsByType(int $actorId, string $activityType): int
+    {
+        $id   = $actorId;
+        $type = $activityType;
+
+        $query = $this->db->createQuery()
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__fediverse_inbound_activities'))
+            ->where($this->db->quoteName('local_actor_id') . ' = :actorId')
+            ->where($this->db->quoteName('activity_type') . ' = :activityType')
+            ->bind(':actorId', $id, ParameterType::INTEGER)
+            ->bind(':activityType', $type, ParameterType::STRING);
+
+        $this->db->setQuery($query);
+        $total = $this->db->loadResult();
+
+        return $total !== null ? (int) $total : 0;
+    }
+
+    /**
+     * Normalise full ordering input to a whitelisted column and direction.
+     *
+     * @param   string    $fullOrdering    User supplied ordering value.
+     * @param   string    $defaultColumn   Fallback ordering column.
+     * @param   string    $defaultDirection  Fallback ordering direction.
+     * @param   string[]  $allowedColumns  Allowed ordering columns.
+     *
+     * @return  array{0:string,1:string}  Safe ordering tuple.
+     *
+     * @since  __DEPLOY_VERSION__
+     */
+    private function normaliseOrdering(
+        string $fullOrdering,
+        string $defaultColumn,
+        string $defaultDirection,
+        array $allowedColumns
+    ): array {
+        $parts     = preg_split('/\s+/', trim($fullOrdering)) ?: [];
+        $column    = (string) ($parts[0] ?? '');
+        $direction = strtoupper((string) ($parts[1] ?? ''));
+
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = $defaultColumn;
+        }
+
+        if ($direction !== 'ASC' && $direction !== 'DESC') {
+            $direction = strtoupper($defaultDirection);
+        }
+
+        return [$column, $direction];
     }
 }

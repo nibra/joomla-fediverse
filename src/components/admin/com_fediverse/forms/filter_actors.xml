@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			inputmode="search"
+			label="JSEARCH_FILTER"
+			hint="JSEARCH_FILTER"
+		/>
+		<field
+			name="type"
+			type="list"
+			label="COM_FEDIVERSE_FILTER_ACTOR_SCOPE_SELECT"
+			class="js-select-submit-on-change"
+			validate="options"
+		>
+			<option value="">COM_FEDIVERSE_FILTER_ACTOR_SCOPE_SELECT</option>
+			<option value="local">COM_FEDIVERSE_ACTORS_SCOPE_LOCAL</option>
+			<option value="remote">COM_FEDIVERSE_ACTORS_SCOPE_REMOTE</option>
+		</field>
+		<field
+			name="enabled"
+			type="list"
+			label="COM_FEDIVERSE_FILTER_ENABLED_SELECT"
+			class="js-select-submit-on-change"
+			validate="options"
+		>
+			<option value="">COM_FEDIVERSE_FILTER_ENABLED_SELECT</option>
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			label="JGLOBAL_SORT_BY"
+			class="js-select-submit-on-change"
+			default="preferred_username ASC"
+			validate="options"
+		>
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="preferred_username ASC">COM_FEDIVERSE_SORT_HANDLE_ASC</option>
+			<option value="preferred_username DESC">COM_FEDIVERSE_SORT_HANDLE_DESC</option>
+			<option value="type ASC">COM_FEDIVERSE_SORT_SCOPE_ASC</option>
+			<option value="type DESC">COM_FEDIVERSE_SORT_SCOPE_DESC</option>
+			<option value="user_id ASC">COM_FEDIVERSE_SORT_USER_ID_ASC</option>
+			<option value="user_id DESC">COM_FEDIVERSE_SORT_USER_ID_DESC</option>
+			<option value="id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="id DESC">JGRID_HEADING_ID_DESC</option>
+		</field>
+		<field
+			name="limit"
+			type="limitbox"
+			label="JGLOBAL_LIST_LIMIT"
+			class="js-select-submit-on-change"
+		/>
+	</fields>
+</form>
