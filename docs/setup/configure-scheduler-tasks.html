@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-page="setup/configure-scheduler-tasks">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Configure Scheduled Tasks — Joomla Fediverse Manual</title>
+  <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <img src="../../assets/logo.svg" alt="Joomla Fediverse logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Joomla Fediverse</span>
+        <span class="nav-logo-tag">Publishing to the open social web</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#features">Features</a></li>
+      <li><a href="../../index.html#screenshots">Screenshots</a></li>
+      <li><a href="../../index.html#pricing">Pricing</a></li>
+      <li><a href="../index.html">Docs</a></li>
+      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Get Pro</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="docs-body">
+
+<aside class="docs-sidebar">
+  <section class="docs-sidebar-group is-open" data-sidebar-group="setup">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-setup" type="button" aria-expanded="true" aria-controls="docs-sidebar-panel-setup"><span class="docs-sidebar-toggle-label">Setup</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-setup" role="region" aria-labelledby="docs-sidebar-toggle-setup">
+    <ul>
+      <li data-page="setup/install-joomla-fediverse"><a href="install-joomla-fediverse.html">Install Joomla Fediverse</a></li>
+      <li data-page="setup/activate-core-plugins"><a href="activate-core-plugins.html">Activate Core Fediverse Plugins</a></li>
+      <li data-page="setup/configure-fediverse-options"><a href="configure-fediverse-options.html">Configure Fediverse Component Options</a></li>
+      <li data-page="setup/activate-paid-license"><a href="activate-paid-license.html">Activate or Change a Paid License</a></li>
+      <li data-page="setup/recover-paid-license"><a href="recover-paid-license.html">Recover a Paid License After Moving the Site</a></li>
+      <li class="active" data-page="setup/configure-scheduler-tasks"><a href="configure-scheduler-tasks.html">Configure Scheduled Tasks</a></li>
+      <li data-page="setup/run-diagnostics-wizard"><a href="run-diagnostics-wizard.html">Run the Diagnostics Wizard</a></li>
+      <li data-page="setup/understand-fediverse-compatibility"><a href="understand-fediverse-compatibility.html">Understand Fediverse Compatibility Expectations</a></li>
+      <li data-page="setup/export-import-configuration"><a href="export-import-configuration.html">Export or Import Fediverse Configuration</a></li>
+      <li data-page="setup/manage-automation-webhooks"><a href="manage-automation-webhooks.html">Manage Automation Webhooks</a></li>
+      <li data-page="setup/update-joomla-fediverse"><a href="update-joomla-fediverse.html">Update Joomla Fediverse</a></li>
+      <li data-page="setup/uninstall-joomla-fediverse"><a href="uninstall-joomla-fediverse.html">Uninstall Joomla Fediverse</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="actors">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-actors" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-actors"><span class="docs-sidebar-toggle-label">Actors</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-actors" role="region" aria-labelledby="docs-sidebar-toggle-actors" hidden="hidden">
+    <ul>
+      <li data-page="actors/create-local-actor"><a href="../actors/create-local-actor.html">Create a Local Actor</a></li>
+      <li data-page="actors/edit-actor-profile-types"><a href="../actors/edit-actor-profile-types.html">Manage Actor Account Identity</a></li>
+      <li data-page="actors/make-actor-easier-to-discover"><a href="../actors/make-actor-easier-to-discover.html">Make an Actor Easier to Discover</a></li>
+      <li data-page="actors/enable-disable-actor"><a href="../actors/enable-disable-actor.html">Enable or Disable an Actor</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="publishing-and-frontend">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-publishing-and-frontend" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-publishing-and-frontend"><span class="docs-sidebar-toggle-label">Publishing and Frontend</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-publishing-and-frontend" role="region" aria-labelledby="docs-sidebar-toggle-publishing-and-frontend" hidden="hidden">
+    <ul>
+      <li data-page="publishing/publish-article"><a href="../publishing/publish-article.html">Publish a Federated Article</a></li>
+      <li data-page="publishing/use-shortcodes"><a href="../publishing/use-shortcodes.html">Use Fediverse Shortcodes in Articles</a></li>
+      <li data-page="publishing/configure-reactions-module"><a href="../publishing/configure-reactions-module.html">Configure the Reactions Module</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="moderation-and-policies">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-moderation-and-policies" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-moderation-and-policies"><span class="docs-sidebar-toggle-label">Moderation and Policies</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-moderation-and-policies" role="region" aria-labelledby="docs-sidebar-toggle-moderation-and-policies" hidden="hidden">
+    <ul>
+      <li data-page="moderation/moderate-inbound-replies"><a href="../moderation/moderate-inbound-replies.html">Moderate Inbound Replies</a></li>
+      <li data-page="moderation/review-audit-logs"><a href="../moderation/review-audit-logs.html">Review Audit Logs</a></li>
+      <li data-page="moderation/manage-domain-policies"><a href="../moderation/manage-domain-policies.html">Manage Domain Policies (Allow/Block)</a></li>
+      <li data-page="policies/set-follow-policy"><a href="../policies/set-follow-policy.html">Set Global Follow Policy</a></li>
+      <li data-page="policies/opt-out-category-federation"><a href="../policies/opt-out-category-federation.html">Opt Out Federation for a Category</a></li>
+      <li data-page="policies/opt-out-single-content-federation"><a href="../policies/opt-out-single-content-federation.html">Opt Out Federation for a Single Content Item</a></li>
+      <li data-page="policies/opt-out-user-federation"><a href="../policies/opt-out-user-federation.html">Opt Out Federation for a User</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="client-apps">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-client-apps" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-client-apps"><span class="docs-sidebar-toggle-label">Client Apps</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-client-apps" role="region" aria-labelledby="docs-sidebar-toggle-client-apps" hidden="hidden">
+    <ul>
+      <li data-page="client-apps/connect-client-app"><a href="../client-apps/connect-client-app.html">Connect a Mastodon-Compatible Client App</a></li>
+    </ul>
+  </div>
+</section>
+  <div class="sidebar-divider"></div>
+  <section class="docs-sidebar-group" data-sidebar-group="links">
+    <button
+      class="docs-sidebar-toggle"
+      id="docs-sidebar-toggle-links"
+      type="button"
+      aria-expanded="false"
+      aria-controls="docs-sidebar-panel-links"
+    >
+      <span class="docs-sidebar-toggle-label">Links</span>
+      <span class="docs-sidebar-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <div
+      class="docs-sidebar-panel"
+      id="docs-sidebar-panel-links"
+      role="region"
+      aria-labelledby="docs-sidebar-toggle-links"
+      hidden="hidden"
+    >
+      <ul>
+        <li><a href="../index.html">Manual Home</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../../index.html">Back to site</a></li>
+      </ul>
+    </div>
+  </section>
+</aside>
+
+    <main class="docs-content">
+<h1 id="configure-scheduled-tasks">Configure Scheduled Tasks</h1>
+<h2 id="overview">Overview</h2>
+<p>Configure the scheduled tasks so publishing, replies, cleanup, and
+key rotation happen automatically instead of stalling in queues. This
+keeps the site responsive to followers and moderators without requiring
+manual processing.</p>
+<p>This step matters because Joomla Fediverse is not a purely
+synchronous extension. Publishing an article, receiving a reply, or
+cleaning up historical queue data depends on the scheduler. If the tasks
+are missing, disabled, or set to manual-only mode when you expect
+automatic processing, the site may look configured but still do nothing.
+After you finish, the dashboard diagnostics should confirm the task
+layer is healthy.</p>
+<h2 id="before-you-begin">Before you begin</h2>
+<ul>
+<li>Plugin <code>Task - Fediverse</code> must be enabled.</li>
+<li>Joomla Scheduler must be available and running for your site.</li>
+<li>Decide whether each task should run automatically on an interval or
+only when you trigger it manually.</li>
+</ul>
+<h2 id="required-task-types">Required task types</h2>
+<ul>
+<li><code>fediverse.inbox_worker</code></li>
+<li><code>fediverse.delivery_worker</code></li>
+<li><code>fediverse.key_rotation</code></li>
+<li><code>fediverse.cleanup</code></li>
+</ul>
+<h2 id="steps-from-dashboard-diagnostics">Steps (from Dashboard
+Diagnostics)</h2>
+<ol type="1">
+<li>Open <code>Components -&gt; Fediverse -&gt; Dashboard</code>.</li>
+<li>In the <code>Scheduler Tasks</code> check, click
+<code>Configure Tasks</code>.</li>
+<li>Review each Fediverse task in the scheduler configuration dialog.
+<ul>
+<li><strong>Enabled</strong> - Turns the selected task on or off. A
+disabled task does not run.</li>
+<li><strong>Run mode</strong> - Choose <code>Interval (minutes)</code>
+if the task should run automatically, or <code>Manual only</code> if you
+want to trigger it yourself.</li>
+<li><strong>Interval (minutes)</strong> - The automatic run frequency
+when interval mode is selected. Use values that match how quickly you
+want posts and replies processed.</li>
+</ul></li>
+<li>Make sure the task roles are covered sensibly.
+<ul>
+<li><code>fediverse.inbox_worker</code> for inbound reply and reaction
+processing</li>
+<li><code>fediverse.delivery_worker</code> for outbound follower
+delivery</li>
+<li><code>fediverse.key_rotation</code> for scheduled signing-key
+rotation</li>
+<li><code>fediverse.cleanup</code> for retention-based cleanup</li>
+</ul></li>
+<li>Save the dialog.</li>
+</ol>
+<h2 id="alternative-steps-from-joomla-scheduler">Alternative steps (from
+Joomla Scheduler)</h2>
+<ol type="1">
+<li>Open <code>System -&gt; Scheduled Tasks</code>.</li>
+<li>Filter for <code>fediverse</code>.</li>
+<li>Open each Fediverse task and confirm its publish state and execution
+rule.</li>
+<li>Save any task that still needs adjustment.</li>
+</ol>
+<h2 id="check-your-result">Check your result</h2>
+<ul>
+<li>The <code>Scheduler Tasks</code> diagnostics check on the dashboard
+shows a passing state.</li>
+<li>Publishing or updating an article produces delivery work that
+progresses instead of remaining idle.</li>
+<li>Inbound activities can be processed once remote replies or reactions
+arrive.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="the-tasks-exist-but-nothing-ever-runs">The tasks exist, but
+nothing ever runs</h3>
+<ul>
+<li><strong>Likely cause:</strong> Joomla’s scheduler trigger is not
+configured in the hosting environment.</li>
+<li><strong>Solution:</strong> Verify the Joomla scheduler itself is
+running on the site, then return to the Fediverse tasks and check their
+enabled state and run mode again.</li>
+</ul>
+<h3 id="only-some-fediverse-tasks-appear">Only some Fediverse tasks
+appear</h3>
+<ul>
+<li><strong>Likely cause:</strong> <code>Task - Fediverse</code> is
+disabled or the task list was opened before the plugin was active.</li>
+<li><strong>Solution:</strong> Enable <code>Task - Fediverse</code>,
+reopen the scheduler screen, and search for <code>fediverse</code>
+again.</li>
+</ul>
+<h3 id="deliveries-remain-queued-for-too-long">Deliveries remain queued
+for too long</h3>
+<ul>
+<li><strong>Likely cause:</strong>
+<code>fediverse.delivery_worker</code> is disabled or its interval is
+too infrequent for the publishing volume you expect.</li>
+<li><strong>Solution:</strong> Enable the delivery worker and reduce the
+interval so outbound processing runs more often.</li>
+</ul>
+<h2 id="related-tasks">Related tasks</h2>
+<ul>
+<li><a href="activate-core-plugins.html">Activate Core Fediverse
+Plugins</a></li>
+<li><a href="run-diagnostics-wizard.html">Run the Diagnostics
+Wizard</a></li>
+<li><a href="../publishing/publish-article.html">Publish a Federated
+Article</a></li>
+</ul>
+<nav class="docs-page-nav" aria-label="Manual page navigation">
+  <a class="docs-page-nav-prev" href="recover-paid-license.html">&larr; Recover a Paid License After Moving the Site</a>
+  <a class="docs-page-nav-home" href="../index.html">Home</a>
+  <a class="docs-page-nav-next" href="run-diagnostics-wizard.html">Run the Diagnostics Wizard &rarr;</a>
+</nav>
+    </main>
+
+  </div>
+
+<footer>
+  <div class="footer-inner">
+    <img class="footer-logo" src="../../assets/logo.svg" alt="Joomla Fediverse">
+    <div class="footer-links">
+      <a href="../index.html">Documentation</a>
+      <a href="../../legal-notice.html">Legal Notice</a>
+      <a href="https://github.com/nibra/joomla-fediverse" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:support@code.nibra.net">Support</a>
+      <a href="../../index.html#pricing">Pricing</a>
+    </div>
+    <p>
+      &copy; 2026 BSDS / nibra Consulting &mdash;
+      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU GPL v2</a> (Free tier) /
+      Commercial license (Personal and Pro) &mdash;
+      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">LemonSqueezy</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (page && li.getAttribute('data-page') === page) {
+          li.classList.add('active');
+        }
+      });
+
+      var groups = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar-group'));
+      if (!groups.length) return;
+
+      function setOpen(group, open) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        var panel = group.querySelector('.docs-sidebar-panel');
+        if (!toggle || !panel) return;
+
+        group.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', 'hidden');
+        }
+      }
+
+      groups.forEach(function (group) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', function () {
+          var willOpen = !group.classList.contains('is-open');
+
+          groups.forEach(function (candidate) {
+            setOpen(candidate, false);
+          });
+
+          if (willOpen) {
+            setOpen(group, true);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

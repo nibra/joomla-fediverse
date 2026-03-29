@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" data-page="policies/set-follow-policy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Set Global Follow Policy — Joomla Fediverse Manual</title>
+  <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <img src="../../assets/logo.svg" alt="Joomla Fediverse logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Joomla Fediverse</span>
+        <span class="nav-logo-tag">Publishing to the open social web</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#features">Features</a></li>
+      <li><a href="../../index.html#screenshots">Screenshots</a></li>
+      <li><a href="../../index.html#pricing">Pricing</a></li>
+      <li><a href="../index.html">Docs</a></li>
+      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Get Pro</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="docs-body">
+
+<aside class="docs-sidebar">
+  <section class="docs-sidebar-group" data-sidebar-group="setup">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-setup" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-setup"><span class="docs-sidebar-toggle-label">Setup</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-setup" role="region" aria-labelledby="docs-sidebar-toggle-setup" hidden="hidden">
+    <ul>
+      <li data-page="setup/install-joomla-fediverse"><a href="../setup/install-joomla-fediverse.html">Install Joomla Fediverse</a></li>
+      <li data-page="setup/activate-core-plugins"><a href="../setup/activate-core-plugins.html">Activate Core Fediverse Plugins</a></li>
+      <li data-page="setup/configure-fediverse-options"><a href="../setup/configure-fediverse-options.html">Configure Fediverse Component Options</a></li>
+      <li data-page="setup/activate-paid-license"><a href="../setup/activate-paid-license.html">Activate or Change a Paid License</a></li>
+      <li data-page="setup/recover-paid-license"><a href="../setup/recover-paid-license.html">Recover a Paid License After Moving the Site</a></li>
+      <li data-page="setup/configure-scheduler-tasks"><a href="../setup/configure-scheduler-tasks.html">Configure Scheduled Tasks</a></li>
+      <li data-page="setup/run-diagnostics-wizard"><a href="../setup/run-diagnostics-wizard.html">Run the Diagnostics Wizard</a></li>
+      <li data-page="setup/understand-fediverse-compatibility"><a href="../setup/understand-fediverse-compatibility.html">Understand Fediverse Compatibility Expectations</a></li>
+      <li data-page="setup/export-import-configuration"><a href="../setup/export-import-configuration.html">Export or Import Fediverse Configuration</a></li>
+      <li data-page="setup/manage-automation-webhooks"><a href="../setup/manage-automation-webhooks.html">Manage Automation Webhooks</a></li>
+      <li data-page="setup/update-joomla-fediverse"><a href="../setup/update-joomla-fediverse.html">Update Joomla Fediverse</a></li>
+      <li data-page="setup/uninstall-joomla-fediverse"><a href="../setup/uninstall-joomla-fediverse.html">Uninstall Joomla Fediverse</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="actors">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-actors" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-actors"><span class="docs-sidebar-toggle-label">Actors</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-actors" role="region" aria-labelledby="docs-sidebar-toggle-actors" hidden="hidden">
+    <ul>
+      <li data-page="actors/create-local-actor"><a href="../actors/create-local-actor.html">Create a Local Actor</a></li>
+      <li data-page="actors/edit-actor-profile-types"><a href="../actors/edit-actor-profile-types.html">Manage Actor Account Identity</a></li>
+      <li data-page="actors/make-actor-easier-to-discover"><a href="../actors/make-actor-easier-to-discover.html">Make an Actor Easier to Discover</a></li>
+      <li data-page="actors/enable-disable-actor"><a href="../actors/enable-disable-actor.html">Enable or Disable an Actor</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="publishing-and-frontend">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-publishing-and-frontend" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-publishing-and-frontend"><span class="docs-sidebar-toggle-label">Publishing and Frontend</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-publishing-and-frontend" role="region" aria-labelledby="docs-sidebar-toggle-publishing-and-frontend" hidden="hidden">
+    <ul>
+      <li data-page="publishing/publish-article"><a href="../publishing/publish-article.html">Publish a Federated Article</a></li>
+      <li data-page="publishing/use-shortcodes"><a href="../publishing/use-shortcodes.html">Use Fediverse Shortcodes in Articles</a></li>
+      <li data-page="publishing/configure-reactions-module"><a href="../publishing/configure-reactions-module.html">Configure the Reactions Module</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group is-open" data-sidebar-group="moderation-and-policies">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-moderation-and-policies" type="button" aria-expanded="true" aria-controls="docs-sidebar-panel-moderation-and-policies"><span class="docs-sidebar-toggle-label">Moderation and Policies</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-moderation-and-policies" role="region" aria-labelledby="docs-sidebar-toggle-moderation-and-policies">
+    <ul>
+      <li data-page="moderation/moderate-inbound-replies"><a href="../moderation/moderate-inbound-replies.html">Moderate Inbound Replies</a></li>
+      <li data-page="moderation/review-audit-logs"><a href="../moderation/review-audit-logs.html">Review Audit Logs</a></li>
+      <li data-page="moderation/manage-domain-policies"><a href="../moderation/manage-domain-policies.html">Manage Domain Policies (Allow/Block)</a></li>
+      <li class="active" data-page="policies/set-follow-policy"><a href="set-follow-policy.html">Set Global Follow Policy</a></li>
+      <li data-page="policies/opt-out-category-federation"><a href="opt-out-category-federation.html">Opt Out Federation for a Category</a></li>
+      <li data-page="policies/opt-out-single-content-federation"><a href="opt-out-single-content-federation.html">Opt Out Federation for a Single Content Item</a></li>
+      <li data-page="policies/opt-out-user-federation"><a href="opt-out-user-federation.html">Opt Out Federation for a User</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="client-apps">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-client-apps" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-client-apps"><span class="docs-sidebar-toggle-label">Client Apps</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-client-apps" role="region" aria-labelledby="docs-sidebar-toggle-client-apps" hidden="hidden">
+    <ul>
+      <li data-page="client-apps/connect-client-app"><a href="../client-apps/connect-client-app.html">Connect a Mastodon-Compatible Client App</a></li>
+    </ul>
+  </div>
+</section>
+  <div class="sidebar-divider"></div>
+  <section class="docs-sidebar-group" data-sidebar-group="links">
+    <button
+      class="docs-sidebar-toggle"
+      id="docs-sidebar-toggle-links"
+      type="button"
+      aria-expanded="false"
+      aria-controls="docs-sidebar-panel-links"
+    >
+      <span class="docs-sidebar-toggle-label">Links</span>
+      <span class="docs-sidebar-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <div
+      class="docs-sidebar-panel"
+      id="docs-sidebar-panel-links"
+      role="region"
+      aria-labelledby="docs-sidebar-toggle-links"
+      hidden="hidden"
+    >
+      <ul>
+        <li><a href="../index.html">Manual Home</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../../index.html">Back to site</a></li>
+      </ul>
+    </div>
+  </section>
+</aside>
+
+    <main class="docs-content">
+<h1 id="set-global-follow-policy">Set Global Follow Policy</h1>
+<h2 id="overview">Overview</h2>
+<p>Set the global follow policy so the site handles new followers in a
+way that matches your moderation goals. This helps you balance reach,
+review effort, and protection without deciding each case from
+scratch.</p>
+<p>This matters because follow handling changes both the public posture
+of the site and the administrative workload behind it. An open policy
+reduces friction, manual approval gives you more control over who can
+follow local actors, and a closed policy blocks the follow path
+entirely. After you save the chosen policy, new follow requests should
+follow that default behavior unless another control overrides the
+flow.</p>
+<h2 id="before-you-begin">Before you begin</h2>
+<ul>
+<li>You need permission to edit component options.</li>
+<li>Confirm your site policy for follower approval.</li>
+<li>If multiple administrators manage the site, make sure the follow
+policy matches the site’s editorial and moderation expectations.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol type="1">
+<li>Open <code>Components -&gt; Fediverse -&gt; Options</code>.</li>
+<li>Find the <code>Follow policy</code> option.</li>
+<li>Select the policy that matches the site’s intended follow behavior.
+<ul>
+<li><strong>Open</strong> - Accepts follows automatically.</li>
+<li><strong>Manual approval</strong> - Requires administrative review
+before a follow is accepted.</li>
+<li><strong>Closed</strong> - Rejects follows by default.</li>
+</ul></li>
+<li>Save the configuration.</li>
+</ol>
+<h2 id="check-your-result">Check your result</h2>
+<ul>
+<li>Reopen the options screen and confirm the selected policy is still
+saved.</li>
+<li>New follow requests now follow the chosen default behavior.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="follow-behavior-does-not-match-the-selected-policy">Follow
+behavior does not match the selected policy</h3>
+<ul>
+<li><strong>Likely cause:</strong> Another configuration or policy
+control is affecting the expected result, or the option was not saved
+correctly.</li>
+<li><strong>Solution:</strong> Reopen the options screen, confirm the
+saved value, and then review whether other site-level controls are
+affecting the follow flow.</li>
+</ul>
+<h3
+id="administrators-disagree-about-the-correct-follow-behavior">Administrators
+disagree about the correct follow behavior</h3>
+<ul>
+<li><strong>Likely cause:</strong> The site has not defined a clear
+moderation posture for followers.</li>
+<li><strong>Solution:</strong> Decide whether the site should optimize
+for reach, review, or restriction first, then pick <code>Open</code>,
+<code>Manual approval</code>, or <code>Closed</code> accordingly.</li>
+</ul>
+<h2 id="related-tasks">Related tasks</h2>
+<ul>
+<li><a href="../setup/configure-fediverse-options.html">Configure
+Fediverse Component Options</a></li>
+<li><a href="../moderation/manage-domain-policies.html">Manage Domain
+Policies (Allow/Block)</a></li>
+</ul>
+<nav class="docs-page-nav" aria-label="Manual page navigation">
+  <a class="docs-page-nav-prev" href="../moderation/manage-domain-policies.html">&larr; Manage Domain Policies (Allow/Block)</a>
+  <a class="docs-page-nav-home" href="../index.html">Home</a>
+  <a class="docs-page-nav-next" href="opt-out-category-federation.html">Opt Out Federation for a Category &rarr;</a>
+</nav>
+    </main>
+
+  </div>
+
+<footer>
+  <div class="footer-inner">
+    <img class="footer-logo" src="../../assets/logo.svg" alt="Joomla Fediverse">
+    <div class="footer-links">
+      <a href="../index.html">Documentation</a>
+      <a href="../../legal-notice.html">Legal Notice</a>
+      <a href="https://github.com/nibra/joomla-fediverse" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:support@code.nibra.net">Support</a>
+      <a href="../../index.html#pricing">Pricing</a>
+    </div>
+    <p>
+      &copy; 2026 BSDS / nibra Consulting &mdash;
+      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU GPL v2</a> (Free tier) /
+      Commercial license (Personal and Pro) &mdash;
+      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">LemonSqueezy</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (page && li.getAttribute('data-page') === page) {
+          li.classList.add('active');
+        }
+      });
+
+      var groups = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar-group'));
+      if (!groups.length) return;
+
+      function setOpen(group, open) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        var panel = group.querySelector('.docs-sidebar-panel');
+        if (!toggle || !panel) return;
+
+        group.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', 'hidden');
+        }
+      }
+
+      groups.forEach(function (group) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', function () {
+          var willOpen = !group.classList.contains('is-open');
+
+          groups.forEach(function (candidate) {
+            setOpen(candidate, false);
+          });
+
+          if (willOpen) {
+            setOpen(group, true);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" data-page="setup/run-diagnostics-wizard">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Run the Diagnostics Wizard — Joomla Fediverse Manual</title>
+  <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <img src="../../assets/logo.svg" alt="Joomla Fediverse logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Joomla Fediverse</span>
+        <span class="nav-logo-tag">Publishing to the open social web</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#features">Features</a></li>
+      <li><a href="../../index.html#screenshots">Screenshots</a></li>
+      <li><a href="../../index.html#pricing">Pricing</a></li>
+      <li><a href="../index.html">Docs</a></li>
+      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Get Pro</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="docs-body">
+
+<aside class="docs-sidebar">
+  <section class="docs-sidebar-group is-open" data-sidebar-group="setup">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-setup" type="button" aria-expanded="true" aria-controls="docs-sidebar-panel-setup"><span class="docs-sidebar-toggle-label">Setup</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-setup" role="region" aria-labelledby="docs-sidebar-toggle-setup">
+    <ul>
+      <li data-page="setup/install-joomla-fediverse"><a href="install-joomla-fediverse.html">Install Joomla Fediverse</a></li>
+      <li data-page="setup/activate-core-plugins"><a href="activate-core-plugins.html">Activate Core Fediverse Plugins</a></li>
+      <li data-page="setup/configure-fediverse-options"><a href="configure-fediverse-options.html">Configure Fediverse Component Options</a></li>
+      <li data-page="setup/activate-paid-license"><a href="activate-paid-license.html">Activate or Change a Paid License</a></li>
+      <li data-page="setup/recover-paid-license"><a href="recover-paid-license.html">Recover a Paid License After Moving the Site</a></li>
+      <li data-page="setup/configure-scheduler-tasks"><a href="configure-scheduler-tasks.html">Configure Scheduled Tasks</a></li>
+      <li class="active" data-page="setup/run-diagnostics-wizard"><a href="run-diagnostics-wizard.html">Run the Diagnostics Wizard</a></li>
+      <li data-page="setup/understand-fediverse-compatibility"><a href="understand-fediverse-compatibility.html">Understand Fediverse Compatibility Expectations</a></li>
+      <li data-page="setup/export-import-configuration"><a href="export-import-configuration.html">Export or Import Fediverse Configuration</a></li>
+      <li data-page="setup/manage-automation-webhooks"><a href="manage-automation-webhooks.html">Manage Automation Webhooks</a></li>
+      <li data-page="setup/update-joomla-fediverse"><a href="update-joomla-fediverse.html">Update Joomla Fediverse</a></li>
+      <li data-page="setup/uninstall-joomla-fediverse"><a href="uninstall-joomla-fediverse.html">Uninstall Joomla Fediverse</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="actors">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-actors" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-actors"><span class="docs-sidebar-toggle-label">Actors</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-actors" role="region" aria-labelledby="docs-sidebar-toggle-actors" hidden="hidden">
+    <ul>
+      <li data-page="actors/create-local-actor"><a href="../actors/create-local-actor.html">Create a Local Actor</a></li>
+      <li data-page="actors/edit-actor-profile-types"><a href="../actors/edit-actor-profile-types.html">Manage Actor Account Identity</a></li>
+      <li data-page="actors/make-actor-easier-to-discover"><a href="../actors/make-actor-easier-to-discover.html">Make an Actor Easier to Discover</a></li>
+      <li data-page="actors/enable-disable-actor"><a href="../actors/enable-disable-actor.html">Enable or Disable an Actor</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="publishing-and-frontend">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-publishing-and-frontend" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-publishing-and-frontend"><span class="docs-sidebar-toggle-label">Publishing and Frontend</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-publishing-and-frontend" role="region" aria-labelledby="docs-sidebar-toggle-publishing-and-frontend" hidden="hidden">
+    <ul>
+      <li data-page="publishing/publish-article"><a href="../publishing/publish-article.html">Publish a Federated Article</a></li>
+      <li data-page="publishing/use-shortcodes"><a href="../publishing/use-shortcodes.html">Use Fediverse Shortcodes in Articles</a></li>
+      <li data-page="publishing/configure-reactions-module"><a href="../publishing/configure-reactions-module.html">Configure the Reactions Module</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="moderation-and-policies">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-moderation-and-policies" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-moderation-and-policies"><span class="docs-sidebar-toggle-label">Moderation and Policies</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-moderation-and-policies" role="region" aria-labelledby="docs-sidebar-toggle-moderation-and-policies" hidden="hidden">
+    <ul>
+      <li data-page="moderation/moderate-inbound-replies"><a href="../moderation/moderate-inbound-replies.html">Moderate Inbound Replies</a></li>
+      <li data-page="moderation/review-audit-logs"><a href="../moderation/review-audit-logs.html">Review Audit Logs</a></li>
+      <li data-page="moderation/manage-domain-policies"><a href="../moderation/manage-domain-policies.html">Manage Domain Policies (Allow/Block)</a></li>
+      <li data-page="policies/set-follow-policy"><a href="../policies/set-follow-policy.html">Set Global Follow Policy</a></li>
+      <li data-page="policies/opt-out-category-federation"><a href="../policies/opt-out-category-federation.html">Opt Out Federation for a Category</a></li>
+      <li data-page="policies/opt-out-single-content-federation"><a href="../policies/opt-out-single-content-federation.html">Opt Out Federation for a Single Content Item</a></li>
+      <li data-page="policies/opt-out-user-federation"><a href="../policies/opt-out-user-federation.html">Opt Out Federation for a User</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="client-apps">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-client-apps" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-client-apps"><span class="docs-sidebar-toggle-label">Client Apps</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-client-apps" role="region" aria-labelledby="docs-sidebar-toggle-client-apps" hidden="hidden">
+    <ul>
+      <li data-page="client-apps/connect-client-app"><a href="../client-apps/connect-client-app.html">Connect a Mastodon-Compatible Client App</a></li>
+    </ul>
+  </div>
+</section>
+  <div class="sidebar-divider"></div>
+  <section class="docs-sidebar-group" data-sidebar-group="links">
+    <button
+      class="docs-sidebar-toggle"
+      id="docs-sidebar-toggle-links"
+      type="button"
+      aria-expanded="false"
+      aria-controls="docs-sidebar-panel-links"
+    >
+      <span class="docs-sidebar-toggle-label">Links</span>
+      <span class="docs-sidebar-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <div
+      class="docs-sidebar-panel"
+      id="docs-sidebar-panel-links"
+      role="region"
+      aria-labelledby="docs-sidebar-toggle-links"
+      hidden="hidden"
+    >
+      <ul>
+        <li><a href="../index.html">Manual Home</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../../index.html">Back to site</a></li>
+      </ul>
+    </div>
+  </section>
+</aside>
+
+    <main class="docs-content">
+<h1 id="run-the-diagnostics-wizard">Run the Diagnostics Wizard</h1>
+<h2 id="overview">Overview</h2>
+<p>Use the diagnostics tiles to find missing setup pieces quickly and
+fix them from one place. This saves time during installation and helps
+you avoid trial-and-error across several Joomla screens.</p>
+<p>This step matters because Joomla Fediverse depends on several moving
+parts at once: a correct public URL, active plugins, working scheduler
+tasks, and at least one local actor path. The diagnostics module lets
+you review those dependencies in one screen and jump straight into the
+corrective action for each failing check. After you complete this
+procedure, the dashboard should show a clean baseline for the rest of
+the manual.</p>
+<h2 id="before-you-begin">Before you begin</h2>
+<ul>
+<li>Complete plugin activation and core options first.</li>
+<li>Sign in with an account that can manage component
+configuration.</li>
+<li>If you already know a check is failing, keep in mind that some
+actions open another screen or dialog before the dashboard can report
+success.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol type="1">
+<li>Open <code>Components -&gt; Fediverse -&gt; Dashboard</code>.</li>
+<li>Review the current status of the diagnostics tiles.
+<ul>
+<li><strong>Public Base URL</strong> - Confirms the site exposes a
+usable public federation address.</li>
+<li><strong>Core Plugins</strong> - Confirms the required Fediverse
+plugins are active.</li>
+<li><strong>Scheduler Tasks</strong> - Confirms the background
+processing tasks are available and configured.</li>
+<li><strong>Local Actors</strong> - Confirms the site can provision or
+access local actors for publishing.</li>
+<li><strong>Permissions</strong> - Shows whether the site is still using
+Joomla-wide permissions or the stricter Fediverse-specific permission
+mode.</li>
+<li>Each check now also explains the operational <strong>Impact</strong>
+and the practical <strong>Next step</strong> so you can see why the
+issue matters before you leave the dashboard.</li>
+</ul></li>
+<li>Read the compatibility expectations block above the checklist before
+you test with a new remote server.
+<ul>
+<li>It explains which differences are normal across remote Fediverse
+software.</li>
+<li>Use it to distinguish a real local misconfiguration from a remote
+server presenting standards-based content differently.</li>
+</ul></li>
+<li>Use the action attached to any failing check.
+<ul>
+<li><strong>Configure URL</strong> - Opens the component options so you
+can correct <code>Public base URL</code>.</li>
+<li><strong>Activate Plugins</strong> - Enables the required Fediverse
+plugins from the dashboard flow.</li>
+<li><strong>Configure Tasks</strong> - Opens the scheduler task
+configuration path.</li>
+<li><strong>Open Actors</strong> - Takes you to actor management so you
+can create or inspect local actors.</li>
+<li><strong>Open Permissions</strong> - Opens component options so you
+can review the Governance and Permissions tabs together.</li>
+</ul></li>
+<li>After each correction, return to the dashboard and reload the
+diagnostics state.</li>
+<li>Repeat until every required check passes.</li>
+<li>Optional: if you want the same overview on Joomla’s Home Dashboard,
+assign the <code>Fediverse Diagnostics</code> administrator module to
+that dashboard as well.</li>
+</ol>
+<h2 id="check-your-result">Check your result</h2>
+<ul>
+<li>All required diagnostics checks show a passing state.</li>
+<li>The dashboard no longer points to missing plugins, scheduler
+configuration, or actor provisioning problems.</li>
+<li>You can continue into actor creation or publishing without
+unresolved baseline setup errors.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="a-check-stays-red-after-i-already-fixed-it">A check stays red
+after I already fixed it</h3>
+<ul>
+<li><strong>Likely cause:</strong> The changed setting was not saved, or
+the dashboard is still showing older state.</li>
+<li><strong>Solution:</strong> Reopen the affected settings screen,
+confirm the saved values, then return to the dashboard and refresh it
+again.</li>
+</ul>
+<h3 id="the-local-actors-check-fails">The <code>Local Actors</code>
+check fails</h3>
+<ul>
+<li><strong>Likely cause:</strong> No local actor exists yet, or actor
+provisioning has not run for a Joomla user.</li>
+<li><strong>Solution:</strong> Create or resave a Joomla user with the
+Fediverse user plugin enabled, then open the Actors view and confirm the
+actor exists.</li>
+</ul>
+<h3
+id="the-diagnostics-screen-looks-healthy-but-publishing-still-does-not-work">The
+diagnostics screen looks healthy, but publishing still does not
+work</h3>
+<ul>
+<li><strong>Likely cause:</strong> The baseline setup is complete, but
+the specific author actor, article author mapping, or worker timing is
+still wrong for the content you are testing.</li>
+<li><strong>Solution:</strong> Continue with the actor and publishing
+guides, then verify deliveries and author mapping specifically.</li>
+</ul>
+<h2 id="related-tasks">Related tasks</h2>
+<ul>
+<li><a href="understand-fediverse-compatibility.html">Understand Fediverse
+Compatibility Expectations</a></li>
+<li><a href="configure-fediverse-options.html">Configure Fediverse
+Component Options</a></li>
+<li><a href="configure-scheduler-tasks.html">Configure Scheduled
+Tasks</a></li>
+<li><a href="../actors/create-local-actor.html">Create a Local
+Actor</a></li>
+</ul>
+<nav class="docs-page-nav" aria-label="Manual page navigation">
+  <a class="docs-page-nav-prev" href="configure-scheduler-tasks.html">&larr; Configure Scheduled Tasks</a>
+  <a class="docs-page-nav-home" href="../index.html">Home</a>
+  <a class="docs-page-nav-next" href="understand-fediverse-compatibility.html">Understand Fediverse Compatibility Expectations &rarr;</a>
+</nav>
+    </main>
+
+  </div>
+
+<footer>
+  <div class="footer-inner">
+    <img class="footer-logo" src="../../assets/logo.svg" alt="Joomla Fediverse">
+    <div class="footer-links">
+      <a href="../index.html">Documentation</a>
+      <a href="../../legal-notice.html">Legal Notice</a>
+      <a href="https://github.com/nibra/joomla-fediverse" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:support@code.nibra.net">Support</a>
+      <a href="../../index.html#pricing">Pricing</a>
+    </div>
+    <p>
+      &copy; 2026 BSDS / nibra Consulting &mdash;
+      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU GPL v2</a> (Free tier) /
+      Commercial license (Personal and Pro) &mdash;
+      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">LemonSqueezy</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (page && li.getAttribute('data-page') === page) {
+          li.classList.add('active');
+        }
+      });
+
+      var groups = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar-group'));
+      if (!groups.length) return;
+
+      function setOpen(group, open) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        var panel = group.querySelector('.docs-sidebar-panel');
+        if (!toggle || !panel) return;
+
+        group.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', 'hidden');
+        }
+      }
+
+      groups.forEach(function (group) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', function () {
+          var willOpen = !group.classList.contains('is-open');
+
+          groups.forEach(function (candidate) {
+            setOpen(candidate, false);
+          });
+
+          if (willOpen) {
+            setOpen(group, true);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

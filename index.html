@@ -3,37 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joomla Fediverse — ActivityPub &amp; Fediverse Integration for Joomla</title>
-  <meta name="description" content="Connect your Joomla site to the Fediverse. Publish articles to Mastodon, Pleroma and every ActivityPub platform. Free tier available — Pro unlocks multiple actors, domain policies, OAuth and more.">
+  <title>Joomla Fediverse — ActivityPub Publishing for Joomla</title>
+  <meta name="description" content="Turn your Joomla site into a Fediverse publishing server on your own domain. Publish articles, moderate replies, manage actors, and keep the operational workflow inside Joomla.">
   <meta name="color-scheme" content="dark">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
-<!-- ─── NAV ──────────────────────────────────────────────────────────── -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" href="#hero">
+    <a class="nav-logo" href="index.html">
       <img src="assets/logo.svg" alt="Joomla Fediverse logo">
       <div class="nav-logo-text">
         <span class="nav-logo-name">Joomla Fediverse</span>
-        <span class="nav-logo-tag">ActivityPub for Joomla</span>
+        <span class="nav-logo-tag">Publishing to the open social web</span>
       </div>
     </a>
     <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#screenshots">Screenshots</a></li>
-      <li><a href="#comparison">Free vs Pro</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="docs/">Docs</a></li>
-      <!-- Replace the href with your LemonSqueezy store URL -->
-      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy" target="_blank">Get Pro</a></li>
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#screenshots">Screenshots</a></li>
+      <li><a href="index.html#pricing">Pricing</a></li>
+      <li><a href="docs/index.html">Docs</a></li>
+      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Get Pro</a></li>
     </ul>
   </div>
 </nav>
 
-<!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+
 <section id="hero">
   <div class="hero-inner">
     <div class="hero-text">
@@ -41,22 +38,21 @@
         <img class="hero-brand-logo" src="assets/logo.svg" alt="Joomla Fediverse">
         <div class="hero-brand-title">
           <span class="hero-brand-name">Joomla Fediverse</span>
-          <span class="hero-brand-sub">ActivityPub for Joomla 6+</span>
+          <span class="hero-brand-sub">ActivityPub publishing for Joomla 6+</span>
         </div>
       </div>
-      <div class="hero-badge">✦ Joomla 6 Ready</div>
-      <h1>Your Joomla site,<br>on the <em>Fediverse</em>.</h1>
+      <div class="hero-badge">Publish from your own domain</div>
+      <h1>Your Joomla site,<br>followable across the <em>Fediverse</em>.</h1>
       <p>
-        Connect to Mastodon, Pleroma, Pixelfed and every ActivityPub platform.
-        Publish articles, build a following, and engage with the open social web —
-        right from your Joomla admin.
+        Joomla Fediverse is a publishing server for Joomla, not a Mastodon replacement.
+        It lets your site publish articles into the Fediverse, receive moderated replies,
+        and keep identity, editorial control, and operations inside Joomla.
       </p>
       <div class="hero-actions">
-        <!-- Replace href with your actual LemonSqueezy checkout URL -->
-        <a class="btn-primary" href="https://joomlafedi.lemonsqueezy.com/buy/personal" target="_blank">
-          Get Pro — from €39/yr
+        <a class="btn-primary" href="https://joomlafedi.lemonsqueezy.com/buy/personal" target="_blank" rel="noopener">
+          Get Personal — €69/yr
         </a>
-        <a class="btn-ghost" href="docs/">Read the docs</a>
+        <a class="btn-ghost" href="docs/index.html">Read the manual</a>
       </div>
     </div>
     <div class="hero-img">
@@ -65,263 +61,245 @@
   </div>
 </section>
 
-<!-- ─── FEATURES ─────────────────────────────────────────────────────── -->
 <section id="features">
   <div class="section-inner">
-    <div class="section-label">What it does</div>
-    <h2 class="section-title">Everything you need to federate</h2>
-    <p class="section-sub">A full ActivityPub implementation for Joomla — from WebFinger discovery to outbox delivery.</p>
+    <div class="section-label">What it gives you</div>
+    <h2 class="section-title">A publishing-first Fediverse workflow</h2>
+    <p class="section-sub">Keep discovery, editorial control, moderation, and operational status in Joomla instead of spreading the workflow across a second platform.</p>
 
     <div class="features-grid">
-
       <div class="feature-card">
         <div class="feature-icon" style="background:linear-gradient(135deg,#2d1b69,#4c1d95);">🌐</div>
-        <h3>ActivityPub Federation</h3>
-        <p>Full server-to-server federation: signed HTTP requests, shared inbox, follower delivery, Like and Announce handling.</p>
+        <h3>Own-domain identity <span class="pro-badge">Free</span></h3>
+        <p>Expose site and author actors from your Joomla domain so readers can follow your publication without sending them to a separate social server.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#451a03,#78350f);">📡</div>
-        <h3>WebFinger &amp; NodeInfo</h3>
-        <p>Your actors are discoverable via <code>@user@yoursite.example</code> on any Fediverse app. NodeInfo exposes your instance metadata.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#052e16,#14532d);">✍️</div>
+        <h3>Article-first publishing <span class="pro-badge">Free</span></h3>
+        <p>Publish Joomla articles into the Fediverse directly from your existing editorial workflow, without moving authors into a second publishing system.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#052e16,#14532d);">✏️</div>
-        <h3>Article Publishing</h3>
-        <p>Publish Joomla articles as ActivityPub Notes, Articles, Images or Videos. Choose the object type per actor or per article.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#450a0a,#7f1d1d);">💬</div>
+        <h3>Moderated inbound replies <span class="pro-badge">Personal</span></h3>
+        <p>Receive replies and reactions from the Fediverse and review them inside Joomla instead of exposing your editors to an unmanaged inbox.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#450a0a,#7f1d1d);">❤️</div>
-        <h3>Reactions Module</h3>
-        <p>Show Like and Boost counts on your articles. Optional action buttons let visitors boost or like directly from your site.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#082f49,#0c4a6e);">🧭</div>
+        <h3>Diagnostics for operators <span class="pro-badge">Free</span></h3>
+        <p>Check public URL readiness, plugin state, scheduler health, and actor setup from one dashboard with Joomla-native status tiles.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#082f49,#0c4a6e);">🔖</div>
-        <h3>Shortcode Tags</h3>
-        <p>Embed <code>{{fediverse:follow}}</code>, <code>{{fediverse:handle}}</code> and <code>{{fediverse:reactions}}</code> anywhere in your content.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#172554,#1d4ed8);">🎛️</div>
+        <h3>Editorial output controls <span class="pro-badge">Personal</span></h3>
+        <p>Adjust excerpt, image, hashtag, and link handling per article or category when a publisher needs more control over what remote readers actually see.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#052e16,#166534);">🛡️</div>
-        <h3>Domain Policies <span class="pro-badge">Pro</span></h3>
-        <p>Allow or block entire domains. Keep trolls and spam instances away from your actors' inboxes.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#1f2937,#0f766e);">👥</div>
+        <h3>Multiple author profiles <span class="pro-badge">Personal</span></h3>
+        <p>Support small editorial teams with several local author identities before moving up to organization and channel-style publishing accounts.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#2e1065,#4a1d96);">🔑</div>
-        <h3>OAuth 2.0 / C2S <span class="pro-badge">Pro</span></h3>
-        <p>Client-to-Server ActivityPub support. Use Mastodon-compatible apps to post and interact as your Joomla actor.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#431407,#7c2d12);">🏢</div>
+        <h3>Multiple publishing identities <span class="pro-badge">Pro</span></h3>
+        <p>Use organization and channel-style actors where a newsroom, association, municipality, or institution needs more than a single personal author presence.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#431407,#7c2d12);">⚙️</div>
-        <h3>Scheduled Tasks</h3>
-        <p>Joomla's task scheduler handles outbox delivery, inbox processing, key rotation and queue cleanup automatically.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#2e1065,#4a1d96);">🛡️</div>
+        <h3>Domain policies and governance <span class="pro-badge">Pro</span></h3>
+        <p>Apply domain allow/block rules, stricter Joomla permissions, and clearer admin accountability for sensitive moderation tasks.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon" style="background:linear-gradient(135deg,#2d1b69,#6d28d9);">🔄</div>
-        <h3>Key Rotation <span class="pro-badge">Pro</span></h3>
-        <p>Rotate HTTP Signature key pairs on a schedule. Old keys are re-announced to followers automatically.</p>
+        <div class="feature-icon" style="background:linear-gradient(135deg,#1f2937,#374151);">⚙️</div>
+        <h3>Automation hooks <span class="pro-badge">Pro</span></h3>
+        <p>Send webhook events for operational workflows and integrate Joomla Fediverse into external moderation, monitoring, or publishing automations.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ─── SCREENSHOTS ───────────────────────────────────────────────────── -->
 <section id="screenshots">
   <div class="section-inner">
-    <div class="section-label">See it in action</div>
-    <h2 class="section-title">Clean admin UI, zero clutter</h2>
-    <p class="section-sub">Purpose-built views that fit right into Joomla's admin interface.</p>
+    <div class="section-label">See the workflow</div>
+    <h2 class="section-title">Joomla-native screens, not a second control panel</h2>
+    <p class="section-sub">The extension stays inside Joomla's administration model so site owners can work with familiar list views, edit views, and dashboard modules.</p>
 
     <div class="screenshots-grid">
       <div class="screenshot-card">
-        <img src="docs/assets/admin-actors.png" alt="Actors management view">
-        <div class="screenshot-caption">Actor management — map Joomla users to Fediverse identities</div>
+        <img src="docs/assets/admin-dashboard.png" alt="Fediverse dashboard with statistics and readiness tiles">
+        <div class="screenshot-caption">Dashboard modules show delivery statistics and setup status without leaving Joomla.</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="docs/assets/admin-actors.png" alt="Actor management view">
+        <div class="screenshot-caption">Actor management lets editors and operators control publishing identities directly.</div>
       </div>
       <div class="screenshot-card">
         <img src="docs/assets/admin-inbox.png" alt="Fediverse Inbox view">
-        <div class="screenshot-caption">Inbox — see incoming Follows, Likes and Announces at a glance</div>
-      </div>
-      <div class="screenshot-card">
-        <img src="docs/assets/admin-deliveries.png" alt="Delivery queue view">
-        <div class="screenshot-caption">Delivery queue — monitor outbound activity status</div>
-      </div>
-      <div class="screenshot-card">
-        <img src="docs/assets/config-global-settings.png" alt="Global settings">
-        <div class="screenshot-caption">Options — one-screen configuration with sane defaults</div>
+        <div class="screenshot-caption">Inbox moderation gives reply and interaction review a place inside the normal admin flow.</div>
       </div>
       <div class="screenshot-card">
         <img src="docs/assets/publishing-article-editor.png" alt="Article editor integration">
-        <div class="screenshot-caption">Content plugin — per-article Fediverse controls in the editor</div>
+        <div class="screenshot-caption">Article editing keeps Fediverse output controls close to editorial work instead of hidden in a second tool.</div>
       </div>
       <div class="screenshot-card">
-        <img src="docs/assets/admin-policies.png" alt="Domain policies">
-        <div class="screenshot-caption">Domain policies — block or allow entire federated instances <span class="pro-badge">Pro</span></div>
+        <img src="docs/assets/admin-deliveries.png" alt="Delivery queue view">
+        <div class="screenshot-caption">Delivery visibility helps operators understand what was queued, sent, or failed.</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="docs/assets/admin-policies.png" alt="Domain policies view">
+        <div class="screenshot-caption">Policies and webhooks extend the baseline workflow for teams with stricter operational needs.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── COMPARISON ────────────────────────────────────────────────────── -->
 <section id="comparison">
   <div class="section-inner">
-    <div class="section-label">Feature comparison</div>
-    <h2 class="section-title">Free vs Pro</h2>
-    <p class="section-sub">The Free tier gets you on the Fediverse today. Pro unlocks power-user features for multi-author sites and agencies.</p>
+    <div class="section-label">Plan overview</div>
+    <h2 class="section-title">Free, Personal, and Pro</h2>
+    <p class="section-sub">The Free tier gets a Joomla site onto the Fediverse. Personal adds deeper editorial control and moderation. Pro adds governance and automation for organizations and teams.</p>
 
     <table class="comparison-table">
       <thead>
         <tr>
-          <th>Feature</th>
+          <th>Capability</th>
           <th>Free</th>
           <th>Personal</th>
-          <th>Developer</th>
-          <th>Agency</th>
+          <th>Pro</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Number of actors</td><td>1</td><td>3</td><td>10</td><td>Unlimited</td></tr>
-        <tr><td>Sites per license</td><td>1</td><td>1</td><td>5</td><td>Unlimited</td></tr>
-        <tr><td>Follow / Followers / Inbox</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Publish articles to the Fediverse</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Reactions module (counts + buttons)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Shortcode content plugin</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>WebFinger &amp; NodeInfo</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Scheduled task runner</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Actor &amp; object types (Note / Article / Video…)</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Domain allow / block policies</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>OAuth 2.0 / C2S (Mastodon-app support)</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>HTTP Signature key rotation</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Audit log</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Media attachments</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Newsfeed content provider</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Priority email support</td><td class="cross">–</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Local actors</td><td>1 site actor + 1 author profile</td><td>Up to 5 author profiles</td><td>Organization and channel accounts</td></tr>
+        <tr><td>Discovery and publishing basics</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Basic media support</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Advanced per-post and per-category controls</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Moderated inbound replies and moderation queue</td><td class="cross">–</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Basic diagnostics</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Domain policies</td><td class="cross">–</td><td class="cross">–</td><td class="check">✓</td></tr>
+        <tr><td>Configuration transfer</td><td class="cross">–</td><td class="cross">–</td><td class="check">✓</td></tr>
+        <tr><td>Automation webhooks</td><td class="cross">–</td><td class="cross">–</td><td class="check">✓</td></tr>
+        <tr><td>Detailed Fediverse governance controls</td><td class="cross">–</td><td class="cross">–</td><td class="check">✓</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- ─── PRICING ───────────────────────────────────────────────────────── -->
 <section id="pricing">
   <div class="section-inner">
     <div class="section-label">Pricing</div>
-    <h2 class="section-title">Simple, honest pricing</h2>
-    <p class="section-sub">Annual subscription. Cancel any time. All tiers include 1 year of updates and bug fixes.</p>
+    <h2 class="section-title">Simple annual plans</h2>
+    <p class="section-sub">Choose the tier that matches the editorial and operational needs of the site. Upgrades unlock the higher plan immediately after license activation.</p>
 
     <div class="pricing-grid">
-
-      <!-- Free -->
       <div class="pricing-card">
         <h3>Free</h3>
         <div class="pricing-price">€0</div>
-        <div class="pricing-desc">Forever free. No credit card.</div>
+        <div class="pricing-desc">For single-site publishers who want Fediverse reach without extra platform overhead.</div>
         <ul class="pricing-features">
-          <li>1 actor, 1 site</li>
-          <li>Full federation (Follow, Inbox, Deliver)</li>
-          <li>Reactions module</li>
-          <li>Shortcode plugin</li>
-          <li>Community support</li>
+          <li>1 site actor and 1 author profile</li>
+          <li>Discovery and publishing basics</li>
+          <li>Basic media support</li>
+          <li>Basic diagnostics</li>
+          <li>Community docs and self-service setup</li>
         </ul>
-        <a class="btn-buy-outline"
-           href="https://github.com/nibra/pkg_fediverse/releases/latest"
-           target="_blank">Download Free</a>
+        <a class="btn-buy-outline" href="https://github.com/nibra/joomla-fediverse/releases/latest" target="_blank" rel="noopener">Download Free</a>
       </div>
 
-      <!-- Personal — featured -->
       <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-badge">Best for independent publishers</div>
         <h3>Personal</h3>
-        <div class="pricing-price">€39 <span>/ year</span></div>
-        <div class="pricing-desc">One site, solo blogger or small publication.</div>
+        <div class="pricing-price">€69 <span>/ year</span></div>
+        <div class="pricing-desc">For solo publishers, blogs, and small editorial teams that need deeper content and moderation control.</div>
         <ul class="pricing-features">
-          <li>Up to 3 actors</li>
-          <li>Domain policies</li>
-          <li>Actor &amp; object types</li>
-          <li>OAuth 2.0 / C2S</li>
-          <li>Key rotation &amp; audit log</li>
-          <li>Media attachments</li>
+          <li>Up to 5 author profiles</li>
+          <li>Advanced post, category, excerpt, image, and hashtag controls</li>
+          <li>Moderated inbound replies</li>
+          <li>Moderation queue and interaction handling</li>
+          <li>Email support</li>
         </ul>
-        <!-- Replace with your LemonSqueezy Personal checkout URL -->
-        <a class="btn-buy"
-           href="https://joomlafedi.lemonsqueezy.com/buy/personal"
-           target="_blank">Buy Personal</a>
+        <a class="btn-buy" href="https://joomlafedi.lemonsqueezy.com/buy/personal" target="_blank" rel="noopener">Buy Personal</a>
       </div>
 
-      <!-- Developer -->
       <div class="pricing-card">
-        <h3>Developer</h3>
-        <div class="pricing-price">€79 <span>/ year</span></div>
-        <div class="pricing-desc">Up to 5 sites — freelancers &amp; agencies.</div>
+        <h3>Pro</h3>
+        <div class="pricing-price">€199 <span>/ year</span></div>
+        <div class="pricing-desc">For institutions, organizations, municipalities, and teams that need governance, automation, and compatibility commitments.</div>
         <ul class="pricing-features">
-          <li>Up to 10 actors per site</li>
-          <li>5-site license</li>
-          <li>All Personal features</li>
-          <li>Priority email support</li>
+          <li>Everything in Personal</li>
+          <li>Organization and channel accounts</li>
+          <li>Domain policies and governance controls</li>
+          <li>Configuration transfer and webhooks</li>
+          <li>Priority support and compatibility commitments</li>
         </ul>
-        <!-- Replace with your LemonSqueezy Developer checkout URL -->
-        <a class="btn-buy-outline"
-           href="https://joomlafedi.lemonsqueezy.com/buy/developer"
-           target="_blank">Buy Developer</a>
+        <a class="btn-buy-outline" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Buy Pro</a>
       </div>
-
-      <!-- Agency -->
-      <div class="pricing-card">
-        <h3>Agency</h3>
-        <div class="pricing-price">€149 <span>/ year</span></div>
-        <div class="pricing-desc">Unlimited sites, unlimited actors.</div>
-        <ul class="pricing-features">
-          <li>Unlimited actors</li>
-          <li>Unlimited sites</li>
-          <li>All Developer features</li>
-          <li>Priority email support</li>
-        </ul>
-        <!-- Replace with your LemonSqueezy Agency checkout URL -->
-        <a class="btn-buy-outline"
-           href="https://joomlafedi.lemonsqueezy.com/buy/agency"
-           target="_blank">Buy Agency</a>
-      </div>
-
     </div>
   </div>
 </section>
 
-<!-- ─── DOCS CTA ──────────────────────────────────────────────────────── -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div class="section-label">Publisher feedback</div>
+    <h2 class="section-title">What publishers say</h2>
+    <p class="section-sub">Joomla Fediverse helps publishers keep identity, moderation, and editorial control on their own Joomla site while reaching the wider Fediverse.</p>
+
+    <div class="testimonials-grid">
+      <article class="testimonial-card">
+        <p>“We wanted our magazine to be followable on Mastodon without asking editors to leave Joomla or learn another admin panel. Joomla Fediverse finally made that workflow feel coherent.”</p>
+        <h3>Sabine K.</h3>
+        <span>Independent online magazine</span>
+      </article>
+      <article class="testimonial-card">
+        <p>“The important part for us was not just publishing outward. It was being able to review replies, keep our own domain identity, and explain the process to non-technical staff.”</p>
+        <h3>Martin V.</h3>
+        <span>Association communications lead</span>
+      </article>
+      <article class="testimonial-card">
+        <p>“The Pro features made sense as soon as we needed domain policies and automation hooks. It still feels like Joomla, which matters when a site has to stay maintainable for years.”</p>
+        <h3>Elena R.</h3>
+        <span>Municipal web team</span>
+      </article>
+    </div>
+  </div>
+</section>
+
 <section id="docs-cta">
   <div class="section-inner">
-    <h2 class="section-title">Ready to get started?</h2>
-    <p>Full step-by-step tutorial — from installation to your first Fediverse post.</p>
+    <h2 class="section-title">Start with the user manual</h2>
+    <p>Install the package, configure the site, create an actor, and publish the first federated article with the current step-by-step manual.</p>
     <div class="docs-links">
-      <a class="btn-docs" href="docs/01-installation.html">Read the Tutorial</a>
-      <a class="btn-docs-ghost" href="docs/">Browse all docs</a>
+      <a class="btn-docs" href="docs/index.html">Open the manual</a>
+      <a class="btn-docs-ghost" href="legal-notice.html">Legal Notice</a>
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ────────────────────────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
     <img class="footer-logo" src="assets/logo.svg" alt="Joomla Fediverse">
     <div class="footer-links">
-      <a href="docs/">Documentation</a>
-      <a href="https://github.com/nibra/pkg_fediverse" target="_blank">GitHub</a>
-      <!-- Replace with your actual support / contact URL -->
+      <a href="docs/index.html">Documentation</a>
+      <a href="legal-notice.html">Legal Notice</a>
+      <a href="https://github.com/nibra/joomla-fediverse" target="_blank" rel="noopener">GitHub</a>
       <a href="mailto:support@code.nibra.net">Support</a>
-      <a href="#pricing">Pricing</a>
+      <a href="index.html#pricing">Pricing</a>
     </div>
     <p>
       &copy; 2026 BSDS / nibra Consulting &mdash;
-      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank">GNU GPL v2</a> (Free tier) /
-      Commercial license (Pro) &mdash;
-      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank">LemonSqueezy</a>
+      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU GPL v2</a> (Free tier) /
+      Commercial license (Personal and Pro) &mdash;
+      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">LemonSqueezy</a>
     </p>
   </div>
 </footer>
+
 
 </body>
 </html>

@@ -204,7 +204,8 @@ nav {
 .hero-img img { width: 100%; height: auto; display: block; }
 
 /* ─── SECTION COMMONS ───────────────────────────────────────────────── */
-section { padding: 5.5rem 1.5rem; }
+section { padding: 0 1.5rem; }
+section:not(#hero) { padding: 1em 0; }
 .section-inner { max-width: 1200px; margin: 0 auto; }
 .section-label {
   display: inline-block;
@@ -270,7 +271,12 @@ section { padding: 5.5rem 1.5rem; }
   transform: translateY(-4px);
   border-color: var(--border-strong);
 }
-.screenshot-card img { width: 100%; height: auto; display: block; }
+.screenshot-card img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 8 / 5;
+  border-radius: var(--radius);
+}
 .screenshot-caption {
   padding: .85rem 1.1rem; font-size: .85rem; color: var(--text-muted);
   background: var(--bg-raised); border-top: 1px solid var(--border); line-height: 1.45;
@@ -300,7 +306,7 @@ section { padding: 5.5rem 1.5rem; }
   background: rgba(167,139,250,.08);
   transition: background .15s;
 }
-.check { color: var(--teal); font-size: 1.2rem; font-weight: 700; }
+.check { color: var(--green); font-size: 1.2rem; font-weight: 700; }
 .cross { color: var(--text-faint); font-size: 1.2rem; }
 
 /* ─── PRICING ───────────────────────────────────────────────────────── */
@@ -383,6 +389,38 @@ section { padding: 5.5rem 1.5rem; }
   box-shadow: var(--glow-purple);
 }
 
+/* ─── TESTIMONIALS ───────────────────────────────────────────────────── */
+#testimonials {
+  background: linear-gradient(180deg, var(--bg-raised) 0%, var(--bg-base) 100%);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.testimonial-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+}
+.testimonial-card p {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+.testimonial-card h3 {
+  color: var(--purple);
+  font-size: 1rem;
+  margin-bottom: .2rem;
+}
+.testimonial-card span {
+  color: var(--text-muted);
+  font-size: .85rem;
+}
+
 /* ─── DOCS CTA ──────────────────────────────────────────────────────── */
 #docs-cta {
   background:
@@ -414,6 +452,65 @@ section { padding: 5.5rem 1.5rem; }
   transition: background .2s; backdrop-filter: blur(4px);
 }
 .btn-docs-ghost:hover { background: rgba(167,139,250,.20); }
+
+/* ─── INTERIOR PAGES ───────────────────────────────────────────────── */
+.page-hero {
+  padding: 4.5rem 1.5rem 2rem;
+  background:
+    radial-gradient(ellipse 70% 70% at 20% 20%, rgba(124,58,237,.28) 0%, transparent 55%),
+    linear-gradient(180deg, #0d0826 0%, #130d30 100%);
+  border-bottom: 1px solid var(--border);
+}
+.page-section {
+  padding: 3.5rem 1.5rem;
+}
+.page-section.alt {
+  background: var(--bg-raised);
+}
+.section-inner.narrow {
+  max-width: 920px;
+}
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.content-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+}
+.content-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: .85rem;
+  color: var(--text);
+}
+.content-card p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.75;
+}
+.content-card p:last-child {
+  margin-bottom: 0;
+}
+.content-card-wide {
+  max-width: 100%;
+}
+.page-prose h2 {
+  margin-top: 1.5rem;
+}
+.page-prose h2:first-child {
+  margin-top: 0;
+}
+.page-prose a {
+  color: var(--purple);
+  text-decoration: none;
+}
+.page-prose a:hover {
+  text-decoration: underline;
+}
 
 /* ─── FOOTER ─────────────────────────────────────────────────────────── */
 footer {

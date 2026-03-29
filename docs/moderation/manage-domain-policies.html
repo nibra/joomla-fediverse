@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-page="moderation/manage-domain-policies">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Manage Domain Policies
+(Allow/Block) — Joomla Fediverse Manual</title>
+  <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <img src="../../assets/logo.svg" alt="Joomla Fediverse logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Joomla Fediverse</span>
+        <span class="nav-logo-tag">Publishing to the open social web</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#features">Features</a></li>
+      <li><a href="../../index.html#screenshots">Screenshots</a></li>
+      <li><a href="../../index.html#pricing">Pricing</a></li>
+      <li><a href="../index.html">Docs</a></li>
+      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Get Pro</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="docs-body">
+
+<aside class="docs-sidebar">
+  <section class="docs-sidebar-group" data-sidebar-group="setup">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-setup" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-setup"><span class="docs-sidebar-toggle-label">Setup</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-setup" role="region" aria-labelledby="docs-sidebar-toggle-setup" hidden="hidden">
+    <ul>
+      <li data-page="setup/install-joomla-fediverse"><a href="../setup/install-joomla-fediverse.html">Install Joomla Fediverse</a></li>
+      <li data-page="setup/activate-core-plugins"><a href="../setup/activate-core-plugins.html">Activate Core Fediverse Plugins</a></li>
+      <li data-page="setup/configure-fediverse-options"><a href="../setup/configure-fediverse-options.html">Configure Fediverse Component Options</a></li>
+      <li data-page="setup/activate-paid-license"><a href="../setup/activate-paid-license.html">Activate or Change a Paid License</a></li>
+      <li data-page="setup/recover-paid-license"><a href="../setup/recover-paid-license.html">Recover a Paid License After Moving the Site</a></li>
+      <li data-page="setup/configure-scheduler-tasks"><a href="../setup/configure-scheduler-tasks.html">Configure Scheduled Tasks</a></li>
+      <li data-page="setup/run-diagnostics-wizard"><a href="../setup/run-diagnostics-wizard.html">Run the Diagnostics Wizard</a></li>
+      <li data-page="setup/understand-fediverse-compatibility"><a href="../setup/understand-fediverse-compatibility.html">Understand Fediverse Compatibility Expectations</a></li>
+      <li data-page="setup/export-import-configuration"><a href="../setup/export-import-configuration.html">Export or Import Fediverse Configuration</a></li>
+      <li data-page="setup/manage-automation-webhooks"><a href="../setup/manage-automation-webhooks.html">Manage Automation Webhooks</a></li>
+      <li data-page="setup/update-joomla-fediverse"><a href="../setup/update-joomla-fediverse.html">Update Joomla Fediverse</a></li>
+      <li data-page="setup/uninstall-joomla-fediverse"><a href="../setup/uninstall-joomla-fediverse.html">Uninstall Joomla Fediverse</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="actors">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-actors" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-actors"><span class="docs-sidebar-toggle-label">Actors</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-actors" role="region" aria-labelledby="docs-sidebar-toggle-actors" hidden="hidden">
+    <ul>
+      <li data-page="actors/create-local-actor"><a href="../actors/create-local-actor.html">Create a Local Actor</a></li>
+      <li data-page="actors/edit-actor-profile-types"><a href="../actors/edit-actor-profile-types.html">Manage Actor Account Identity</a></li>
+      <li data-page="actors/make-actor-easier-to-discover"><a href="../actors/make-actor-easier-to-discover.html">Make an Actor Easier to Discover</a></li>
+      <li data-page="actors/enable-disable-actor"><a href="../actors/enable-disable-actor.html">Enable or Disable an Actor</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="publishing-and-frontend">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-publishing-and-frontend" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-publishing-and-frontend"><span class="docs-sidebar-toggle-label">Publishing and Frontend</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-publishing-and-frontend" role="region" aria-labelledby="docs-sidebar-toggle-publishing-and-frontend" hidden="hidden">
+    <ul>
+      <li data-page="publishing/publish-article"><a href="../publishing/publish-article.html">Publish a Federated Article</a></li>
+      <li data-page="publishing/use-shortcodes"><a href="../publishing/use-shortcodes.html">Use Fediverse Shortcodes in Articles</a></li>
+      <li data-page="publishing/configure-reactions-module"><a href="../publishing/configure-reactions-module.html">Configure the Reactions Module</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group is-open" data-sidebar-group="moderation-and-policies">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-moderation-and-policies" type="button" aria-expanded="true" aria-controls="docs-sidebar-panel-moderation-and-policies"><span class="docs-sidebar-toggle-label">Moderation and Policies</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-moderation-and-policies" role="region" aria-labelledby="docs-sidebar-toggle-moderation-and-policies">
+    <ul>
+      <li data-page="moderation/moderate-inbound-replies"><a href="moderate-inbound-replies.html">Moderate Inbound Replies</a></li>
+      <li data-page="moderation/review-audit-logs"><a href="review-audit-logs.html">Review Audit Logs</a></li>
+      <li class="active" data-page="moderation/manage-domain-policies"><a href="manage-domain-policies.html">Manage Domain Policies (Allow/Block)</a></li>
+      <li data-page="policies/set-follow-policy"><a href="../policies/set-follow-policy.html">Set Global Follow Policy</a></li>
+      <li data-page="policies/opt-out-category-federation"><a href="../policies/opt-out-category-federation.html">Opt Out Federation for a Category</a></li>
+      <li data-page="policies/opt-out-single-content-federation"><a href="../policies/opt-out-single-content-federation.html">Opt Out Federation for a Single Content Item</a></li>
+      <li data-page="policies/opt-out-user-federation"><a href="../policies/opt-out-user-federation.html">Opt Out Federation for a User</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="client-apps">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-client-apps" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-client-apps"><span class="docs-sidebar-toggle-label">Client Apps</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-client-apps" role="region" aria-labelledby="docs-sidebar-toggle-client-apps" hidden="hidden">
+    <ul>
+      <li data-page="client-apps/connect-client-app"><a href="../client-apps/connect-client-app.html">Connect a Mastodon-Compatible Client App</a></li>
+    </ul>
+  </div>
+</section>
+  <div class="sidebar-divider"></div>
+  <section class="docs-sidebar-group" data-sidebar-group="links">
+    <button
+      class="docs-sidebar-toggle"
+      id="docs-sidebar-toggle-links"
+      type="button"
+      aria-expanded="false"
+      aria-controls="docs-sidebar-panel-links"
+    >
+      <span class="docs-sidebar-toggle-label">Links</span>
+      <span class="docs-sidebar-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <div
+      class="docs-sidebar-panel"
+      id="docs-sidebar-panel-links"
+      role="region"
+      aria-labelledby="docs-sidebar-toggle-links"
+      hidden="hidden"
+    >
+      <ul>
+        <li><a href="../index.html">Manual Home</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../../index.html">Back to site</a></li>
+      </ul>
+    </div>
+  </section>
+</aside>
+
+    <main class="docs-content">
+<h1 id="manage-domain-policies-allowblock">Manage Domain Policies
+(Allow/Block)</h1>
+<h2 id="overview">Overview</h2>
+<p>Use domain policies to reduce repeated moderation work and respond
+quickly to trusted or abusive servers. A saved allow or block rule gives
+the team a consistent decision for future inbound traffic from that
+domain.</p>
+<p>This task is available in the <code>Pro</code> plan because it
+affects site-wide moderation behavior. After you save a policy, the
+domain appears in the policy list and new inbound activity from that
+domain follows the stored rule.</p>
+<h2 id="before-you-begin">Before you begin</h2>
+<ul>
+<li>Domain policies require the <code>Pro</code> tier.</li>
+<li>You need permission to manage Fediverse policies.</li>
+<li>You need the exact remote domain name you want to allow or block,
+for example <code>example.social</code>.</li>
+<li>Decide in advance whether the domain should be <code>allow</code> or
+<code>block</code>. That avoids saving the wrong moderation rule.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol type="1">
+<li>Open <code>Components -&gt; Fediverse -&gt; Policies</code>.</li>
+<li>Review the existing list before you add a new entry.
+<code>Policies</code> shows every saved domain rule. Select an existing
+row if you want to edit it, or continue with a new entry if the domain
+is not listed yet.</li>
+<li>Select <code>New</code> in the Joomla toolbar.</li>
+<li>Complete the policy form.
+<ul>
+<li><strong>Domain</strong> – Enter only the remote domain name, such as
+<code>example.social</code>. Do not include <code>https://</code>,
+paths, or usernames.</li>
+<li><strong>Policy</strong> – Choose <code>allow</code> to trust that
+domain explicitly, or <code>block</code> to prevent inbound federation
+from it.</li>
+<li><strong>Reason</strong> – Add a short explanation for your team,
+such as <code>known partner server</code> or <code>spam source</code>.
+This field is optional, but it makes later reviews easier.</li>
+</ul></li>
+<li>Select <code>Save</code> in the toolbar.</li>
+<li>To change an existing entry later, return to
+<code>Components -&gt; Fediverse -&gt; Policies</code> and select the
+domain name from the list.</li>
+<li>To remove one or more entries, select them in the list view and use
+<code>Delete</code> in the toolbar.</li>
+</ol>
+<h2 id="check-your-result">Check your result</h2>
+<p>The policy was saved correctly if:</p>
+<ul>
+<li>Joomla shows a confirmation message after <code>Save</code>.</li>
+<li>The domain appears in the policy list with the expected
+<code>allow</code> or <code>block</code> badge.</li>
+<li>Opening the domain again shows the same values you saved.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="the-new-button-is-missing">The <code>New</code> button is
+missing</h3>
+<ul>
+<li><strong>Likely cause:</strong> The site is not on the
+<code>Pro</code> plan, or your account does not have permission to
+manage policies.</li>
+<li><strong>Solution:</strong> Confirm the installed license tier and
+check the Joomla permissions for the Fediverse component.</li>
+</ul>
+<h3 id="the-policy-does-not-affect-the-remote-server-you-expected">The
+policy does not affect the remote server you expected</h3>
+<ul>
+<li><strong>Likely cause:</strong> The saved <code>Domain</code> value
+does not match the inbound actor domain exactly.</li>
+<li><strong>Solution:</strong> Check the remote actor or server domain
+again and save the policy with the plain hostname only.</li>
+</ul>
+<h3 id="an-old-rule-is-still-shown-after-you-changed-it">An old rule is
+still shown after you changed it</h3>
+<ul>
+<li><strong>Likely cause:</strong> You edited the wrong entry or saved a
+new domain instead of reopening the existing one from the list.</li>
+<li><strong>Solution:</strong> Return to
+<code>Components -&gt; Fediverse -&gt; Policies</code>, open the
+intended row from the list, confirm the domain, and save it again.</li>
+</ul>
+<h2 id="related-tasks">Related tasks</h2>
+<ul>
+<li><a href="moderate-inbound-replies.html">Moderate Inbound
+Replies</a></li>
+<li><a href="../policies/set-follow-policy.html">Set Global Follow
+Policy</a></li>
+</ul>
+<nav class="docs-page-nav" aria-label="Manual page navigation">
+  <a class="docs-page-nav-prev" href="review-audit-logs.html">&larr; Review Audit Logs</a>
+  <a class="docs-page-nav-home" href="../index.html">Home</a>
+  <a class="docs-page-nav-next" href="../policies/set-follow-policy.html">Set Global Follow Policy &rarr;</a>
+</nav>
+    </main>
+
+  </div>
+
+<footer>
+  <div class="footer-inner">
+    <img class="footer-logo" src="../../assets/logo.svg" alt="Joomla Fediverse">
+    <div class="footer-links">
+      <a href="../index.html">Documentation</a>
+      <a href="../../legal-notice.html">Legal Notice</a>
+      <a href="https://github.com/nibra/joomla-fediverse" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:support@code.nibra.net">Support</a>
+      <a href="../../index.html#pricing">Pricing</a>
+    </div>
+    <p>
+      &copy; 2026 BSDS / nibra Consulting &mdash;
+      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU GPL v2</a> (Free tier) /
+      Commercial license (Personal and Pro) &mdash;
+      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">LemonSqueezy</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (page && li.getAttribute('data-page') === page) {
+          li.classList.add('active');
+        }
+      });
+
+      var groups = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar-group'));
+      if (!groups.length) return;
+
+      function setOpen(group, open) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        var panel = group.querySelector('.docs-sidebar-panel');
+        if (!toggle || !panel) return;
+
+        group.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', 'hidden');
+        }
+      }
+
+      groups.forEach(function (group) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', function () {
+          var willOpen = !group.classList.contains('is-open');
+
+          groups.forEach(function (candidate) {
+            setOpen(candidate, false);
+          });
+
+          if (willOpen) {
+            setOpen(group, true);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

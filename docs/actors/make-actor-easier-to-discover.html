@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-page="actors/make-actor-easier-to-discover">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Make an Actor Easier to
+Discover — Joomla Fediverse Manual</title>
+  <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body class="docs-shell">
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <img src="../../assets/logo.svg" alt="Joomla Fediverse logo">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Joomla Fediverse</span>
+        <span class="nav-logo-tag">Publishing to the open social web</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#features">Features</a></li>
+      <li><a href="../../index.html#screenshots">Screenshots</a></li>
+      <li><a href="../../index.html#pricing">Pricing</a></li>
+      <li><a href="../index.html">Docs</a></li>
+      <li><a class="nav-cta" href="https://joomlafedi.lemonsqueezy.com/buy/pro" target="_blank" rel="noopener">Get Pro</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="docs-body">
+
+<aside class="docs-sidebar">
+  <section class="docs-sidebar-group" data-sidebar-group="setup">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-setup" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-setup"><span class="docs-sidebar-toggle-label">Setup</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-setup" role="region" aria-labelledby="docs-sidebar-toggle-setup" hidden="hidden">
+    <ul>
+      <li data-page="setup/install-joomla-fediverse"><a href="../setup/install-joomla-fediverse.html">Install Joomla Fediverse</a></li>
+      <li data-page="setup/activate-core-plugins"><a href="../setup/activate-core-plugins.html">Activate Core Fediverse Plugins</a></li>
+      <li data-page="setup/configure-fediverse-options"><a href="../setup/configure-fediverse-options.html">Configure Fediverse Component Options</a></li>
+      <li data-page="setup/activate-paid-license"><a href="../setup/activate-paid-license.html">Activate or Change a Paid License</a></li>
+      <li data-page="setup/recover-paid-license"><a href="../setup/recover-paid-license.html">Recover a Paid License After Moving the Site</a></li>
+      <li data-page="setup/configure-scheduler-tasks"><a href="../setup/configure-scheduler-tasks.html">Configure Scheduled Tasks</a></li>
+      <li data-page="setup/run-diagnostics-wizard"><a href="../setup/run-diagnostics-wizard.html">Run the Diagnostics Wizard</a></li>
+      <li data-page="setup/understand-fediverse-compatibility"><a href="../setup/understand-fediverse-compatibility.html">Understand Fediverse Compatibility Expectations</a></li>
+      <li data-page="setup/export-import-configuration"><a href="../setup/export-import-configuration.html">Export or Import Fediverse Configuration</a></li>
+      <li data-page="setup/manage-automation-webhooks"><a href="../setup/manage-automation-webhooks.html">Manage Automation Webhooks</a></li>
+      <li data-page="setup/update-joomla-fediverse"><a href="../setup/update-joomla-fediverse.html">Update Joomla Fediverse</a></li>
+      <li data-page="setup/uninstall-joomla-fediverse"><a href="../setup/uninstall-joomla-fediverse.html">Uninstall Joomla Fediverse</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group is-open" data-sidebar-group="actors">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-actors" type="button" aria-expanded="true" aria-controls="docs-sidebar-panel-actors"><span class="docs-sidebar-toggle-label">Actors</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-actors" role="region" aria-labelledby="docs-sidebar-toggle-actors">
+    <ul>
+      <li data-page="actors/create-local-actor"><a href="create-local-actor.html">Create a Local Actor</a></li>
+      <li data-page="actors/edit-actor-profile-types"><a href="edit-actor-profile-types.html">Manage Actor Account Identity</a></li>
+      <li class="active" data-page="actors/make-actor-easier-to-discover"><a href="make-actor-easier-to-discover.html">Make an Actor Easier to Discover</a></li>
+      <li data-page="actors/enable-disable-actor"><a href="enable-disable-actor.html">Enable or Disable an Actor</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="publishing-and-frontend">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-publishing-and-frontend" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-publishing-and-frontend"><span class="docs-sidebar-toggle-label">Publishing and Frontend</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-publishing-and-frontend" role="region" aria-labelledby="docs-sidebar-toggle-publishing-and-frontend" hidden="hidden">
+    <ul>
+      <li data-page="publishing/publish-article"><a href="../publishing/publish-article.html">Publish a Federated Article</a></li>
+      <li data-page="publishing/use-shortcodes"><a href="../publishing/use-shortcodes.html">Use Fediverse Shortcodes in Articles</a></li>
+      <li data-page="publishing/configure-reactions-module"><a href="../publishing/configure-reactions-module.html">Configure the Reactions Module</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="moderation-and-policies">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-moderation-and-policies" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-moderation-and-policies"><span class="docs-sidebar-toggle-label">Moderation and Policies</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-moderation-and-policies" role="region" aria-labelledby="docs-sidebar-toggle-moderation-and-policies" hidden="hidden">
+    <ul>
+      <li data-page="moderation/moderate-inbound-replies"><a href="../moderation/moderate-inbound-replies.html">Moderate Inbound Replies</a></li>
+      <li data-page="moderation/review-audit-logs"><a href="../moderation/review-audit-logs.html">Review Audit Logs</a></li>
+      <li data-page="moderation/manage-domain-policies"><a href="../moderation/manage-domain-policies.html">Manage Domain Policies (Allow/Block)</a></li>
+      <li data-page="policies/set-follow-policy"><a href="../policies/set-follow-policy.html">Set Global Follow Policy</a></li>
+      <li data-page="policies/opt-out-category-federation"><a href="../policies/opt-out-category-federation.html">Opt Out Federation for a Category</a></li>
+      <li data-page="policies/opt-out-single-content-federation"><a href="../policies/opt-out-single-content-federation.html">Opt Out Federation for a Single Content Item</a></li>
+      <li data-page="policies/opt-out-user-federation"><a href="../policies/opt-out-user-federation.html">Opt Out Federation for a User</a></li>
+    </ul>
+  </div>
+</section>
+<section class="docs-sidebar-group" data-sidebar-group="client-apps">
+  <button class="docs-sidebar-toggle" id="docs-sidebar-toggle-client-apps" type="button" aria-expanded="false" aria-controls="docs-sidebar-panel-client-apps"><span class="docs-sidebar-toggle-label">Client Apps</span><span class="docs-sidebar-toggle-icon" aria-hidden="true"></span></button>
+  <div class="docs-sidebar-panel" id="docs-sidebar-panel-client-apps" role="region" aria-labelledby="docs-sidebar-toggle-client-apps" hidden="hidden">
+    <ul>
+      <li data-page="client-apps/connect-client-app"><a href="../client-apps/connect-client-app.html">Connect a Mastodon-Compatible Client App</a></li>
+    </ul>
+  </div>
+</section>
+  <div class="sidebar-divider"></div>
+  <section class="docs-sidebar-group" data-sidebar-group="links">
+    <button
+      class="docs-sidebar-toggle"
+      id="docs-sidebar-toggle-links"
+      type="button"
+      aria-expanded="false"
+      aria-controls="docs-sidebar-panel-links"
+    >
+      <span class="docs-sidebar-toggle-label">Links</span>
+      <span class="docs-sidebar-toggle-icon" aria-hidden="true"></span>
+    </button>
+    <div
+      class="docs-sidebar-panel"
+      id="docs-sidebar-panel-links"
+      role="region"
+      aria-labelledby="docs-sidebar-toggle-links"
+      hidden="hidden"
+    >
+      <ul>
+        <li><a href="../index.html">Manual Home</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse">GitHub</a></li>
+        <li><a href="https://github.com/nibra/joomla-fediverse/releases">Releases</a></li>
+        <li><a href="../../index.html">Back to site</a></li>
+      </ul>
+    </div>
+  </section>
+</aside>
+
+    <main class="docs-content">
+<h1 id="make-an-actor-easier-to-discover">Make an Actor Easier to
+Discover</h1>
+<h2 id="overview">Overview</h2>
+<p>Use this procedure when a local actor is already publishing, but
+remote readers still do not immediately understand who the account
+represents or why they should follow it. A complete actor profile and
+clear public publishing pattern make it easier for other Fediverse
+servers and readers to recognize the account, trust it, and find its
+posts through normal federation activity.</p>
+<p>This matters especially for Joomla Fediverse because it is designed
+as a publishing server. It exposes local actors, article-based
+publishing, and discovery endpoints, but it does not try to reproduce
+every Mastodon profile feature. That means discoverability currently
+depends on strong actor identity, a correct public base URL, and
+consistently published public content rather than on Mastodon-specific
+controls such as pinned posts or profile reach toggles.</p>
+<p>Use this procedure after initial setup is complete and at least one
+local actor exists. When you finish, the actor will present clearer
+public identity data and publish content in a way that is easier for
+remote readers to understand and follow.</p>
+<h2 id="before-you-begin">Before you begin</h2>
+<ul>
+<li>The site must already be federating correctly. If setup is
+incomplete, finish the first-time setup guides first.</li>
+<li>You need permission to edit Fediverse actors and component options
+in <code>Components -&gt; Fediverse</code>.</li>
+<li>A local actor must already exist for the Joomla user or publishing
+identity you want to improve.</li>
+<li>Decide how the actor should be understood remotely:
+<ul>
+<li>whether it represents a person, a service, an organization, or a
+channel</li>
+<li>the public display name readers should recognize</li>
+<li>a short first-line summary that explains the actor clearly</li>
+<li>the public website URL you want remote readers to visit for more
+context</li>
+</ul></li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol type="1">
+<li>Confirm the site uses the correct public federation address.</li>
+<li>Open <code>Components -&gt; Fediverse</code>, click
+<code>Options</code>, and verify <code>Public base URL</code>.
+<ul>
+<li><strong>Public base URL</strong> - This is the public address remote
+servers use for discovery and actor lookups. It must be the externally
+reachable canonical URL of the site. If this value is wrong,
+discoverability problems will continue even if the actor profile is
+complete.</li>
+</ul></li>
+<li>Open <code>Components -&gt; Fediverse -&gt; Actors</code>, select
+the actor you want to improve, and click <code>Edit</code>.</li>
+<li>In <code>Account Identity</code>, choose the account type that
+matches the actor’s real role.
+<ul>
+<li><strong>Personal profile</strong> - Use this for an individual
+author or editor.</li>
+<li><strong>Service / Bot</strong> - Use this for an automated feed or
+machine-managed publisher.</li>
+<li><strong>Organization account (Pro)</strong> - Use this when the
+actor represents an institution, newsroom, association, company, or
+foundation.</li>
+<li><strong>Channel account (Pro)</strong> - Use this when the actor
+represents a shared topic stream, publication channel, or brand
+feed.</li>
+</ul></li>
+<li>Fill in the public profile fields with concrete, recognizable
+values.
+<ul>
+<li><strong>Display Name</strong> - The main public label remote readers
+see. Use the human-readable name people should recognize
+immediately.</li>
+<li><strong>Summary</strong> - A short description of what the actor
+publishes or represents. Put the clearest explanation in the first line,
+because many Fediverse readers and discovery views only show a short
+excerpt.</li>
+<li><strong>Website URL</strong> - An absolute <code>https://</code> URL
+that gives readers a trustworthy page with more context, such as the
+publication homepage, author page, or organization site. If that page
+links back to the actor profile with <code>rel="me"</code>, Joomla
+Fediverse can mark it as verified.</li>
+<li><strong>Profile Image URL</strong> - An absolute image URL that
+gives the actor a recognizable avatar in remote clients and discovery
+views.</li>
+<li><strong>Header Image URL</strong> - An absolute image URL that gives
+the actor a wider banner in remote clients and profile views that
+support it.</li>
+<li><strong>Featured Introduction Content</strong> - A published Joomla
+article that acts as the actor’s canonical introduction or profile post
+when remote readers want one clear item to inspect first.</li>
+<li><strong>Profile Facts</strong> - Short labeled facts such as
+<code>Region</code>, <code>Language</code>, <code>Role</code>, or
+<code>Coverage</code> that help remote readers understand the publishing
+identity quickly.</li>
+</ul></li>
+<li>Set the default <code>Object Type</code> so new outbound posts match
+the actor’s normal publishing style.
+<ul>
+<li><strong>Article</strong> - Best for most Joomla editorial
+publishing.</li>
+<li><strong>Note</strong> - Best for short status-style updates.</li>
+<li><strong>Image</strong> - Best when the actor mainly publishes
+image-first content.</li>
+<li><strong>Video</strong> - Best when the actor mainly publishes
+video-first content.</li>
+</ul></li>
+<li>Click <code>Save</code>.</li>
+<li>Publish a clear public article from the Joomla user mapped to this
+actor.
+<ul>
+<li>Use a title and opening paragraph that explain who the actor is or
+what it publishes.</li>
+<li>Include relevant hashtags in the article content when appropriate,
+because hashtags remain a practical discovery path across the
+Fediverse.</li>
+<li>If this is a new actor, publish a short introduction article first
+so remote readers have one obvious public post to inspect.</li>
+</ul></li>
+<li>Keep publishing consistently under the same actor identity so
+followers and remote servers see a stable profile and topic pattern over
+time.</li>
+</ol>
+<h2 id="check-your-result">Check your result</h2>
+<ul>
+<li>The actor editor keeps the saved <code>Account Type</code>,
+<code>Display Name</code>, <code>Summary</code>,
+<code>Website URL</code>, <code>Profile Image URL</code>,
+<code>Header Image URL</code>,
+<code>Featured Introduction Content</code>, <code>Profile Facts</code>,
+and <code>Object Type</code>.</li>
+<li>If the website proves ownership through a reciprocal
+<code>rel="me"</code> link, the actor editor and public actor page both
+show that the link is verified.</li>
+<li>The actor’s public profile URL now shows a recognizable actor page
+in a browser, not only raw JSON.</li>
+<li>The actor’s public ActivityPub JSON now exposes the updated identity
+fields such as <code>type</code>, <code>name</code>,
+<code>summary</code>, <code>url</code>, <code>icon</code>,
+<code>image</code>, <code>attachment</code>, and
+<code>featured</code>.</li>
+<li>A newly published article federates from that actor and shows the
+updated public identity.</li>
+<li>A remote reader who opens the actor or one of its posts can
+understand who the account represents without needing extra
+explanation.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="remote-servers-still-show-the-old-actor-profile">Remote servers
+still show the old actor profile</h3>
+<ul>
+<li><strong>Likely cause:</strong> The remote server cached the previous
+actor document.</li>
+<li><strong>Solution:</strong> Confirm the new values are saved in
+Joomla first, then wait for the remote server to refresh its cache or
+trigger a new interaction that causes it to fetch the actor again.</li>
+</ul>
+<h3
+id="the-actor-is-clear-but-remote-servers-still-cannot-discover-it">The
+actor is clear, but remote servers still cannot discover it</h3>
+<ul>
+<li><strong>Likely cause:</strong> <code>Public base URL</code> is
+wrong, not publicly reachable, or does not match the site’s real
+external address.</li>
+<li><strong>Solution:</strong> Recheck the component options, confirm
+the URL is reachable from outside the site, save the corrected value,
+and run the diagnostics wizard again.</li>
+</ul>
+<h3 id="readers-still-do-not-understand-what-the-actor-is-for">Readers
+still do not understand what the actor is for</h3>
+<ul>
+<li><strong>Likely cause:</strong> The display name is too generic, the
+summary is blank or vague, or the first public article does not explain
+the publishing purpose.</li>
+<li><strong>Solution:</strong> Rewrite the <code>Display Name</code> and
+<code>Summary</code> to be more specific, then publish a clearer
+introduction-style article under that actor.</li>
+</ul>
+<h3
+id="i-need-mastodon-style-profile-features-such-as-pinned-posts-profile-images-or-reach-controls">I
+need Mastodon-style profile features such as pinned posts, profile
+images, or reach controls</h3>
+<ul>
+<li><strong>Likely cause:</strong> Joomla Fediverse is currently
+optimized for publishing-server workflows, not for full Mastodon profile
+parity.</li>
+<li><strong>Solution:</strong> Use the supported identity and publishing
+steps in this guide today. Treat pinned-profile behavior, profile media,
+and similar discovery features as product gaps rather than configuration
+mistakes.</li>
+</ul>
+<h2 id="related-tasks">Related tasks</h2>
+<ul>
+<li><a href="../setup/configure-fediverse-options.html">Configure
+Fediverse Component Options</a></li>
+<li><a href="create-local-actor.html">Create a Local Actor</a></li>
+<li><a href="edit-actor-profile-types.html">Manage Actor Account
+Identity</a></li>
+<li><a href="../publishing/publish-article.html">Publish a Federated
+Article</a></li>
+</ul>
+<nav class="docs-page-nav" aria-label="Manual page navigation">
+  <a class="docs-page-nav-prev" href="edit-actor-profile-types.html">&larr; Manage Actor Account Identity</a>
+  <a class="docs-page-nav-home" href="../index.html">Home</a>
+  <a class="docs-page-nav-next" href="enable-disable-actor.html">Enable or Disable an Actor &rarr;</a>
+</nav>
+    </main>
+
+  </div>
+
+<footer>
+  <div class="footer-inner">
+    <img class="footer-logo" src="../../assets/logo.svg" alt="Joomla Fediverse">
+    <div class="footer-links">
+      <a href="../index.html">Documentation</a>
+      <a href="../../legal-notice.html">Legal Notice</a>
+      <a href="https://github.com/nibra/joomla-fediverse" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:support@code.nibra.net">Support</a>
+      <a href="../../index.html#pricing">Pricing</a>
+    </div>
+    <p>
+      &copy; 2026 BSDS / nibra Consulting &mdash;
+      Released under the <a href="https://www.gnu.org/licenses/gpl-2.0.html" target="_blank" rel="noopener">GNU GPL v2</a> (Free tier) /
+      Commercial license (Personal and Pro) &mdash;
+      Payments securely handled by <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">LemonSqueezy</a>
+    </p>
+  </div>
+</footer>
+
+  <script>
+    (function () {
+      var page = document.documentElement.getAttribute('data-page');
+      document.querySelectorAll('.docs-sidebar li[data-page]').forEach(function (li) {
+        if (page && li.getAttribute('data-page') === page) {
+          li.classList.add('active');
+        }
+      });
+
+      var groups = Array.prototype.slice.call(document.querySelectorAll('.docs-sidebar-group'));
+      if (!groups.length) return;
+
+      function setOpen(group, open) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        var panel = group.querySelector('.docs-sidebar-panel');
+        if (!toggle || !panel) return;
+
+        group.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', 'hidden');
+        }
+      }
+
+      groups.forEach(function (group) {
+        var toggle = group.querySelector('.docs-sidebar-toggle');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', function () {
+          var willOpen = !group.classList.contains('is-open');
+
+          groups.forEach(function (candidate) {
+            setOpen(candidate, false);
+          });
+
+          if (willOpen) {
+            setOpen(group, true);
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
